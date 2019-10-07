@@ -43,7 +43,7 @@ public interface ContractRepository {
     * accepts Drive contract invitation by content id.
     * </p>
     * <p>
-    * Note: Operation is non revertible, once join Node must follow the contract.
+    * Note: Operation is non reversible, once join Node must follow the contract.
     * </p>
     * 
     * @param id
