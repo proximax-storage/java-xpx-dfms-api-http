@@ -15,7 +15,7 @@ import io.proximax.dfms.http.repos.DriveHttp;
  */
 public class StorageApi implements ServiceNode {
    
-   public static final String API_PATH = "/api/v1";
+   public static final String API_PATH = "api/v1";
    
    /** URL of the node */
    private final URL nodeUrl;

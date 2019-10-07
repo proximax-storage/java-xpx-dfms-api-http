@@ -18,6 +18,7 @@ import io.proximax.dfms.contract.UpdatesSubscription;
 import io.proximax.dfms.http.HttpRepository;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import okhttp3.OkHttpClient;
 
 /**
  * Contract repository implementation using HTTP protocol
@@ -31,7 +32,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
     * @param apiPath the path to the API on the node
     */
    public ContractHttp(StorageApi api, String apiPath) {
-      super(api, Optional.of(apiPath));
+      super(api, Optional.of(apiPath), new OkHttpClient());
    }
 
    @Override

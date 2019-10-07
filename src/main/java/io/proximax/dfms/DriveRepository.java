@@ -5,6 +5,7 @@
  */
 package io.proximax.dfms;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -33,8 +34,9 @@ public interface DriveRepository {
     * @param path
     * @param content
     * @return
+    * @throws IOException 
     */
-   Observable<Cid> add(Cid id, String path, DriveContent content);
+   Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException;
 
    /**
     * retrieves file from a specific contract at a given path.

@@ -5,10 +5,10 @@
  */
 package io.proximax.dfms.http.repos;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,12 +20,19 @@ import io.proximax.dfms.drive.DriveContent;
 import io.proximax.dfms.http.HttpRepository;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import okhttp3.Call;
+import okhttp3.HttpUrl;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Drive repository implementation using HTTP protocol
  */
 public class DriveHttp extends HttpRepository<StorageApi> implements DriveRepository {
 
+   private static final String URL_ADD = "drive/add";
    private static final String URL_REMOVE = "drive/remove";
    private static final String URL_MOVE = "drive/move";
    private static final String URL_COPY = "drive/copy";
@@ -37,13 +44,18 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
     * @param apiPath the path to the API on the node
     */
    public DriveHttp(StorageApi api, String apiPath) {
-      super(api, Optional.of(apiPath));
+      super(api, Optional.of(apiPath), new OkHttpClient());
    }
 
    @Override
-   public Observable<Cid> add(Cid id, String path, DriveContent content) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException {
+      HttpUrl url = buildUrl(URL_ADD, id.toString(), path).build();
+      MultipartBody.Builder bodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+      addFormContent(bodyBuilder, "file", "filename", content);
+      RequestBody body = bodyBuilder.build();
+      Request request = new Request.Builder().url(url).post(body).build();
+      // make the request
+      return makeRequest(request).map(HttpRepository::mapStringOrError).map(Cid::decode);
    }
 
    @Override
@@ -54,20 +66,28 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Completable remove(Cid id, String path) {
-      String requestUrl = getUrl(URL_REMOVE, Arrays.asList(id.toString(), path));
-      return getClient().post(requestUrl, null).map(HttpRepository::mapStringOrError).ignoreElements();
+      HttpUrl url = buildUrl(URL_REMOVE, id.toString(), path).build();
+      Request request = new Request.Builder().url(url).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
    }
 
    @Override
    public Completable move(Cid id, String sourcePath, String destinationPath) {
-      String requestUrl = getUrl(URL_MOVE, Arrays.asList(id.toString(), sourcePath, destinationPath));
-      return getClient().post(requestUrl, null).map(HttpRepository::mapStringOrError).ignoreElements();
+      HttpUrl url = buildUrl(URL_MOVE, id.toString(), sourcePath, destinationPath).build();
+      RequestBody body = RequestBody.create(null, new byte[]{});
+      Request request = new Request.Builder().url(url).post(body).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
    }
 
    @Override
    public Completable copy(Cid id, String sourcePath, String destinationPath) {
-      String requestUrl = getUrl(URL_COPY, Arrays.asList(id.toString(), sourcePath, destinationPath));
-      return getClient().post(requestUrl, null).map(HttpRepository::mapStringOrError).ignoreElements();
+      HttpUrl url = buildUrl(URL_COPY, id.toString(), sourcePath, destinationPath).build();
+      RequestBody body = RequestBody.create(null, new byte[]{});
+      Request request = new Request.Builder().url(url).post(body).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
    }
 
    @Override
