@@ -6,23 +6,21 @@
 package io.proximax.dfms.http.repos;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import io.ipfs.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;
+import io.proximax.dfms.drive.InputStreamContent;
 import io.proximax.dfms.http.HttpRepository;
+import io.proximax.dfms.http.MultipartRequestContent;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -33,6 +31,7 @@ import okhttp3.RequestBody;
 public class DriveHttp extends HttpRepository<StorageApi> implements DriveRepository {
 
    private static final String URL_ADD = "drive/add";
+   private static final String URL_GET = "drive/get";
    private static final String URL_REMOVE = "drive/remove";
    private static final String URL_MOVE = "drive/move";
    private static final String URL_COPY = "drive/copy";
@@ -50,18 +49,17 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException {
       HttpUrl url = buildUrl(URL_ADD, id.toString(), path).build();
-      MultipartBody.Builder bodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-      addFormContent(bodyBuilder, "file", "filename", content);
-      RequestBody body = bodyBuilder.build();
-      Request request = new Request.Builder().url(url).post(body).build();
+      Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content)).build();
       // make the request
       return makeRequest(request).map(HttpRepository::mapStringOrError).map(Cid::decode);
    }
 
    @Override
    public Observable<DriveContent> get(Cid id, String path) {
-      // TODO Auto-generated method stub
-      return null;
+      HttpUrl url = buildUrl(URL_GET, id.toString(), path).build();
+      Request request = new Request.Builder().url(url).build();
+      // caller is responsible to call close on the input stream
+      return makeRequest(request).map(HttpRepository::mapRespBodyOrError).map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
    }
 
    @Override
@@ -112,23 +110,5 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    public Completable flush(Cid id, String path) {
       // TODO Auto-generated method stub
       return null;
-   }
-
-   private static String getUrl(String base, List<String> args) {
-      // concatenate arguments
-      String urlArgs = args.stream().map(arg -> "arg=" + encode(arg)).collect(Collectors.joining("&"));
-      // build the url
-      StringBuilder url = new StringBuilder(base);
-      url.append("?");
-      url.append(urlArgs);
-      return url.toString();
-   }
-
-   private static String encode(String string) {
-      try {
-         return URLEncoder.encode(string, "UTF-8");
-      } catch (UnsupportedEncodingException e) {
-         throw new RuntimeException("failed to encode URL string", e);
-      }
    }
 }

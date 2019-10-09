@@ -24,9 +24,15 @@ import org.apache.commons.lang3.Validate;
 import com.google.gson.Gson;
 
 import io.proximax.dfms.ServiceNode;
-import io.proximax.dfms.drive.DriveContent;
 import io.reactivex.Observable;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Generic HTTP repository implementation, keeping track of the node, HTTP client and mapper
@@ -34,6 +40,7 @@ import okhttp3.*;
 public class HttpRepository<T extends ServiceNode> {
    protected static final MediaType MEDIA_JSON = MediaType.parse("application/json; charset=utf-8");
    protected static final MediaType MEDIA_STREAM = MediaType.parse("application/octet-stream");
+   protected static final MediaType MEDIA_DIRECTORY = MediaType.parse("application/x-directory");
    
    protected static final String QUERY_PARAM_ARG = "arg";
 
@@ -130,24 +137,17 @@ public class HttpRepository<T extends ServiceNode> {
    }
    
    /**
-    * add drive content as a multi-part form to the request builder
+    * throw RuntimeException on error or return body of the response
     * 
-    * @param bodyBuilder
-    * @param name
-    * @param fileName
-    * @param content
-    * @throws IOException
+    * @param response response to examine
+    * @return body of the response as string
     */
-   protected static void addFormContent(MultipartBody.Builder bodyBuilder, String name, String fileName, DriveContent content) throws IOException {
-      if (content.isNode()) {
-         for (DriveContent child: content.getChildren()) {
-            String fname = child.getName().orElse("filedef");
-            addFormContent(bodyBuilder, fname, fname, child);
-         }
-      } else {
-         bodyBuilder.addFormDataPart(name, fileName,
-               RequestBody.create(MEDIA_STREAM, content.toByteArray()));
+   public static ResponseBody mapRespBodyOrError(final Response response) {
+      final int code = response.code();
+      if (code < 200 || code > 299) {
+         throw new RuntimeException(code + " " + response.message());
       }
+      return response.body();
    }
    
    /**
@@ -157,11 +157,7 @@ public class HttpRepository<T extends ServiceNode> {
     * @return body of the response as string
     */
    public static String mapStringOrError(final Response response) {
-      final int code = response.code();
-      if (code < 200 || code > 299) {
-         throw new RuntimeException(code + " " + response.message());
-      }
-      try (ResponseBody body = response.body()) {
+      try (ResponseBody body = mapRespBodyOrError(response)) {
          return body.string();
       } catch (IOException e) {
          throw new RuntimeException(e.getMessage());
