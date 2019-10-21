@@ -9,8 +9,7 @@ import java.math.BigInteger;
 import java.time.Duration;
 
 import io.ipfs.cid.Cid;
-import io.proximax.dfms.contract.ContractResponse;
-import io.proximax.dfms.contract.InviteSubscription;
+import io.proximax.dfms.contract.Contract;
 import io.proximax.dfms.contract.UpdatesSubscription;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -31,50 +30,6 @@ import io.reactivex.Observable;
 public interface ContractRepository {
 
    /**
-    * retrieves Contract by it's content id.
-    * 
-    * @param id
-    * @return
-    */
-   Observable<ContractResponse> get(Cid id);
-
-   /**
-    * <p>
-    * accepts Drive contract invitation by content id.
-    * </p>
-    * <p>
-    * Note: Operation is non reversible, once join Node must follow the contract.
-    * </p>
-    * 
-    * @param id
-    * @return
-    */
-   Completable join(Cid id);
-
-   /**
-    * List Drive contracts the node has relation with.
-    * 
-    * @param id
-    * @return
-    */
-   Observable<Cid> list(Cid id);
-
-   /**
-    * creates new subscription for updates of specific Drive contract
-    * 
-    * @param id
-    * @return
-    */
-   Observable<UpdatesSubscription> updates(Cid id);
-
-   /**
-    * create new subscription for Drive contract invitation from the network
-    * 
-    * @return
-    */
-   Observable<InviteSubscription> invites();
-
-   /**
     * <p>
     * constructs new Drive contract from specific parameters.
     * </p>
@@ -82,26 +37,53 @@ public interface ContractRepository {
     * It announces invitation on the network and waits till minimum(2) amount of nodes Join the invitation. Compose does
     * not guarantee successful completion and may error if minimum(2) amount of nodes have not found through timeout.
     * </p>
+    * <p>
+    * Compose synchronously announces invites to the Network with current node as an owner and tries to find members
+    * which agrees on specified parameters and options. It does not guarantee success on resolving members. On success
+    * persists contract locally and gives ability to use DriveFS.
+    * </p>
     * 
-    * @param space
-    * @param duration
+    * @param space total space reserved by Drive contract on member nodes. TODO in bytes?
+    * @param duration duration of the contract
+    * @return the contract created based on the request
+    */
+   Observable<Contract> compose(BigInteger space, Duration duration);
+
+   /**
+    * Searches for Drive contract information in local storage and/or in blockchain.
+    * 
+    * @param id CID of the Drive contract
+    * @return the contract information
+    */
+   Observable<Contract> get(Cid id);
+
+   /**
+    * Lists all the contracts in which Node participates as an owner or member
+    * 
     * @return
     */
-   Observable<ContractResponse> compose(BigInteger space, Duration duration);
-   
+   Observable<Cid> list();
+
+   /**
+    * Creates subscription for Drive contract corrections for contract in local storage and/or in blockchain.
+    * 
+    * @param id CID of the Drive contract
+    * @return TODO stream of contracts??
+    */
+   Observable<UpdatesSubscription> amendments(Cid id);
+
    /**
     * triggers node to automatically accept incoming contracts.
     * 
     * @return
     */
    Completable startAccepting();
-   
+
    /**
     * stops accepting process.
     * 
     * @return
     */
    Completable stopAccepting();
-   
-   
+
 }

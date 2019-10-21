@@ -11,13 +11,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import io.ipfs.cid.Cid;
 import io.libp2p.core.PeerId;
 
 /**
  * TODO add proper description
  */
-public class ContractResponse {
+public class Contract {
    private final Cid cid;
    private final PeerId owner;
    private final List<PeerId> members;
@@ -35,7 +37,7 @@ public class ContractResponse {
     * @param root
     * @param totalSpace
     */
-   public ContractResponse(Cid cid, PeerId owner, List<PeerId> members, Duration duration, Date created, Cid root,
+   public Contract(Cid cid, PeerId owner, List<PeerId> members, Duration duration, Date created, Cid root,
          BigInteger totalSpace) {
       this.cid = cid;
       this.owner = owner;
@@ -95,4 +97,8 @@ public class ContractResponse {
       return totalSpace;
    }
    
+   public static Contract fromDto(JsonObject obj) {
+      // TODO implement this
+      throw new UnsupportedOperationException("not implemented yet");
+   }
 }

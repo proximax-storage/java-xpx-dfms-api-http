@@ -12,19 +12,26 @@ import java.util.Optional;
 import io.ipfs.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
-import io.proximax.dfms.contract.ContractResponse;
-import io.proximax.dfms.contract.InviteSubscription;
+import io.proximax.dfms.contract.Contract;
 import io.proximax.dfms.contract.UpdatesSubscription;
 import io.proximax.dfms.http.HttpRepository;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Contract repository implementation using HTTP protocol
  */
 public class ContractHttp extends HttpRepository<StorageApi> implements ContractRepository {
 
+   private static final String URL_COMPOSE = "contract/compose";
+   private static final String URL_LS = "contract/ls";
+   private static final String URL_GET = "contract/get";
+   private static final String URL_AMENDS = "contract/amends";
+   
    /**
     * create new instance
     * 
@@ -36,39 +43,40 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
    }
 
    @Override
-   public Observable<ContractResponse> get(Cid id) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<Contract> compose(BigInteger space, Duration duration) {
+      // TODO what is the duration field? openapi says: Drive contract duration. Might be in millisecconds or blocks.
+      HttpUrl url = buildUrl(URL_COMPOSE, space.toString(), Long.toString(duration.toMillis())).build();
+      RequestBody body = RequestBody.create(null, new byte[]{});
+      Request request = new Request.Builder().url(url).post(body).build();
+      // make the request
+      return makeRequest(request).map(HttpRepository::mapStringOrError).map(str -> getGson().fromJson(str, Contract.class));
    }
 
    @Override
-   public Completable join(Cid id) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<Contract> get(Cid id) {
+      HttpUrl url = buildUrl(URL_GET, id.toString()).build();
+      RequestBody body = RequestBody.create(null, new byte[]{});
+      Request request = new Request.Builder().url(url).post(body).build();
+      // make the request
+      return makeRequest(request).map(HttpRepository::mapStringOrError).map(str -> getGson().fromJson(str, Contract.class));
    }
 
    @Override
-   public Observable<Cid> list(Cid id) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<Cid> list() {
+      HttpUrl url = buildUrl(URL_LS).build();
+      RequestBody body = RequestBody.create(null, new byte[]{});
+      Request request = new Request.Builder().url(url).post(body).build();
+      // make the request
+      return makeRequest(request).map(HttpRepository::mapStringOrError).map(Cid::decode);
    }
 
    @Override
-   public Observable<UpdatesSubscription> updates(Cid id) {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-   @Override
-   public Observable<InviteSubscription> invites() {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-   @Override
-   public Observable<ContractResponse> compose(BigInteger space, Duration duration) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<UpdatesSubscription> amendments(Cid id) {
+      HttpUrl url = buildUrl(URL_AMENDS, id.toString()).build();
+      RequestBody body = RequestBody.create(null, new byte[]{});
+      Request request = new Request.Builder().url(url).post(body).build();
+      // make the request
+      return makeRequest(request).map(HttpRepository::mapStringOrError).map(str -> getGson().fromJson(str, UpdatesSubscription.class));
    }
 
    @Override

@@ -5,16 +5,22 @@
  */
 package io.proximax.dfms.http.repos;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
+import java.time.Duration;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
 import io.ipfs.cid.Cid;
-import io.ipfs.multihash.Multihash;
+import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.contract.Contract;
 import io.proximax.dfms.drive.InputStreamContent;
 
 /**
@@ -24,13 +30,18 @@ class E2EDriveHttpTest {
 
    @Test
    void test() throws IOException {
-      StorageApi api = new StorageApi(new URL("http://54.169.42.125"));
+      StorageApi api = new StorageApi(new URL("http://54.179.139.207:?????"));
+      // start off by composing contract
+      ContractRepository contracts = api.createContractRepository();
+      Contract contract = contracts.compose(BigInteger.valueOf(1000000), Duration.ofDays(30)).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      // now add something to the drive
       DriveRepository drive = api.createDriveRepository();
-      Cid cid = drive.add(new Cid(Multihash.fromBase58("QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy")),
+      Cid cid = drive.add(contract.getCid(),
             "hello",
             new InputStreamContent(Optional.of("ahoj"),
-                  E2EDriveHttpTest.class.getClassLoader().getResourceAsStream("data.txt"))).blockingFirst();
-      System.out.println(cid);
+                  E2EDriveHttpTest.class.getClassLoader().getResourceAsStream("data.txt")))
+            .timeout(30, TimeUnit.SECONDS).blockingFirst();
+      assertNotNull(cid);
    }
 
 }
