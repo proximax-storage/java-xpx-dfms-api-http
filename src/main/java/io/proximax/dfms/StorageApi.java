@@ -9,6 +9,7 @@ import java.net.URL;
 
 import io.proximax.dfms.http.repos.ContractHttp;
 import io.proximax.dfms.http.repos.DriveHttp;
+import io.proximax.dfms.http.repos.NetworkHttp;
 
 /**
  * Central access point to the storage API. Provides factories for DFMS service repositories
@@ -60,6 +61,10 @@ public class StorageApi implements ServiceNode {
       return new ContractHttp(this, apiPath);
    }
 
+   public NetworkRepository createNetworkRepository() {
+      return new NetworkHttp(this, apiPath);
+   }
+   
    @Override
    public URL getUrl() {
       return nodeUrl;
