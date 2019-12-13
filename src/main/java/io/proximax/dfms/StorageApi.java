@@ -10,6 +10,9 @@ import java.net.URL;
 import io.proximax.dfms.http.repos.ContractHttp;
 import io.proximax.dfms.http.repos.DriveHttp;
 import io.proximax.dfms.http.repos.NetworkHttp;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 
 /**
  * Central access point to the storage API. Provides factories for DFMS service repositories
@@ -22,7 +25,8 @@ public class StorageApi implements ServiceNode {
    private final URL nodeUrl;
    /** the path to the API on the node */
    private final String apiPath;
-
+   private final OkHttpClient client;
+   
    /**
     * Create new instance running at specified URL
     * 
@@ -32,6 +36,7 @@ public class StorageApi implements ServiceNode {
    public StorageApi(URL nodeUrl, String apiPath) {
       this.nodeUrl = nodeUrl;
       this.apiPath = apiPath;
+      this.client = new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(Level.BASIC)).build();
    }
 
    /**
@@ -49,7 +54,7 @@ public class StorageApi implements ServiceNode {
     * @return new instance
     */
    public DriveRepository createDriveRepository() {
-      return new DriveHttp(this, apiPath);
+      return new DriveHttp(this, apiPath, client);
    }
    
    /**
@@ -58,11 +63,11 @@ public class StorageApi implements ServiceNode {
     * @return new instance
     */
    public ContractRepository createContractRepository() {
-      return new ContractHttp(this, apiPath);
+      return new ContractHttp(this, apiPath, client);
    }
 
    public NetworkRepository createNetworkRepository() {
-      return new NetworkHttp(this, apiPath);
+      return new NetworkHttp(this, apiPath, client);
    }
    
    @Override

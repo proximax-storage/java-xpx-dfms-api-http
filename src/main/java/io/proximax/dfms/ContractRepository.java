@@ -8,7 +8,7 @@ package io.proximax.dfms;
 import java.math.BigInteger;
 import java.time.Duration;
 
-import io.ipfs.cid.Cid;
+import io.proximax.Cid;
 import io.proximax.dfms.contract.Contract;
 import io.proximax.dfms.contract.UpdatesSubscription;
 import io.reactivex.Completable;

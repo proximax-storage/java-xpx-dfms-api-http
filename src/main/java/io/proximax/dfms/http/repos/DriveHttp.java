@@ -10,13 +10,14 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import io.ipfs.cid.Cid;
+import io.proximax.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;
 import io.proximax.dfms.drive.InputStreamContent;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
+import io.proximax.dfms.http.responses.CidResponse;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.Call;
@@ -32,9 +33,9 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    private static final String URL_ADD = "drive/add";
    private static final String URL_GET = "drive/get";
-   private static final String URL_REMOVE = "drive/remove";
-   private static final String URL_MOVE = "drive/move";
-   private static final String URL_COPY = "drive/copy";
+   private static final String URL_REMOVE = "drive/rm";
+   private static final String URL_MOVE = "drive/mv";
+   private static final String URL_COPY = "drive/cp";
 
    /**
     * create new instance
@@ -42,8 +43,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
     * @param api the storage API
     * @param apiPath the path to the API on the node
     */
-   public DriveHttp(StorageApi api, String apiPath) {
-      super(api, Optional.of(apiPath), new OkHttpClient());
+   public DriveHttp(StorageApi api, String apiPath, OkHttpClient client) {
+      super(api, Optional.of(apiPath), client);
    }
 
    @Override
@@ -51,7 +52,10 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       HttpUrl url = buildUrl(URL_ADD, id.toString(), path).build();
       Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content)).build();
       // make the request
-      return makeRequest(request).map(HttpRepository::mapStringOrError).map(Cid::decode);
+      return makeRequest(request).map(HttpRepository::mapStringOrError)
+            .map(str -> getGson().fromJson(str, CidResponse.class))
+            .map(CidResponse::getId)
+            .map(Cid::decode);
    }
 
    @Override

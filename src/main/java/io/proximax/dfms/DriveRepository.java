@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import io.ipfs.cid.Cid;
+import io.proximax.Cid;
 import io.proximax.dfms.drive.DriveContent;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -28,7 +28,7 @@ import io.reactivex.Observable;
 public interface DriveRepository {
 
    /**
-    * adds the file to a specific Drive and to a given path.
+    * adds the content to a specific Drive and to a given path.
     * 
     * @param id
     * @param path
@@ -39,7 +39,8 @@ public interface DriveRepository {
    Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException;
 
    /**
-    * retrieves file from a specific contract at a given path.
+    * retrieves content for a specific contract at a given path. The content is represented as an input stream
+    * of a tar file containing the directory
     * 
     * @param id
     * @param path

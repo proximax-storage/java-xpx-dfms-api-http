@@ -145,7 +145,11 @@ public class HttpRepository<T extends ServiceNode> {
    public static ResponseBody mapRespBodyOrError(final Response response) {
       final int code = response.code();
       if (code < 200 || code > 299) {
-         throw new RuntimeException(code + " " + response.message());
+         try {
+            throw new RuntimeException(code + " " + response.message() + " " + response.body().string());
+         } catch (IOException e) {
+            throw new RuntimeException(code + " " + response.message() + " body missing");
+         }
       }
       return response.body();
    }
@@ -158,7 +162,10 @@ public class HttpRepository<T extends ServiceNode> {
     */
    public static String mapStringOrError(final Response response) {
       try (ResponseBody body = mapRespBodyOrError(response)) {
-         return body.string();
+         String bodyString = body.string();
+         // TODO this has to go before release
+         System.out.println("Got response: " + bodyString);
+         return bodyString;
       } catch (IOException e) {
          throw new RuntimeException(e.getMessage());
       }

@@ -45,8 +45,8 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
     * @param api
     * @param apiPath
     */
-   public NetworkHttp(StorageApi api, String apiPath) {
-      super(api, Optional.of(apiPath), new OkHttpClient());
+   public NetworkHttp(StorageApi api, String apiPath, OkHttpClient client) {
+      super(api, Optional.of(apiPath), client);
    }
 
    @Override

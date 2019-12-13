@@ -1,0 +1,16 @@
+{
+	"Contract": {
+		"drive": "08041220720a6dc299b7672e623cef70f9f6f827d81ea4b1d1f545854422a77502f10090",
+		"owner": "08041220409ec6b365c1fe329b63e83b4bf9b211e59bdf084f1ba6c88628a117bc2ec39f",
+		"replicators": [],
+		"root": "QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn",
+		"created": 10,
+		"duration": 10,
+		"space": 10,
+		"payedReplicas": 10,
+		"minReplicators": 10,
+		"percentApprovers": 10,
+		"billingPrice": 10,
+		"billingPeriod": 10
+	}
+}
