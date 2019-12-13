@@ -27,7 +27,7 @@ import io.proximax.dfms.contract.Contract;
 class E2EContractHttpTest {
 
    private static final Cid FIXED_CID = Cid
-         .decode("08041220720a6dc299b7672e623cef70f9f6f827d81ea4b1d1f545854422a77502f10090");
+         .decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
 
    StorageApi api;
 
@@ -51,6 +51,9 @@ class E2EContractHttpTest {
       // retrieve info by contract id
       Contract contr = ((ContractHttp) contracts).get(FIXED_CID).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(FIXED_CID, contr.getCid());
-      assertEquals("0804122035f3f497d7d49ce76a1637615be4cb598bd412ca03bbddb525a04779e346f22f", contr.getOwner());
+      assertEquals("080412207ca9d1e5321d51171773e941155e6d0c19a118959fafa5c2bf08ac8861439e11", contr.getOwner());
    }
 }
+
+// docker run      --name=dfms --network=proximax-net -p 6366:6366 dfms                  dfms --test --ledger-addr=http://rest-api.proximax.com:3000
+// docker run --rm --name=dfms --network=proximax-net -p 6366:6366 wondertan/dfms:v0.6.1 dfms --test --ledger-addr=http://rest-api.proximax.com:3000

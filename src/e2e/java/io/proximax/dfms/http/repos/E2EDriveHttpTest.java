@@ -36,7 +36,7 @@ import io.proximax.dfms.drive.FileSystemContent;
 class E2EDriveHttpTest {
 
    private static final Cid FIXED_CID = Cid
-         .decode("08041220720a6dc299b7672e623cef70f9f6f827d81ea4b1d1f545854422a77502f10090");
+         .decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
 
    private StorageApi api;
    private DriveRepository drive;

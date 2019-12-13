@@ -21,7 +21,7 @@ class CidTest {
 
    @Test
    void test2() {
-      Cid.decode("08041220720a6dc299b7672e623cef70f9f6f827d81ea4b1d1f545854422a77502f10090");
+      Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
    }
 
 }
