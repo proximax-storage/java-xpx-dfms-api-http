@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import io.proximax.dfms.exception.DFMSRuntimeException;
+
 /**
  * Utility methods for manipulation with HTTP data
  */
@@ -29,7 +31,7 @@ public class HttpUtils {
       try {
          return URLEncoder.encode(text, UTF_8);
       } catch (UnsupportedEncodingException e) {
-         throw new RuntimeException("Failed to encode the file name", e);
+         throw new DFMSRuntimeException("Failed to encode the file name", e);
       }
    }
 }

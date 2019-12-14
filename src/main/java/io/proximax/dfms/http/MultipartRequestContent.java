@@ -10,6 +10,7 @@ import java.util.Random;
 import org.apache.commons.lang3.Validate;
 
 import io.proximax.dfms.drive.DriveContent;
+import io.proximax.dfms.exception.DFMSRuntimeException;
 import io.proximax.dfms.utils.HttpUtils;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -169,7 +170,7 @@ public class MultipartRequestContent extends RequestBody {
             sink.write(buffer, 0, r);
          }
       } catch (IOException e) {
-         throw new RuntimeException("Failed to write file to request", e);
+         throw new DFMSRuntimeException("Failed to write file to request", e);
       }
 
       sink.writeUtf8(LINE_FEED);

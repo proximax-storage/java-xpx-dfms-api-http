@@ -52,10 +52,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       HttpUrl url = buildUrl(URL_ADD, id.toString(), path).build();
       Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content)).build();
       // make the request
-      return makeRequest(request).map(HttpRepository::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidResponse.class))
-            .map(CidResponse::getId)
-            .map(Cid::decode);
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidResponse.class))
+            .map(CidResponse::getId).map(Cid::decode);
    }
 
    @Override
@@ -63,7 +61,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       HttpUrl url = buildUrl(URL_GET, id.toString(), path).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(HttpRepository::mapRespBodyOrError).map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
+      return makeRequest(request).map(this::mapRespBodyOrError)
+            .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
    }
 
    @Override
@@ -77,7 +76,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Completable move(Cid id, String sourcePath, String destinationPath) {
       HttpUrl url = buildUrl(URL_MOVE, id.toString(), sourcePath, destinationPath).build();
-      RequestBody body = RequestBody.create(null, new byte[]{});
+      RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       Call call = getClient().newCall(request);
       return Completable.fromAction(call::execute);
@@ -86,7 +85,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Completable copy(Cid id, String sourcePath, String destinationPath) {
       HttpUrl url = buildUrl(URL_COPY, id.toString(), sourcePath, destinationPath).build();
-      RequestBody body = RequestBody.create(null, new byte[]{});
+      RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       Call call = getClient().newCall(request);
       return Completable.fromAction(call::execute);

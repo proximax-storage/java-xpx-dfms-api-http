@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.proximax.dfms.exception.DFMSRuntimeException;
 import io.proximax.dfms.utils.FileSystemUtils;
 
 /**
@@ -35,7 +36,7 @@ public class FileSystemContent extends BaseContent {
          try (Stream<Path> files = Files.list(source)) {
             return files.map(FileSystemContent::new).collect(Collectors.toList());
          } catch (IOException e) {
-            throw new RuntimeException("Failed to traverse directory", e);
+            throw new DFMSRuntimeException("Failed to traverse directory", e);
          }
       }
       // default return empty list

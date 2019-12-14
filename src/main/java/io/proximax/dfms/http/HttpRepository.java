@@ -22,8 +22,13 @@ import java.util.Optional;
 import org.apache.commons.lang3.Validate;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import io.proximax.dfms.ServiceNode;
+import io.proximax.dfms.exception.DFMSResponseException;
+import io.proximax.dfms.exception.DFMSRuntimeException;
+import io.proximax.dfms.exception.ResponseErrorType;
+import io.proximax.dfms.http.responses.ErrorDTO;
 import io.reactivex.Observable;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,7 +46,7 @@ public class HttpRepository<T extends ServiceNode> {
    protected static final MediaType MEDIA_JSON = MediaType.parse("application/json; charset=utf-8");
    protected static final MediaType MEDIA_STREAM = MediaType.parse("application/octet-stream");
    protected static final MediaType MEDIA_DIRECTORY = MediaType.parse("application/x-directory");
-   
+
    protected static final String QUERY_PARAM_ARG = "arg";
 
    private final T api;
@@ -105,14 +110,14 @@ public class HttpRepository<T extends ServiceNode> {
     * @param command relative URL path segments (e.g. drive/remove)
     * @return the url builder
     */
-   protected HttpUrl.Builder buildUrl(String command, String ... arguments) {
+   protected HttpUrl.Builder buildUrl(String command, String... arguments) {
       HttpUrl.Builder builder = getApiUrl().newBuilder().addPathSegments(command);
-      for (String argument: arguments) {
+      for (String argument : arguments) {
          builder.addQueryParameter(QUERY_PARAM_ARG, argument);
       }
       return builder;
    }
-   
+
    /**
     * provide observable response for the request
     * 
@@ -127,7 +132,7 @@ public class HttpRepository<T extends ServiceNode> {
                emitter.onNext(response);
                emitter.onComplete();
             }
-            
+
             @Override
             public void onFailure(Call call, IOException e) {
                emitter.onError(e);
@@ -135,39 +140,57 @@ public class HttpRepository<T extends ServiceNode> {
          });
       });
    }
-   
+
    /**
     * throw RuntimeException on error or return body of the response
     * 
     * @param response response to examine
     * @return body of the response as string
     */
-   public static ResponseBody mapRespBodyOrError(final Response response) {
+   public ResponseBody mapRespBodyOrError(final Response response) {
       final int code = response.code();
       if (code < 200 || code > 299) {
-         try {
-            throw new RuntimeException(code + " " + response.message() + " " + response.body().string());
-         } catch (IOException e) {
-            throw new RuntimeException(code + " " + response.message() + " body missing");
-         }
+         throw createResponseException(response);
       }
       return response.body();
    }
-   
+
    /**
     * throw RuntimeException on error or return body of the response
     * 
     * @param response response to examine
     * @return body of the response as string
     */
-   public static String mapStringOrError(final Response response) {
+   public String mapStringOrError(final Response response) {
       try (ResponseBody body = mapRespBodyOrError(response)) {
          String bodyString = body.string();
          // TODO this has to go before release
          System.out.println("Got response: " + bodyString);
          return bodyString;
       } catch (IOException e) {
-         throw new RuntimeException(e.getMessage());
+         throw new DFMSRuntimeException("Failed to read response body", e);
+      }
+   }
+
+   /**
+    * create exception representing the response error
+    * 
+    * @param response the response to process
+    * @return the exception
+    */
+   private DFMSRuntimeException createResponseException(final Response response) {
+      final int responseCode = response.code();
+      final String responseMessage = response.message();
+      try {
+         final String responseBody = response.body().string();
+         try {
+            ErrorDTO err = getGson().fromJson(responseBody, ErrorDTO.class);
+            return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode()), err.getMessage());
+         } catch (JsonSyntaxException e) {
+            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody);
+         }
+      } catch (IOException e) {
+         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body");
       }
    }
 }

@@ -51,8 +51,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(HttpRepository::mapStringOrError)
-            .map(str -> getGson().fromJson(str, Contract.class));
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, Contract.class));
    }
 
    @Override
@@ -61,9 +60,8 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(HttpRepository::mapStringOrError)
-            .map(str -> getGson().fromJson(str, ContractResponse.class))
-            .map(ContractResponse::getContract)
+      return makeRequest(request).map(this::mapStringOrError)
+            .map(str -> getGson().fromJson(str, ContractResponse.class)).map(ContractResponse::getContract)
             .map(Contract::fromDto);
    }
 
@@ -73,9 +71,8 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(HttpRepository::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidListResponse.class)).map(CidListResponse::getIds).flatMapIterable(list -> list)
-            .map(Cid::decode);
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListResponse.class))
+            .map(CidListResponse::getIds).flatMapIterable(list -> list).map(Cid::decode);
    }
 
    @Override
@@ -84,7 +81,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(HttpRepository::mapStringOrError)
+      return makeRequest(request).map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, UpdatesSubscription.class));
    }
 

@@ -38,8 +38,10 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
    private static final String URL_ID = "net/id";
    private static final String URL_ADDRS = "net/addrs";
 
-   private static final Type PEER_INFO_LIST_TYPE = new TypeToken<List<PeerInfo>>(){}.getType();
-   private static final Type ADDRS_LIST_TYPE = new TypeToken<List<Multiaddr>>(){}.getType();
+   private static final Type PEER_INFO_LIST_TYPE = new TypeToken<List<PeerInfo>>() {
+   }.getType();
+   private static final Type ADDRS_LIST_TYPE = new TypeToken<List<Multiaddr>>() {
+   }.getType();
 
    /**
     * @param api
@@ -50,20 +52,22 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
    }
 
    @Override
-   public Completable connect(Multiaddr ... addresses) {
-      String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList()).toArray(new String[addresses.length]);
+   public Completable connect(Multiaddr... addresses) {
+      String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList())
+            .toArray(new String[addresses.length]);
       HttpUrl url = buildUrl(URL_CONNECT, args).build();
-      RequestBody body = RequestBody.create(null, new byte[]{});
+      RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       Call call = getClient().newCall(request);
       return Completable.fromAction(call::execute);
    }
 
    @Override
-   public Completable disconnect(Multiaddr ... addresses) {
-      String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList()).toArray(new String[addresses.length]);
+   public Completable disconnect(Multiaddr... addresses) {
+      String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList())
+            .toArray(new String[addresses.length]);
       HttpUrl url = buildUrl(URL_DISCONNECT, args).build();
-      RequestBody body = RequestBody.create(null, new byte[]{});
+      RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       Call call = getClient().newCall(request);
       return Completable.fromAction(call::execute);
@@ -74,9 +78,7 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_PEERS).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request)
-            .map(HttpRepository::mapStringOrError)
-            .map(this::toPeerInfoList);
+      return makeRequest(request).map(this::mapStringOrError).map(this::toPeerInfoList);
    }
 
    @Override
@@ -84,7 +86,7 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_ID).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(HttpRepository::mapStringOrError).map(str -> getGson().fromJson(str, PeerId.class));
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, PeerId.class));
    }
 
    @Override
@@ -92,17 +94,15 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_ADDRS).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request)
-            .map(HttpRepository::mapStringOrError)
-            .map(this::toAddrsList);
+      return makeRequest(request).map(this::mapStringOrError).map(this::toAddrsList);
    }
 
    private List<PeerInfo> toPeerInfoList(String json) {
       return getGson().fromJson(json, PEER_INFO_LIST_TYPE);
    }
-   
+
    private List<Multiaddr> toAddrsList(String json) {
       return getGson().fromJson(json, ADDRS_LIST_TYPE);
    }
-   
+
 }
