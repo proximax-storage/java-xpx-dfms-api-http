@@ -8,7 +8,7 @@ package io.proximax.dfms.contract;
 import java.math.BigInteger;
 import java.util.List;
 
-import io.proximax.Cid;
+import io.proximax.cid.Cid;
 import io.proximax.dfms.gen.model.ContractDTO;
 
 /**

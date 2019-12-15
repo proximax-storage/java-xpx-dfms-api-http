@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import io.proximax.Cid;
+import io.proximax.cid.Cid;
 import io.proximax.dfms.drive.DriveContent;
 import io.reactivex.Completable;
 import io.reactivex.Observable;

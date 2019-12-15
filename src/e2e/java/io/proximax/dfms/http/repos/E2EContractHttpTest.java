@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.proximax.Cid;
+import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.contract.Contract;
@@ -51,7 +51,6 @@ class E2EContractHttpTest {
       // retrieve info by contract id
       Contract contr = ((ContractHttp) contracts).get(FIXED_CID).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(FIXED_CID, contr.getCid());
-      assertEquals("080412207ca9d1e5321d51171773e941155e6d0c19a118959fafa5c2bf08ac8861439e11", contr.getOwner());
    }
 }
 

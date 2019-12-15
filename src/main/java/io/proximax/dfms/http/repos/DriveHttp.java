@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.Cid;
+import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;

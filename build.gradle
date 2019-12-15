@@ -89,6 +89,7 @@ dependencies {
     // validations
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.apache.commons:commons-math3:3.6.1'
+	implementation 'commons-codec:commons-codec:1.13'
     // OK HTTP3 client
     implementation "com.squareup.okhttp3:okhttp:${okHttp3Version}"
 	implementation "com.squareup.okhttp3:logging-interceptor:${okHttp3Version}"

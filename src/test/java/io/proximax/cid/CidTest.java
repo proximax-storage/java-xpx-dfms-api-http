@@ -5,9 +5,12 @@
  */
 package io.proximax.cid;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 import org.junit.jupiter.api.Test;
 
-import io.ipfs.cid.Cid;
+import io.proximax.cid.multibase.Base32;
+
 
 /**
  * TODO add proper description
@@ -24,4 +27,15 @@ class CidTest {
       Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
    }
 
+   @Test
+   void test3() {
+      io.ipfs.cid.Cid.decode("zdpuAyvkgEDQm9TenwGkd5eNaosSxjgEYd8QatfPetgB1CdEZ");
+   }
+   
+   @Test
+   void testBase32() {
+      byte[] multibaseBytes = Base32.decode("aegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+      byte[] otherBytes = new org.apache.commons.codec.binary.Base32().decode("aegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+      assertArrayEquals(otherBytes, multibaseBytes);
+   }
 }
