@@ -34,8 +34,9 @@ class CidTest {
    
    @Test
    void testBase32() {
-      byte[] multibaseBytes = Base32.decode("aegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
-      byte[] otherBytes = new org.apache.commons.codec.binary.Base32().decode("aegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
-      assertArrayEquals(otherBytes, multibaseBytes);
+      String base = "aegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu";
+      byte[] multibaseBytes = Base32.decode(base);
+      byte[] apacheBytes = new org.apache.commons.codec.binary.Base32().decode(base);
+      assertArrayEquals(apacheBytes, multibaseBytes);
    }
 }
