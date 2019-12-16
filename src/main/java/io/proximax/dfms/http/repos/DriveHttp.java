@@ -36,6 +36,10 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    private static final String URL_REMOVE = "drive/rm";
    private static final String URL_MOVE = "drive/mv";
    private static final String URL_COPY = "drive/cp";
+   private static final String URL_MKDIR = "drive/mkdir";
+   private static final String URL_LS = "drive/ls";
+   private static final String URL_STAT = "drive/stat";
+   private static final String URL_FLUSH = "drive/flush";
 
    /**
     * create new instance
@@ -93,8 +97,12 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Completable makeDir(Cid id, String path) {
-      // TODO Auto-generated method stub
-      return null;
+      HttpUrl url = buildUrl(URL_MKDIR, id.toString(), path).build();
+      RequestBody body = RequestBody.create(null, new byte[] {});
+      Request request = new Request.Builder().url(url).post(body).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
+
    }
 
    @Override

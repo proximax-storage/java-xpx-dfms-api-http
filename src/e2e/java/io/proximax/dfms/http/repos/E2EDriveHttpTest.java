@@ -35,8 +35,7 @@ import io.proximax.dfms.drive.FileSystemContent;
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class E2EDriveHttpTest {
 
-   private static final Cid FIXED_CID = Cid
-         .decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+   private static final Cid FIXED_CID = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
 
    private StorageApi api;
    private DriveRepository drive;
@@ -49,9 +48,8 @@ class E2EDriveHttpTest {
    }
 
    @Test
-   void test01AddDirecotry() throws IOException {
-      DriveContent addContent = new FileSystemContent(
-            new File("src/e2e/resources/simple").toPath());
+   void test01AddDirectory() throws IOException {
+      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
       Cid cid = drive.add(FIXED_CID, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);
@@ -64,21 +62,49 @@ class E2EDriveHttpTest {
    }
 
    @Test
-   void test02CopyFile() {
-
+   void test02CopyFile() throws IOException {
+      String targetPath = path + "copy_dst";
+      DriveContent content = drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      try (InputStream is = content.getInputStream()) {
+//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
+      }
+      drive.copy(FIXED_CID, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      DriveContent newContent = drive.get(FIXED_CID, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      try (InputStream is = newContent.getInputStream()) {
+//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
+      }
    }
 
    @Test
-   void test03MoveFile() {
-
+   void test03MoveFile() throws IOException {
+      String targetPath = path + "move_dst";
+      DriveContent content = drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      try (InputStream is = content.getInputStream()) {
+         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
+      }
+      drive.move(FIXED_CID, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      DriveContent newContent = drive.get(FIXED_CID, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      try (InputStream is = newContent.getInputStream()) {
+         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
+      }
+      // move the stuff back
+      drive.move(FIXED_CID, targetPath, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
 
    @Test
    void test04RemoveFile() throws IOException {
       // remove the content
-      drive.remove(FIXED_CID, path+"/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.remove(FIXED_CID, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
       // now try to retrieve the content again
       drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+   }
+
+   @Test
+   void test04Mkdir() throws IOException {
+      // remove the content
+      drive.makeDir(FIXED_CID, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      // now try to retrieve the content again
+      drive.get(FIXED_CID, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
 
    @Test
