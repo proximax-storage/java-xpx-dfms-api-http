@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -36,11 +35,12 @@ import io.proximax.dfms.drive.FileSystemContent;
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class E2EDriveHttpTest {
 
-   private static final Cid FIXED_CID = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+   private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+
+   private final String path = "hello" + System.currentTimeMillis();// Long.toString(new Random().nextLong());
 
    private StorageApi api;
    private DriveRepository drive;
-   private String path = "hello" + System.currentTimeMillis();// Long.toString(new Random().nextLong());
 
    @BeforeAll
    void init() throws MalformedURLException {
@@ -49,15 +49,28 @@ class E2EDriveHttpTest {
    }
 
    @Test
+   void killServer() throws IOException {
+      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
+      drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
+   }
+   
+   @Test
    void test01AddDirectory() throws IOException {
       DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
-      Cid cid = drive.add(FIXED_CID, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      Cid cid = drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);
       // now make request for that data
-      DriveContent content = drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
       try (InputStream is = content.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
+//         File tempFile = File.createTempFile("dfms-test-"+path, ".tar");
+//         FileUtils.copyInputStreamToFile(is, tempFile);
+////         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
+//         FileSystemManager fsManager = VFS.getManager();
+//         FileObject tarredContent = fsManager.resolveFile( "tar:file://" + tempFile.getCanonicalPath()+"!/" );
+//         System.out.println(tarredContent);
       }
 
    }
@@ -65,12 +78,12 @@ class E2EDriveHttpTest {
    @Test
    void test02CopyFile() throws IOException {
       String targetPath = path + "copy_dst";
-      DriveContent content = drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
       try (InputStream is = content.getInputStream()) {
 //         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
       }
-      drive.copy(FIXED_CID, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      DriveContent newContent = drive.get(FIXED_CID, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      drive.copy(CONTRACT, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      DriveContent newContent = drive.get(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
       try (InputStream is = newContent.getInputStream()) {
 //         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
       }
@@ -79,43 +92,43 @@ class E2EDriveHttpTest {
    @Test
    void test03MoveFile() throws IOException {
       String targetPath = path + "move_dst";
-      DriveContent content = drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
       try (InputStream is = content.getInputStream()) {
-         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
+//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
       }
-      drive.move(FIXED_CID, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      DriveContent newContent = drive.get(FIXED_CID, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      drive.move(CONTRACT, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      DriveContent newContent = drive.get(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
       try (InputStream is = newContent.getInputStream()) {
-         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
+//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
       }
       // move the stuff back
-      drive.move(FIXED_CID, targetPath, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.move(CONTRACT, targetPath, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
 
    @Test
    void test04Mkdir() throws IOException {
       // remove the content
-      drive.makeDir(FIXED_CID, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.makeDir(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingAwait();
       // now try to retrieve the content again
-      drive.get(FIXED_CID, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingFirst();
+      drive.get(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
 
    @Test
-   @Disabled("Running this and then removal of parent dir breaks contract until restart........")
+//   @Disabled("Running this and then removal of parent dir breaks contract until restart........")
    void test04RemoveFile() throws IOException {
       // remove the content
-      drive.remove(FIXED_CID, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
       // now try to retrieve the content again
-      drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
 
    @Test
    void test05RemoveAll() throws IOException, InterruptedException {
       // remove the content
-      drive.remove(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
       // now try to retrieve the content again
       assertThrows(RuntimeException.class,
-            () -> drive.get(FIXED_CID, path).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            () -> drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst());
    }
 
    private static void writeToFile(String fileName, InputStream is) throws IOException {

@@ -107,4 +107,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    // tar utility to check content of server responses
+    //testImplementation 'org.apache.commons:commons-compress:1.20'
+    testImplementation 'org.apache.commons:commons-vfs2:2.6.0'
+    testImplementation 'commons-io:commons-io:2.6'
 }
