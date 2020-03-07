@@ -30,13 +30,13 @@ public interface DriveRepository {
    /**
     * adds the content to a specific Drive and to a given path.
     * 
-    * @param id
-    * @param path
-    * @param content
-    * @return
-    * @throws IOException 
+    * @param contract id of the contract under which the content is being uploaded
+    * @param path path where content will be placed
+    * @param content content to place on the path
+    * @return cid of the created content
+    * @throws IOException exception when something failed
     */
-   Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException;
+   Observable<Cid> add(Cid contract, String path, DriveContent content) throws IOException;
 
    /**
     * retrieves content for a specific contract at a given path. The content is represented as an input stream

@@ -82,9 +82,12 @@ ext {
 dependencies {
     // ReactiveX async processing
     api 'io.reactivex.rxjava2:rxjava:2.2.11'
-    // CID and libp2p for the IPFS stuff
-    api 'com.github.ipld:java-cid:v1.1.1'
     api 'io.libp2p:jvm-libp2p-minimal:0.1.0-RELEASE'
+    
+    // use chain SDK for crypto operations
+    implementation 'io.proximax:java-xpx-chain-sdk:0.6.+'
+    
+    implementation 'com.codahale:shamir:0.6.0'
     
     // validations
     implementation 'org.apache.commons:commons-lang3:3.9'
