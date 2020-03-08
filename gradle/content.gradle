@@ -30,13 +30,13 @@ task sourcesJar(type: Jar) {
     }
     manifest {
         attributes(
-            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
+            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-dfms-api-http',
             'Build-Timestamp'      : new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
             'Build-Revision'       : project.version,
             'Created-By'           : "Gradle ${gradle.gradleVersion}",
             'Build-Jdk'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
             'Build-OS'             : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
-            'Specification-Title'  : 'ProximaX Sirius Blockchain Java SDK',
+            'Specification-Title'  : 'ProximaX Sirius Java DFMS HTTP API',
             'Implementation-Vendor': 'ProximaX',
             'Bundle-License'       : 'https://www.apache.org/licenses/LICENSE-2.0.txt'
         )
@@ -56,13 +56,13 @@ task javadocJar(type: Jar) {
     }
     manifest {
         attributes(
-            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
+            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-dfms-api-http',
             'Build-Timestamp'      : new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
             'Build-Revision'       : project.version,
             'Created-By'           : "Gradle ${gradle.gradleVersion}",
             'Build-Jdk'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
             'Build-OS'             : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
-            'Specification-Title'  : 'ProximaX Sirius Blockchain Java SDK',
+            'Specification-Title'  : 'ProximaX Sirius Java DFMS HTTP API',
             'Implementation-Vendor': 'ProximaX',
             'Bundle-License'       : 'https://www.apache.org/licenses/LICENSE-2.0.txt'
         )
@@ -80,13 +80,13 @@ jar {
     }
     manifest {
         attributes(
-            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
+            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-dfms-api-http',
             'Build-Timestamp'      : new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
             'Build-Revision'       : project.version,
             'Created-By'           : "Gradle ${gradle.gradleVersion}",
             'Build-Jdk'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
             'Build-OS'             : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
-            'Specification-Title'  : 'ProximaX Sirius Blockchain Java SDK',
+            'Specification-Title'  : 'ProximaX Sirius Java DFMS HTTP API',
             'Implementation-Vendor': 'ProximaX',
             'Bundle-License'       : 'https://www.apache.org/licenses/LICENSE-2.0.txt'
         )
