@@ -74,37 +74,6 @@ public final class ShamirSecretSharingPrivacyStrategy implements PrivacyStrategy
    }
 
    /**
-    * A model class to represent a secret part which is composed of index and the secret part data
-    */
-   public static class SecretPart {
-
-      private final int index;
-      private final byte[] data;
-
-      /**
-       * Construct instance of this model
-       * 
-       * @param index the index of the secret part
-       * @param data the data of the secret part
-       */
-      public SecretPart(int index, byte[] data) {
-         this.index = index;
-         this.data = data;
-      }
-
-      /**
-       * Construct instance of this model
-       * 
-       * @param index the index of the secret part
-       * @param secretPart the data of the secret part
-       * @return instance of this model
-       */
-      public static SecretPart secretPart(int index, byte[] secretPart) {
-         return new SecretPart(index, secretPart);
-      }
-   }
-
-   /**
     * Create instance of this strategy using an array of secret parts
     * 
     * @param secretTotalPartCount the total count of secret parts
@@ -148,4 +117,34 @@ public final class ShamirSecretSharingPrivacyStrategy implements PrivacyStrategy
             secretMinimumPartCountToBuild, secretParts == null ? Collections.emptyMap() : secretParts);
    }
 
+   /**
+    * A model class to represent a secret part which is composed of index and the secret part data
+    */
+   public static class SecretPart {
+
+      private final int index;
+      private final byte[] data;
+
+      /**
+       * Construct instance of this model
+       * 
+       * @param index the index of the secret part
+       * @param data the data of the secret part
+       */
+      public SecretPart(int index, byte[] data) {
+         this.index = index;
+         this.data = data;
+      }
+
+      /**
+       * Construct instance of this model
+       * 
+       * @param index the index of the secret part
+       * @param secretPart the data of the secret part
+       * @return instance of this model
+       */
+      public static SecretPart secretPart(int index, byte[] secretPart) {
+         return new SecretPart(index, secretPart);
+      }
+   }
 }

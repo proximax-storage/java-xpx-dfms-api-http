@@ -1,11 +1,5 @@
 package io.proximax.dfms.privacy;
 
-import io.proximax.dfms.privacy.strategy.CustomPrivacyStrategy;
-import io.proximax.dfms.privacy.strategy.ProximaXKeysPrivacyStrategy;
-import io.proximax.dfms.privacy.strategy.PasswordPrivacyStrategy;
-import io.proximax.dfms.privacy.strategy.PlainPrivacyStrategy;
-import io.proximax.dfms.privacy.strategy.ShamirSecretSharingPrivacyStrategy;
-
 /**
  * Enumerates the different privacy types
  * 
@@ -16,31 +10,31 @@ public enum PrivacyType {
    /**
     * The type for plain privacy strategy
     * 
-    * @see PlainPrivacyStrategy
+    * @see io.proximax.dfms.privacy.strategy.PlainPrivacyStrategy
     */
    PLAIN(1001),
    /**
     * The type for secured with ProximaX keys privacy strategy
     * 
-    * @see NemKeysPrivacyStrategy
+    * @see io.proximax.dfms.privacy.strategy.ProximaXKeysPrivacyStrategy
     */
    PROXIMAX_KEYS(1002),
    /**
     * The type for secured with shamir secret sharing privacy strategy
     * 
-    * @see ShamirSecretSharingPrivacyStrategy
+    * @see io.proximax.dfms.privacy.strategy.ShamirSecretSharingPrivacyStrategy
     */
    SHAMIR(1003),
    /**
     * The type for secured with password privacy strategy
     * 
-    * @see PasswordPrivacyStrategy
+    * @see io.proximax.dfms.privacy.strategy.PasswordPrivacyStrategy
     */
    PASSWORD(1004),
    /**
     * The type for custom privacy strategy
     * 
-    * @see CustomPrivacyStrategy
+    * @see io.proximax.dfms.privacy.strategy.CustomPrivacyStrategy
     */
    CUSTOM(2001);
 

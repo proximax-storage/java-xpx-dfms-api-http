@@ -5,7 +5,7 @@ import java.io.InputStream;
 import io.proximax.dfms.privacy.strategy.CustomPrivacyStrategy;
 
 /**
- * The abstract class privacy strategy <br>
+ * The privacy strategy interface<br>
  * <br>
  * Privacy strategy handles the encrypting and decrypting of data <br>
  * <br>

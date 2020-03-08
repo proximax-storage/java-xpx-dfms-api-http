@@ -75,4 +75,10 @@ public class StorageApi implements ServiceNode {
       return nodeUrl;
    }
    
+   /**
+    * @return the API path
+    */
+   public String getApiPath() {
+      return apiPath;
+   }
 }
