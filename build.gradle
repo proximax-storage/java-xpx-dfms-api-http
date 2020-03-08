@@ -93,6 +93,7 @@ dependencies {
     // validations
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'commons-io:commons-io:2.6'
 	implementation 'commons-codec:commons-codec:1.13'
     // OK HTTP3 client
     implementation "com.squareup.okhttp3:okhttp:${okHttp3Version}"
@@ -114,5 +115,4 @@ dependencies {
     // tar utility to check content of server responses
     //testImplementation 'org.apache.commons:commons-compress:1.20'
     testImplementation 'org.apache.commons:commons-vfs2:2.6.0'
-    testImplementation 'commons-io:commons-io:2.6'
 }
