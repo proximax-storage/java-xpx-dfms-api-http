@@ -25,7 +25,7 @@ import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedGroupElement;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519GroupElement;
 
 /**
- * This factory class to creating cipher for password based encryptions
+ * This factory class to creating cipher for key-pair based encryptions
  */
 public class BlockchainKeysCipherEncryptor {
 
@@ -104,7 +104,7 @@ public class BlockchainKeysCipherEncryptor {
 			sharedKey[i] ^= salt[i];
 		}
 
-		return new SecretKeySpec(Hashes.sha3_256(new byte[][]{sharedKey}), "AES");
+		return new SecretKeySpec(Hashes.sha3_256(sharedKey), "AES");
 	}
 
 }

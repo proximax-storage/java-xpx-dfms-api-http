@@ -8,19 +8,20 @@ import io.proximax.cipher.BlockchainKeysCipherEncryptor;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
-import io.proximax.dfms.model.PrivacyType;
+import io.proximax.dfms.privacy.PrivacyStrategy;
+import io.proximax.dfms.privacy.PrivacyType;
 
 /**
- * The privacy strategy that secures data using the NEM keys (a private key and a public key). This strategy encrypt and
- * decrypt the data using both private and public keys
+ * The privacy strategy that secures data using the ProximaX keys (a private key and a public key). This strategy
+ * encrypts and decrypts the data using both private and public keys
  */
-public final class NemKeysPrivacyStrategy extends PrivacyStrategy {
+public final class ProximaXKeysPrivacyStrategy implements PrivacyStrategy {
 
    private final BlockchainKeysCipherEncryptor blockchainKeysCipherEncryptor;
    private final KeyPair keyPairOfPrivateKey;
    private final KeyPair keyPairOfPublicKey;
 
-   NemKeysPrivacyStrategy(BlockchainKeysCipherEncryptor blockchainKeysCipherEncryptor, String privateKey,
+   ProximaXKeysPrivacyStrategy(BlockchainKeysCipherEncryptor blockchainKeysCipherEncryptor, String privateKey,
          String publicKey) {
 
       Validate.notNull(privateKey, "private key is required");
@@ -32,14 +33,14 @@ public final class NemKeysPrivacyStrategy extends PrivacyStrategy {
    }
 
    /**
-    * Get the privacy type which is set as NEMKEYS
+    * Get the privacy type which is set as PROXIMAX_KEYS
     * 
     * @return the privacy type's int value
     * @see PrivacyType
     */
    @Override
    public int getPrivacyType() {
-      return PrivacyType.NEMKEYS.getValue();
+      return PrivacyType.PROXIMAX_KEYS.getValue();
    }
 
    /**
@@ -71,7 +72,7 @@ public final class NemKeysPrivacyStrategy extends PrivacyStrategy {
     * @param publicKey the public key
     * @return the instance of this strategy
     */
-   public static NemKeysPrivacyStrategy create(String privateKey, String publicKey) {
-      return new NemKeysPrivacyStrategy(new BlockchainKeysCipherEncryptor(), privateKey, publicKey);
+   public static ProximaXKeysPrivacyStrategy create(String privateKey, String publicKey) {
+      return new ProximaXKeysPrivacyStrategy(new BlockchainKeysCipherEncryptor(), privateKey, publicKey);
    }
 }

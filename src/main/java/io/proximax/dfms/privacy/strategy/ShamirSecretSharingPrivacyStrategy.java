@@ -12,14 +12,15 @@ import org.apache.commons.lang3.Validate;
 import com.codahale.shamir.Scheme;
 
 import io.proximax.cipher.PBECipherEncryptor;
-import io.proximax.dfms.model.PrivacyType;
+import io.proximax.dfms.privacy.PrivacyStrategy;
+import io.proximax.dfms.privacy.PrivacyType;
 
 /**
  * The privacy strategy that secures the data using shamir secret sharing. <br>
  * <br>
  * This strategy requires the total count of secret parts, minimum count of parts to build secret, and the secret parts.
  */
-public final class ShamirSecretSharingPrivacyStrategy extends PrivacyStrategy {
+public final class ShamirSecretSharingPrivacyStrategy implements PrivacyStrategy {
 
    private final char[] secret;
    private final PBECipherEncryptor pbeCipherEncryptor;

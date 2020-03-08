@@ -80,13 +80,14 @@ ext {
 }
 
 dependencies {
+    // use chain SDK to provide API for key-pair
+    api 'io.proximax:java-xpx-chain-sdk:0.6.+'
     // ReactiveX async processing
     api 'io.reactivex.rxjava2:rxjava:2.2.11'
+    // libp2p for peer to peer operations
     api 'io.libp2p:jvm-libp2p-minimal:0.1.0-RELEASE'
     
-    // use chain SDK for crypto operations
-    implementation 'io.proximax:java-xpx-chain-sdk:0.6.+'
-    
+    // support for shamir privacy strategy
     implementation 'com.codahale:shamir:0.6.0'
     
     // validations

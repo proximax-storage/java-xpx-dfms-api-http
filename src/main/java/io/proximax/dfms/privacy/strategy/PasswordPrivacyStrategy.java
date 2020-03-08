@@ -8,12 +8,13 @@ import org.apache.commons.lang3.Validate;
 
 import io.proximax.cipher.PBECipherEncryptor;
 import io.proximax.core.utils.PasswordUtils;
-import io.proximax.dfms.model.PrivacyType;
+import io.proximax.dfms.privacy.PrivacyStrategy;
+import io.proximax.dfms.privacy.PrivacyType;
 
 /**
  * The privacy strategy that secures the data using a long password, 50 characters minimum.
  */
-public final class PasswordPrivacyStrategy extends PrivacyStrategy {
+public final class PasswordPrivacyStrategy implements PrivacyStrategy {
 
    private final PBECipherEncryptor pbeCipherEncryptor;
 
