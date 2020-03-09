@@ -5,6 +5,7 @@
  */
 package io.proximax.dfms.http.repos;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -16,6 +17,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -27,6 +32,7 @@ import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;
 import io.proximax.dfms.drive.FileSystemContent;
+import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**
  * TODO add proper description
@@ -41,11 +47,19 @@ class E2EDriveHttpTest {
 
    private StorageApi api;
    private DriveRepository drive;
+   private DefaultFileSystemManager fsManager;
 
    @BeforeAll
-   void init() throws MalformedURLException {
+   void init() throws MalformedURLException, FileSystemException {
       api = new StorageApi(new URL("http://localhost:6366"));
       drive = api.createDriveRepository();
+      // file system manager for access to retrieved tar-balls
+      fsManager = DriveContentUtils.createFSManager();
+   }
+
+   @AfterAll
+   void cleanup() {
+      fsManager.close();
    }
 
    @Test
@@ -55,7 +69,7 @@ class E2EDriveHttpTest {
       drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
       drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
-   
+
    @Test
    void test01AddDirectory() throws IOException {
       DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
@@ -64,14 +78,10 @@ class E2EDriveHttpTest {
       System.out.println("ID of uploaded data: " + cid);
       // now make request for that data
       DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = content.getInputStream()) {
-//         File tempFile = File.createTempFile("dfms-test-"+path, ".tar");
-//         FileUtils.copyInputStreamToFile(is, tempFile);
-////         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
-//         FileSystemManager fsManager = VFS.getManager();
-//         FileObject tarredContent = fsManager.resolveFile( "tar:file://" + tempFile.getCanonicalPath()+"!/" );
-//         System.out.println(tarredContent);
-      }
+      // test the contents
+      FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
+      assertEquals(path, rootDir.getName().getBaseName());
+      assertEquals(3, rootDir.getChildren().length);
 
    }
 
