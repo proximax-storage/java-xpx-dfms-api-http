@@ -164,8 +164,6 @@ public class HttpRepository<T extends ServiceNode> {
    public String mapStringOrError(final Response response) {
       try (ResponseBody body = mapRespBodyOrError(response)) {
          String bodyString = body.string();
-         // TODO this has to go before release
-         System.out.println("Got response: " + bodyString);
          return bodyString;
       } catch (IOException e) {
          throw new DFMSRuntimeException("Failed to read response body", e);

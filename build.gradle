@@ -80,15 +80,20 @@ ext {
 }
 
 dependencies {
+    // use chain SDK to provide API for key-pair
+    api 'io.proximax:java-xpx-chain-sdk:0.6.+'
     // ReactiveX async processing
     api 'io.reactivex.rxjava2:rxjava:2.2.11'
-    // CID and libp2p for the IPFS stuff
-    api 'com.github.ipld:java-cid:v1.1.1'
+    // libp2p for peer to peer operations
     api 'io.libp2p:jvm-libp2p-minimal:0.1.0-RELEASE'
+    
+    // support for shamir privacy strategy
+    implementation 'com.codahale:shamir:0.6.0'
     
     // validations
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'commons-io:commons-io:2.6'
 	implementation 'commons-codec:commons-codec:1.13'
     // OK HTTP3 client
     implementation "com.squareup.okhttp3:okhttp:${okHttp3Version}"
@@ -108,7 +113,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     // tar utility to check content of server responses
-    //testImplementation 'org.apache.commons:commons-compress:1.20'
     testImplementation 'org.apache.commons:commons-vfs2:2.6.0'
-    testImplementation 'commons-io:commons-io:2.6'
+    // without this VFS2 can not open TARs
+    testImplementation 'org.apache.commons:commons-compress:1.20'
+    
 }

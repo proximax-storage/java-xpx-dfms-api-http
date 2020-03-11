@@ -5,8 +5,10 @@
  */
 package io.proximax.dfms.http.repos;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,6 +18,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -27,6 +33,7 @@ import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;
 import io.proximax.dfms.drive.FileSystemContent;
+import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**
  * TODO add proper description
@@ -41,11 +48,19 @@ class E2EDriveHttpTest {
 
    private StorageApi api;
    private DriveRepository drive;
+   private DefaultFileSystemManager fsManager;
 
    @BeforeAll
-   void init() throws MalformedURLException {
+   void init() throws MalformedURLException, FileSystemException {
       api = new StorageApi(new URL("http://localhost:6366"));
       drive = api.createDriveRepository();
+      // file system manager for access to retrieved tar-balls
+      fsManager = DriveContentUtils.createFSManager();
+   }
+
+   @AfterAll
+   void cleanup() {
+      fsManager.close();
    }
 
    @Test
@@ -55,7 +70,7 @@ class E2EDriveHttpTest {
       drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
       drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
-   
+
    @Test
    void test01AddDirectory() throws IOException {
       DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
@@ -63,16 +78,45 @@ class E2EDriveHttpTest {
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);
       // now make request for that data
-      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = content.getInputStream()) {
-//         File tempFile = File.createTempFile("dfms-test-"+path, ".tar");
-//         FileUtils.copyInputStreamToFile(is, tempFile);
-////         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
-//         FileSystemManager fsManager = VFS.getManager();
-//         FileObject tarredContent = fsManager.resolveFile( "tar:file://" + tempFile.getCanonicalPath()+"!/" );
-//         System.out.println(tarredContent);
+      {
+         DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+         // test the contents
+         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
+         assertEquals(path, rootDir.getName().getBaseName());
+         assertEquals(4, rootDir.getChildren().length);
+         FileObject subDir = rootDir.getChild("subdir");
+         assertEquals(1, subDir.getChildren().length);
       }
-
+      // test sub-paths
+      {
+         DriveContent content = drive.get(CONTRACT, path + "/subdir/").timeout(30, TimeUnit.SECONDS).blockingFirst();
+         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, "subdir");
+         assertEquals(1, rootDir.getChildren().length);
+      }
+      // direct query for file
+      {
+         // make request to a path of the image file
+         DriveContent content = drive.get(CONTRACT, path + "/subdir/test_image_file.png").timeout(30, TimeUnit.SECONDS)
+               .blockingFirst();
+         // response is tar with the image in the root directory so open the image
+         FileObject image = DriveContentUtils.openContent(fsManager, content, "test_image_file.png");
+         // make sure we have the file
+         assertTrue(image.isFile());
+         assertEquals("test_image_file.png", image.getName().getBaseName());
+      }
+//      // now try adding the directory as subdirectory of original upload
+//      {
+//         drive.add(CONTRACT, path+"/subdir", new FileSystemContent(new File("src/e2e/resources/simple").toPath())).timeout(30, TimeUnit.SECONDS).blockingFirst();
+//         DriveContent content = drive.get(CONTRACT, path+"/subdir").timeout(30, TimeUnit.SECONDS).blockingFirst();
+//         // test the contents
+//         DriveContentUtils.writeToFile(content, new File("subdirtest.tar"));
+////         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
+////         assertEquals(path, rootDir.getName().getBaseName());
+////         assertEquals(4, rootDir.getChildren().length);
+////         FileObject subDir = rootDir.getChild("subdir");
+////         assertEquals(1, subDir.getChildren().length);
+//
+//      }
    }
 
    @Test

@@ -28,6 +28,7 @@ public class MultipartRequestContent extends RequestBody {
    private static final String SEMI_COLON = ";";
    private static final String DASH_DASH = "--";
    private static final String BOUNDARY_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   private static final int BOUNDARY_SIZE = 32;
 
    /** the content to be serialized in request body */
    private final DriveContent content;
@@ -41,15 +42,25 @@ public class MultipartRequestContent extends RequestBody {
     * create new instance
     * 
     * @param content the drive content used to create request body
+    * @param boundary the boundary that separates parts in the multi-part content
     */
-   public MultipartRequestContent(DriveContent content) {
+   public MultipartRequestContent(DriveContent content, String boundary) {
       // validate input
       Validate.notNull(content, "Content can not be null");
       // store input
       this.content = content;
       // create boundary and content type
-      this.boundary = createBoundary();
-      this.contentType = MediaType.get("multipart/form-data; boundary=" + this.boundary);
+      this.boundary = boundary;
+      this.contentType = MediaType.get("multipart/form-data; boundary=" + boundary);
+   }
+
+   /**
+    * create new instance with random boundary
+    * 
+    * @param content the drive content used to create request body
+    */
+   public MultipartRequestContent(DriveContent content) {
+      this(content, createBoundary());
    }
 
    @Override
@@ -72,7 +83,7 @@ public class MultipartRequestContent extends RequestBody {
    private static String createBoundary() {
       final int numChars = BOUNDARY_CHARS.length();
       final StringBuilder b = new StringBuilder();
-      for (int i = 0; i < 32; i++) {
+      for (int i = 0; i < BOUNDARY_SIZE; i++) {
          b.append(BOUNDARY_CHARS.charAt(RANDOM.nextInt(numChars)));
       }
       return b.toString();
@@ -132,8 +143,7 @@ public class MultipartRequestContent extends RequestBody {
     */
    private void addDirectoryPart(BufferedSink sink, Path path) throws IOException {
       writeBoundary(sink, false);
-      sink.writeUtf8("Content-Disposition: file; filename=").writeUtf8(quote(path.toString()))
-            .writeUtf8(LINE_FEED);
+      sink.writeUtf8("Content-Disposition: file; filename=").writeUtf8(quote(path.toString())).writeUtf8(LINE_FEED);
       sink.writeUtf8("Content-Type: application/x-directory").writeUtf8(LINE_FEED);
       sink.writeUtf8("Content-Transfer-Encoding: binary").writeUtf8(LINE_FEED);
       sink.writeUtf8(LINE_FEED);
@@ -175,7 +185,7 @@ public class MultipartRequestContent extends RequestBody {
 
       sink.writeUtf8(LINE_FEED);
    }
-   
+
    /**
     * return name encoded to be URL safe and between double quotes (e.g. "test%20name" is created from test name)
     * 
