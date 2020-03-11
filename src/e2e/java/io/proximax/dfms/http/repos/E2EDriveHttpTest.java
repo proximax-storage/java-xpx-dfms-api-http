@@ -8,6 +8,7 @@ package io.proximax.dfms.http.repos;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,12 +78,45 @@ class E2EDriveHttpTest {
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);
       // now make request for that data
-      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      // test the contents
-      FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
-      assertEquals(path, rootDir.getName().getBaseName());
-      assertEquals(3, rootDir.getChildren().length);
-
+      {
+         DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+         // test the contents
+         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
+         assertEquals(path, rootDir.getName().getBaseName());
+         assertEquals(4, rootDir.getChildren().length);
+         FileObject subDir = rootDir.getChild("subdir");
+         assertEquals(1, subDir.getChildren().length);
+      }
+      // test sub-paths
+      {
+         DriveContent content = drive.get(CONTRACT, path + "/subdir/").timeout(30, TimeUnit.SECONDS).blockingFirst();
+         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, "subdir");
+         assertEquals(1, rootDir.getChildren().length);
+      }
+      // direct query for file
+      {
+         // make request to a path of the image file
+         DriveContent content = drive.get(CONTRACT, path + "/subdir/test_image_file.png").timeout(30, TimeUnit.SECONDS)
+               .blockingFirst();
+         // response is tar with the image in the root directory so open the image
+         FileObject image = DriveContentUtils.openContent(fsManager, content, "test_image_file.png");
+         // make sure we have the file
+         assertTrue(image.isFile());
+         assertEquals("test_image_file.png", image.getName().getBaseName());
+      }
+//      // now try adding the directory as subdirectory of original upload
+//      {
+//         drive.add(CONTRACT, path+"/subdir", new FileSystemContent(new File("src/e2e/resources/simple").toPath())).timeout(30, TimeUnit.SECONDS).blockingFirst();
+//         DriveContent content = drive.get(CONTRACT, path+"/subdir").timeout(30, TimeUnit.SECONDS).blockingFirst();
+//         // test the contents
+//         DriveContentUtils.writeToFile(content, new File("subdirtest.tar"));
+////         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
+////         assertEquals(path, rootDir.getName().getBaseName());
+////         assertEquals(4, rootDir.getChildren().length);
+////         FileObject subDir = rootDir.getChild("subdir");
+////         assertEquals(1, subDir.getChildren().length);
+//
+//      }
    }
 
    @Test

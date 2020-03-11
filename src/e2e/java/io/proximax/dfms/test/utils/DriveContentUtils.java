@@ -42,9 +42,7 @@ public class DriveContentUtils {
 
    public static File createTempTar(String name, DriveContent content) throws IOException {
       File tempFile = File.createTempFile(name, ".tar");
-      try (InputStream is = content.getInputStream()) {
-         FileUtils.copyToFile(is, tempFile);
-      }
+      writeToFile(content, tempFile);
       return tempFile;
    }
 
@@ -62,4 +60,18 @@ public class DriveContentUtils {
       File tempFile = DriveContentUtils.createTempTar("proximax-dfms-" + rootPath, content);
       return fsManager.resolveFile("tar:file://" + tempFile.getCanonicalPath() + "!/" + rootPath);
    }
+   
+   /**
+    * write the content to a file
+    * 
+    * @param content the drive content to be written to disk
+    * @param target target file that will receive the data
+    * @throws IOException
+    */
+   public static void writeToFile(DriveContent content, File target) throws IOException {
+      try (InputStream is = content.getInputStream()) {
+         FileUtils.copyToFile(is, target);
+      }
+   }
+   
 }
