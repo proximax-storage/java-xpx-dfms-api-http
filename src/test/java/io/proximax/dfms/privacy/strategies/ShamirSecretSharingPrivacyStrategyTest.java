@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import com.codahale.shamir.Scheme;
 
 import io.proximax.dfms.privacy.PrivacyType;
+import io.proximax.dfms.privacy.strategies.ShamirSecretSharingPrivacyStrategy;
 
 public class ShamirSecretSharingPrivacyStrategyTest {
 

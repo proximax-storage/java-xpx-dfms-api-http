@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 import java.io.InputStream;
 import java.util.Collections;

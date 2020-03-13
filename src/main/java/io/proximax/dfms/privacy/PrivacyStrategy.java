@@ -2,7 +2,7 @@ package io.proximax.dfms.privacy;
 
 import java.io.InputStream;
 
-import io.proximax.dfms.privacy.strategy.CustomPrivacyStrategy;
+import io.proximax.dfms.privacy.strategies.CustomPrivacyStrategy;
 
 /**
  * The privacy strategy interface<br>

@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 import io.proximax.dfms.privacy.PrivacyStrategy;
 import io.proximax.dfms.privacy.PrivacyType;

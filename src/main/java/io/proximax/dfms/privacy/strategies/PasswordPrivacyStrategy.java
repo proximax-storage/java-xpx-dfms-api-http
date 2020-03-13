@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 import static io.proximax.core.utils.PasswordUtils.MINIMUM_PASSWORD_LENGTH;
 

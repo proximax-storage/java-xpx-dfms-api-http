@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,6 +22,7 @@ import org.mockito.MockitoAnnotations;
 import io.proximax.cipher.PBECipherEncryptor;
 import io.proximax.core.utils.PasswordUtils;
 import io.proximax.dfms.privacy.PrivacyType;
+import io.proximax.dfms.privacy.strategies.PasswordPrivacyStrategy;
 
 public class PasswordPrivacyStrategyTest {
 

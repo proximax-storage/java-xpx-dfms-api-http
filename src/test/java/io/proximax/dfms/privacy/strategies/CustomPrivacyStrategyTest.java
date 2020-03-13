@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.dfms.privacy.PrivacyType;
-import io.proximax.dfms.privacy.strategy.CustomPrivacyStrategy;
+import io.proximax.dfms.privacy.strategies.CustomPrivacyStrategy;
 
 
 public class CustomPrivacyStrategyTest {

@@ -1,4 +1,4 @@
-package io.proximax.dfms.privacy.strategy;
+package io.proximax.dfms.privacy.strategies;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +23,7 @@ import io.proximax.core.crypto.CryptoEngines;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.dfms.privacy.PrivacyType;
+import io.proximax.dfms.privacy.strategies.ProximaXKeysPrivacyStrategy;
 
 public class ProximaXPrivacyStrategyTest {
 
