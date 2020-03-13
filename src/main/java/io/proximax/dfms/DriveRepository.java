@@ -6,11 +6,11 @@
 package io.proximax.dfms;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 import io.proximax.cid.Cid;
 import io.proximax.dfms.drive.DriveContent;
+import io.proximax.dfms.drive.DriveItem;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 
@@ -94,7 +94,7 @@ public interface DriveRepository {
     * @param path
     * @return
     */
-   Observable<Path> stat(Cid id, String path);
+   Observable<DriveItem> stat(Cid id, String path);
 
    /**
     *  lists all the files and directories of a specific Drive and information about them at a given path.
@@ -103,7 +103,7 @@ public interface DriveRepository {
     * @param path
     * @return
     */
-   Observable<List<Path>> ls(Cid id, String path);
+   Observable<List<DriveItem>> ls(Cid id, String path);
 
    /**
     * uploads the state of a Drive to all contract members.

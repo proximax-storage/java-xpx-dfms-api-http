@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.vfs2.FileObject;
@@ -32,7 +33,9 @@ import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.drive.FileSystemContent;
+import io.proximax.dfms.drive.DriveItem;
+import io.proximax.dfms.drive.DriveItemType;
+import io.proximax.dfms.drive.content.FileSystemContent;
 import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**
@@ -72,7 +75,7 @@ class E2EDriveHttpTest {
    }
 
    @Test
-   void test01AddDirectory() throws IOException {
+   void test01AddDirectory() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
       Cid cid = drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
@@ -104,19 +107,34 @@ class E2EDriveHttpTest {
          assertTrue(image.isFile());
          assertEquals("test_image_file.png", image.getName().getBaseName());
       }
-//      // now try adding the directory as subdirectory of original upload
-//      {
-//         drive.add(CONTRACT, path+"/subdir", new FileSystemContent(new File("src/e2e/resources/simple").toPath())).timeout(30, TimeUnit.SECONDS).blockingFirst();
-//         DriveContent content = drive.get(CONTRACT, path+"/subdir").timeout(30, TimeUnit.SECONDS).blockingFirst();
-//         // test the contents
+      // now try adding the directory as subdirectory of original upload
+      {
+         drive.add(CONTRACT, path+"/subdir2", new FileSystemContent(new File("src/e2e/resources/simple").toPath())).timeout(30, TimeUnit.SECONDS).blockingFirst();
+         DriveContent content = drive.get(CONTRACT, path+"/subdir").timeout(30, TimeUnit.SECONDS).blockingFirst();
+         // test the contents
 //         DriveContentUtils.writeToFile(content, new File("subdirtest.tar"));
-////         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
-////         assertEquals(path, rootDir.getName().getBaseName());
-////         assertEquals(4, rootDir.getChildren().length);
-////         FileObject subDir = rootDir.getChild("subdir");
-////         assertEquals(1, subDir.getChildren().length);
-//
-//      }
+//         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
+//         assertEquals(path, rootDir.getName().getBaseName());
+//         assertEquals(4, rootDir.getChildren().length);
+//         FileObject subDir = rootDir.getChild("subdir");
+//         assertEquals(1, subDir.getChildren().length);
+      }
+      {
+         List<DriveItem> items = drive.ls(CONTRACT, path+"/subdir").blockingFirst();
+         assertEquals(1, items.size());
+         DriveItem item = items.get(0);
+         assertEquals("test_image_file.png", item.getName());
+         assertEquals(DriveItemType.FILE, item.getType());
+         assertEquals(581312l, item.getSize());
+         assertEquals(Cid.decode("zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"), item.getCid());
+      }
+      {
+         DriveItem item = drive.stat(CONTRACT, path+"/subdir/test_image_file.png").blockingFirst();
+         assertEquals("test_image_file.png", item.getName());
+         assertEquals(DriveItemType.FILE, item.getType());
+         assertEquals(581312l, item.getSize());
+         assertEquals(Cid.decode("zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"), item.getCid());
+      }
    }
 
    @Test

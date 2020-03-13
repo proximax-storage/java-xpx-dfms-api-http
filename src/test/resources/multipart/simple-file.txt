@@ -1,0 +1,7 @@
+--ex6QCAsqaYnQ8dRHsLZCFroQsPkcHGuX
+Content-Disposition: file; filename="text1.txt"
+Content-Type: application/x-directory
+Content-Transfer-Encoding: binary
+
+
+--ex6QCAsqaYnQ8dRHsLZCFroQsPkcHGuX--

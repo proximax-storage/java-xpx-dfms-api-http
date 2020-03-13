@@ -8,6 +8,7 @@ package io.proximax.dfms.test.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.CacheStrategy;
@@ -25,6 +26,8 @@ import io.proximax.dfms.drive.DriveContent;
  * TODO add proper description
  */
 public class DriveContentUtils {
+   private static final AtomicLong counter = new AtomicLong(System.currentTimeMillis());
+   
    public static DefaultFileSystemManager createFSManager() throws FileSystemException {
       // create empty instance
       DefaultFileSystemManager fsManager = new DefaultFileSystemManager();
@@ -41,7 +44,7 @@ public class DriveContentUtils {
    }
 
    public static File createTempTar(String name, DriveContent content) throws IOException {
-      File tempFile = File.createTempFile(name, ".tar");
+      File tempFile = File.createTempFile(name + counter.getAndIncrement(), ".tar");
       writeToFile(content, tempFile);
       return tempFile;
    }

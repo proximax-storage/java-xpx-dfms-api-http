@@ -7,6 +7,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import io.proximax.dfms.drive.content.ByteArrayContent;
+import io.proximax.dfms.drive.content.DirectoryContent;
+import io.proximax.dfms.drive.content.FileSystemContent;
+import io.proximax.dfms.drive.content.InputStreamContent;
+
 /**
  * Representation of the hierarchical data in the DFMS. Can represent either some data (e.g. file) or a
  * node in hierarchy (e.g. directory)

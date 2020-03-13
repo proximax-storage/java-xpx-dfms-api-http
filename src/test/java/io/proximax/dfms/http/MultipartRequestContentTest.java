@@ -18,7 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.drive.FileSystemContent;
+import io.proximax.dfms.drive.content.FileSystemContent;
 import okhttp3.RequestBody;
 import okio.Buffer;
 

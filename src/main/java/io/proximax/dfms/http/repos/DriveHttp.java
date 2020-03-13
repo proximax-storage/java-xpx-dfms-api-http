@@ -6,7 +6,6 @@
 package io.proximax.dfms.http.repos;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +13,13 @@ import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.drive.InputStreamContent;
+import io.proximax.dfms.drive.DriveItem;
+import io.proximax.dfms.drive.content.InputStreamContent;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
 import io.proximax.dfms.http.responses.CidResponse;
+import io.proximax.dfms.http.responses.DriveItemListResponse;
+import io.proximax.dfms.http.responses.DriveItemStatResponse;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.Call;
@@ -106,20 +108,34 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    }
 
    @Override
-   public Observable<Path> stat(Cid id, String path) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<DriveItem> stat(Cid id, String path) {
+      HttpUrl url = buildUrl(URL_STAT, id.toString(), path).build();
+      Request request = new Request.Builder().url(url).build();
+      return makeRequest(request)
+         .map(this::mapStringOrError)
+         .map(str -> getGson().fromJson(str, DriveItemStatResponse.class))
+         .map(DriveItemStatResponse::getItem)
+         .map(DriveItem::fromDto);
    }
 
    @Override
-   public Observable<List<Path>> ls(Cid id, String path) {
-      // TODO Auto-generated method stub
-      return null;
+   public Observable<List<DriveItem>> ls(Cid id, String path) {
+      HttpUrl url = buildUrl(URL_LS, id.toString(), path).build();
+      Request request = new Request.Builder().url(url).build();
+      return makeRequest(request)
+         .map(this::mapStringOrError)
+         .map(str -> getGson().fromJson(str, DriveItemListResponse.class))
+         .flatMapIterable(DriveItemListResponse::getItems)
+         .map(DriveItem::fromDto)
+         .toList().toObservable();
    }
 
    @Override
    public Completable flush(Cid id, String path) {
-      // TODO Auto-generated method stub
-      return null;
+      HttpUrl url = buildUrl(URL_FLUSH, id.toString(), path).build();
+      Request request = new Request.Builder().url(url).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
+   
    }
 }

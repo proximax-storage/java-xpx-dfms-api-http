@@ -1,0 +1,44 @@
+{
+	"List": [
+		{
+			"Name": "text2.txt",
+			"Size": 14,
+			"Type": "file",
+			"Cid": {
+				"/": "bafkreidbonrckqiwo5pa4ugt7jpr4i2tlde3empn3ndbiki2y2xvi5atsu"
+			}
+		},
+		{
+			"Name": "subdir",
+			"Size": 0,
+			"Type": "dir",
+			"Cid": {
+				"/": "bafybeibugwt5232eqwv5d37ywkzg7u5prw6kdurgucgspytako5xdlj3ku"
+			}
+		},
+		{
+			"Name": "text1.txt",
+			"Size": 22,
+			"Type": "file",
+			"Cid": {
+				"/": "bafkreie5bd25bsbwjxhmk4qhi6p4zlrt5wf6eet4g3dam4enwx44wonwxm"
+			}
+		},
+		{
+			"Name": "subdir2",
+			"Size": 0,
+			"Type": "dir",
+			"Cid": {
+				"/": "bafybeihcdyodols2ynbpdne3k76gfevzqxfb26gqqljsagjqbf4eix2gia"
+			}
+		},
+		{
+			"Name": "data.txt",
+			"Size": 9,
+			"Type": "file",
+			"Cid": {
+				"/": "bafkreifxb73lmyossxcb7vfichy4ezggom2q4hqjslfz2bve3eafoxtvwm"
+			}
+		}
+	]
+}
