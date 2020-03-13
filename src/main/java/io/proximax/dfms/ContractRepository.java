@@ -7,6 +7,7 @@ package io.proximax.dfms;
 
 import java.math.BigInteger;
 import java.time.Duration;
+import java.util.List;
 
 import io.proximax.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
@@ -62,7 +63,7 @@ public interface ContractRepository {
     * 
     * @return
     */
-   Observable<Cid> list();
+   Observable<List<Cid>> list();
 
    /**
     * Creates subscription for Drive contract corrections for contract in local storage and/or in blockchain.

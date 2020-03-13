@@ -7,6 +7,7 @@ package io.proximax.dfms.http.repos;
 
 import java.math.BigInteger;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 import io.proximax.cid.Cid;
@@ -66,13 +67,13 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
    }
 
    @Override
-   public Observable<Cid> list() {
+   public Observable<List<Cid>> list() {
       HttpUrl url = buildUrl(URL_LS).build();
       RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
       return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListResponse.class))
-            .map(CidListResponse::getIds).flatMapIterable(list -> list).map(Cid::decode);
+            .map(CidListResponse::getIds).flatMapIterable(list -> list).map(Cid::decode).toList().toObservable();
    }
 
    @Override

@@ -26,7 +26,7 @@ import io.proximax.dfms.model.contract.Contract;
  */
 class E2EContractHttpTest {
 
-   private static final Cid FIXED_CID = Cid
+   private static final Cid CONTRACT = Cid
          .decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
 
    StorageApi api;
@@ -40,19 +40,16 @@ class E2EContractHttpTest {
    void listContracts() {
       ContractRepository contracts = api.createContractRepository();
       // list contracts on the api node
-      List<Cid> listedCids = contracts.list().timeout(30, TimeUnit.SECONDS).toList().blockingGet();
+      List<Cid> listedCids = contracts.list().timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(1, listedCids.size());
-      assertEquals(FIXED_CID, listedCids.get(0));
+      assertEquals(CONTRACT, listedCids.get(0));
    }
 
    @Test
    void getContract() throws IOException {
       ContractRepository contracts = api.createContractRepository();
       // retrieve info by contract id
-      Contract contr = ((ContractHttp) contracts).get(FIXED_CID).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      assertEquals(FIXED_CID, contr.getCid());
+      Contract contr = ((ContractHttp) contracts).get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      assertEquals(CONTRACT, contr.getCid());
    }
 }
-
-// docker run      --name=dfms --network=proximax-net -p 6366:6366 dfms                  dfms --test --ledger-addr=http://rest-api.proximax.com:3000
-// docker run --rm --name=dfms --network=proximax-net -p 6366:6366 wondertan/dfms:v0.6.1 dfms --test --ledger-addr=http://rest-api.proximax.com:3000
