@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import io.proximax.dfms.exception.DFMSRuntimeException;
+import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 
 /**
  * Utility methods for manipulation with HTTP data

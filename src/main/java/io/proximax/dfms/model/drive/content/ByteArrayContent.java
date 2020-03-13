@@ -1,4 +1,4 @@
-package io.proximax.dfms.drive.content;
+package io.proximax.dfms.model.drive.content;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.dfms.drive.DriveContent;
+import io.proximax.dfms.model.drive.DriveContent;
 
 public class ByteArrayContent extends BaseContent {
    private final byte[] data;

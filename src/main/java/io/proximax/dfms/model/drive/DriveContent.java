@@ -1,4 +1,4 @@
-package io.proximax.dfms.drive;
+package io.proximax.dfms.model.drive;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -7,10 +7,10 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.dfms.drive.content.ByteArrayContent;
-import io.proximax.dfms.drive.content.DirectoryContent;
-import io.proximax.dfms.drive.content.FileSystemContent;
-import io.proximax.dfms.drive.content.InputStreamContent;
+import io.proximax.dfms.model.drive.content.ByteArrayContent;
+import io.proximax.dfms.model.drive.content.DirectoryContent;
+import io.proximax.dfms.model.drive.content.FileSystemContent;
+import io.proximax.dfms.model.drive.content.InputStreamContent;
 
 /**
  * Representation of the hierarchical data in the DFMS. Can represent either some data (e.g. file) or a

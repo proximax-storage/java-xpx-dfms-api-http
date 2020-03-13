@@ -9,8 +9,8 @@ import java.util.Random;
 
 import org.apache.commons.lang3.Validate;
 
-import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.exception.DFMSRuntimeException;
+import io.proximax.dfms.model.drive.DriveContent;
+import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.utils.HttpUtils;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;

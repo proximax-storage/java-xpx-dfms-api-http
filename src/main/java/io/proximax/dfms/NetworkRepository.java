@@ -9,7 +9,7 @@ import java.util.List;
 
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
-import io.proximax.dfms.network.PeerInfo;
+import io.proximax.dfms.model.network.PeerInfo;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 

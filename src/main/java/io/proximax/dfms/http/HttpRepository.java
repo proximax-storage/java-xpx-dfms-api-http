@@ -25,10 +25,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import io.proximax.dfms.ServiceNode;
-import io.proximax.dfms.exception.DFMSResponseException;
-import io.proximax.dfms.exception.DFMSRuntimeException;
-import io.proximax.dfms.exception.ResponseErrorType;
 import io.proximax.dfms.http.responses.ErrorDTO;
+import io.proximax.dfms.model.exceptions.DFMSResponseException;
+import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
+import io.proximax.dfms.model.exceptions.ResponseErrorType;
 import io.reactivex.Observable;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -164,6 +164,7 @@ public class HttpRepository<T extends ServiceNode> {
    public String mapStringOrError(final Response response) {
       try (ResponseBody body = mapRespBodyOrError(response)) {
          String bodyString = body.string();
+//         System.out.println("got response -> " + bodyString);
          return bodyString;
       } catch (IOException e) {
          throw new DFMSRuntimeException("Failed to read response body", e);

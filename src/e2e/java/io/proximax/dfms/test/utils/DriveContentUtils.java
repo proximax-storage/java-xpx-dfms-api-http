@@ -20,7 +20,7 @@ import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
 import org.apache.commons.vfs2.provider.tar.TarFileProvider;
 
-import io.proximax.dfms.drive.DriveContent;
+import io.proximax.dfms.model.drive.DriveContent;
 
 /**
  * TODO add proper description

@@ -32,10 +32,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
-import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.drive.DriveItem;
-import io.proximax.dfms.drive.DriveItemType;
-import io.proximax.dfms.drive.content.FileSystemContent;
+import io.proximax.dfms.model.drive.DriveContent;
+import io.proximax.dfms.model.drive.DriveItem;
+import io.proximax.dfms.model.drive.DriveItemType;
+import io.proximax.dfms.model.drive.content.FileSystemContent;
 import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**

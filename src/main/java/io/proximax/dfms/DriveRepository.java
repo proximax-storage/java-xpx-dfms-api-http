@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.List;
 
 import io.proximax.cid.Cid;
-import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.drive.DriveItem;
+import io.proximax.dfms.model.drive.DriveContent;
+import io.proximax.dfms.model.drive.DriveItem;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 

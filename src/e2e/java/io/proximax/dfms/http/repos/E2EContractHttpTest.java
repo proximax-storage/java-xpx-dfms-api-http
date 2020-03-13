@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
-import io.proximax.dfms.contract.Contract;
+import io.proximax.dfms.model.contract.Contract;
 
 /**
  * TODO add proper description

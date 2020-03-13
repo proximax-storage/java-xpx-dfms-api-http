@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.dfms.drive.content.FileSystemContent;
+import io.proximax.dfms.model.drive.content.FileSystemContent;
 
 /**
  * TODO add proper description

@@ -1,11 +1,11 @@
-package io.proximax.dfms.drive.content;
+package io.proximax.dfms.model.drive.content;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.dfms.drive.DriveContent;
+import io.proximax.dfms.model.drive.DriveContent;
 
 public class DirectoryContent extends BaseContent {
 

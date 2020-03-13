@@ -1,4 +1,4 @@
-package io.proximax.dfms.drive.content;
+package io.proximax.dfms.model.drive.content;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import io.proximax.dfms.drive.DriveContent;
-import io.proximax.dfms.exception.DFMSRuntimeException;
+import io.proximax.dfms.model.drive.DriveContent;
+import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.utils.FileSystemUtils;
 
 /**
