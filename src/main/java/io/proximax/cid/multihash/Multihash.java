@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-import io.ipfs.multibase.Base16;
-import io.ipfs.multibase.Base58;
+import io.proximax.cid.multibase.Base16;
+import io.proximax.cid.multibase.Base58;
 
 public class Multihash {
     public enum Type {

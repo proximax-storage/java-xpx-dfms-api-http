@@ -29,7 +29,7 @@ class CidTest {
 
    @Test
    void test3() {
-      io.ipfs.cid.Cid.decode("zdpuAyvkgEDQm9TenwGkd5eNaosSxjgEYd8QatfPetgB1CdEZ");
+      Cid.decode("zdpuAyvkgEDQm9TenwGkd5eNaosSxjgEYd8QatfPetgB1CdEZ");
    }
    
    @Test
