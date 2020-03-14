@@ -10,7 +10,6 @@ import java.util.Random;
 import org.apache.commons.lang3.Validate;
 
 import io.proximax.dfms.model.drive.DriveContent;
-import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.utils.HttpUtils;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -70,7 +69,11 @@ public class MultipartRequestContent extends RequestBody {
 
    @Override
    public void writeTo(BufferedSink sink) throws IOException {
-      addContent(sink, ROOT_PATH, content);
+      if (content.isNode()) {
+         addDirectoryContent(sink, ROOT_PATH, content);
+      } else {
+         addFile(sink, "file", ROOT_PATH, content);
+      }
       // write last boundary at the end
       writeBoundary(sink, true);
    }
@@ -104,31 +107,24 @@ public class MultipartRequestContent extends RequestBody {
       sink.writeUtf8(LINE_FEED);
    }
 
-// TODO decide on what to do with this. do I need it? comes from ipfs
-//   private void addFormField(BufferedSink sink, String name, String value) throws IOException {
-//      sink.writeUtf8("--").writeUtf8(boundary).writeUtf8(LINE_FEED);
-//      sink.writeUtf8("Content-Disposition: form-data; name=\"").writeUtf8(name).writeUtf8(QUOTE).writeUtf8(LINE_FEED);
-//      sink.writeUtf8("Content-Type: text/plain; charset=").writeUtf8(charset.name()).writeUtf8(LINE_FEED);
-//      sink.writeUtf8(LINE_FEED);
-//      sink.writeUtf8(value).writeUtf8(LINE_FEED);
-//   }
-
    /**
-    * write drive content to the sink
+    * write directory content to the sink
     * 
     * @param sink the sink to write to
     * @param parentPath parent path of the content (or empty path for root)
     * @param content the content
     * @throws IOException when write to sink fails
     */
-   private void addContent(BufferedSink sink, Path parentPath, DriveContent content) throws IOException {
+   private void addDirectoryContent(BufferedSink sink, Path parentPath, DriveContent content) throws IOException {
       Path dirPath = parentPath
             .resolve(content.getName().orElseThrow(() -> new IllegalArgumentException("Directory name is mandatory")));
       addDirectoryPart(sink, dirPath);
       for (DriveContent f : content.getChildren()) {
          if (f.isNode()) {
-            addContent(sink, dirPath, f);
+            // recursively add sub-directory
+            addDirectoryContent(sink, dirPath, f);
          } else {
+            // add file
             addFile(sink, "file", dirPath, f);
          }
       }
@@ -179,8 +175,6 @@ public class MultipartRequestContent extends RequestBody {
          while ((r = inputStream.read(buffer)) != -1) {
             sink.write(buffer, 0, r);
          }
-      } catch (IOException e) {
-         throw new DFMSRuntimeException("Failed to write file to request", e);
       }
 
       sink.writeUtf8(LINE_FEED);
