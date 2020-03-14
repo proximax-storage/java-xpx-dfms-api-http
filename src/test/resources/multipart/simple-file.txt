@@ -1,7 +1,8 @@
 --ex6QCAsqaYnQ8dRHsLZCFroQsPkcHGuX
-Content-Disposition: file; filename="text1.txt"
-Content-Type: application/x-directory
+Content-Disposition: file; filename="text1.txt";
+Content-Type: application/octet-stream
 Content-Transfer-Encoding: binary
 
-
+text1 file
+second line
 --ex6QCAsqaYnQ8dRHsLZCFroQsPkcHGuX--
