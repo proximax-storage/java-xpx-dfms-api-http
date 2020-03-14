@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.vfs2.FileSystemException;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -54,19 +53,17 @@ class AddFileTest {
    void test01AddFile() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(
             new File("src/e2e/resources/simple/subdir/test_image_file.png").toPath());
-      Cid cid = drive.add(CONTRACT, path + ".png", addContent).timeout(30, TimeUnit.SECONDS)
-            .blockingFirst();
+      Cid cid = drive.add(CONTRACT, path + ".png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);
    }
 
    @Test
-   @Disabled("Not valid scenario")
-   void test01AddFileToNonExistDir() throws IOException, InterruptedException {
+   void test01AddFileToNewDir() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(
             new File("src/e2e/resources/simple/subdir/test_image_file.png").toPath());
-      Cid cid = drive.add(CONTRACT, path + "subdir/file.png", addContent).timeout(30, TimeUnit.SECONDS)
-            .blockingFirst();
+      drive.makeDir(CONTRACT, path + "subdir").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      Cid cid = drive.add(CONTRACT, path + "subdir/file.png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);
    }
