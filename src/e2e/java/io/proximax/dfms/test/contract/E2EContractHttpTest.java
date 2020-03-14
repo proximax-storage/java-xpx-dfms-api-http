@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.dfms.http.repos;
+package io.proximax.dfms.test.contract;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.http.repos.ContractHttp;
 import io.proximax.dfms.model.contract.Contract;
 
 /**

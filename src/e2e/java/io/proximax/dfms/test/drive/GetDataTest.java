@@ -3,17 +3,14 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.dfms.http.repos;
+package io.proximax.dfms.test.drive;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -43,7 +40,7 @@ import io.proximax.dfms.test.utils.DriveContentUtils;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
-class E2EDriveHttpTest {
+class GetDataTest {
 
    private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
 
@@ -64,14 +61,6 @@ class E2EDriveHttpTest {
    @AfterAll
    void cleanup() {
       fsManager.close();
-   }
-
-   @Test
-   void killServer() throws IOException {
-      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
-      drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
-      drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
 
    @Test
@@ -134,72 +123,6 @@ class E2EDriveHttpTest {
          assertEquals(DriveItemType.FILE, item.getType());
          assertEquals(581312l, item.getSize());
          assertEquals(Cid.decode("zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"), item.getCid());
-      }
-   }
-
-   @Test
-   void test02CopyFile() throws IOException {
-      String targetPath = path + "copy_dst";
-      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = content.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
-      }
-      drive.copy(CONTRACT, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      DriveContent newContent = drive.get(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = newContent.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
-      }
-   }
-
-   @Test
-   void test03MoveFile() throws IOException {
-      String targetPath = path + "move_dst";
-      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = content.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
-      }
-      drive.move(CONTRACT, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      DriveContent newContent = drive.get(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = newContent.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
-      }
-      // move the stuff back
-      drive.move(CONTRACT, targetPath, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
-   }
-
-   @Test
-   void test04Mkdir() throws IOException {
-      // remove the content
-      drive.makeDir(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingAwait();
-      // now try to retrieve the content again
-      drive.get(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingFirst();
-   }
-
-   @Test
-//   @Disabled("Running this and then removal of parent dir breaks contract until restart........")
-   void test04RemoveFile() throws IOException {
-      // remove the content
-      drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
-      // now try to retrieve the content again
-      drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-   }
-
-   @Test
-   void test05RemoveAll() throws IOException, InterruptedException {
-      // remove the content
-      drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      // now try to retrieve the content again
-      assertThrows(RuntimeException.class,
-            () -> drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst());
-   }
-
-   private static void writeToFile(String fileName, InputStream is) throws IOException {
-      try (FileOutputStream fos = new FileOutputStream(fileName)) {
-         int size;
-         byte[] buff = new byte[1024];
-         while ((size = is.read(buff)) >= 0) {
-            fos.write(buff, 0, size);
-         }
       }
    }
 }
