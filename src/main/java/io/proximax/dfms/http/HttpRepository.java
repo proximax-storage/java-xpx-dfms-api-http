@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import io.proximax.dfms.ServiceNode;
-import io.proximax.dfms.http.responses.ErrorDTO;
+import io.proximax.dfms.http.dtos.ErrorDTO;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.model.exceptions.ResponseErrorType;

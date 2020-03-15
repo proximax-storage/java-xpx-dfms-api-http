@@ -3,14 +3,14 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.dfms.http.responses;
+package io.proximax.dfms.http.dtos;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * TODO add proper description
+ * Drive item DTO represents description of drive content
  */
-public class DriveItemResponse {
+public class DriveItemDTO {
    @SerializedName("Name")
    private final String name;
    @SerializedName("Type")
@@ -26,7 +26,7 @@ public class DriveItemResponse {
     * @param size
     * @param cid
     */
-   public DriveItemResponse(String name, String type, long size, DriveItemCid cid) {
+   public DriveItemDTO(String name, String type, long size, DriveItemCid cid) {
       this.name = name;
       this.type = type;
       this.size = size;

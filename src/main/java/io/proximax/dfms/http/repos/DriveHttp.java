@@ -14,9 +14,9 @@ import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
-import io.proximax.dfms.http.responses.CidResponse;
-import io.proximax.dfms.http.responses.DriveItemListResponse;
-import io.proximax.dfms.http.responses.DriveItemStatResponse;
+import io.proximax.dfms.http.dtos.CidDTO;
+import io.proximax.dfms.http.dtos.DriveItemListDTO;
+import io.proximax.dfms.http.dtos.DriveItemStatDTO;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.content.InputStreamContent;
@@ -58,8 +58,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       HttpUrl url = buildUrl(URL_ADD, id.toString(), path).build();
       Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content)).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidResponse.class))
-            .map(CidResponse::getId).map(Cid::decode);
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidDTO.class))
+            .map(CidDTO::getId).map(Cid::decode);
    }
 
    @Override
@@ -113,8 +113,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       Request request = new Request.Builder().url(url).build();
       return makeRequest(request)
          .map(this::mapStringOrError)
-         .map(str -> getGson().fromJson(str, DriveItemStatResponse.class))
-         .map(DriveItemStatResponse::getItem)
+         .map(str -> getGson().fromJson(str, DriveItemStatDTO.class))
+         .map(DriveItemStatDTO::getItem)
          .map(DriveItem::fromDto);
    }
 
@@ -124,8 +124,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       Request request = new Request.Builder().url(url).build();
       return makeRequest(request)
          .map(this::mapStringOrError)
-         .map(str -> getGson().fromJson(str, DriveItemListResponse.class))
-         .flatMapIterable(DriveItemListResponse::getItems)
+         .map(str -> getGson().fromJson(str, DriveItemListDTO.class))
+         .flatMapIterable(DriveItemListDTO::getItems)
          .map(DriveItem::fromDto)
          .toList().toObservable();
    }

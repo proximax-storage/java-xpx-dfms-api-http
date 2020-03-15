@@ -3,12 +3,12 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.dfms.http.responses;
+package io.proximax.dfms.http.dtos;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * TODO add proper description
+ * DTO for deserialization of error messages
  */
 public class ErrorDTO {
    @SerializedName("Message")

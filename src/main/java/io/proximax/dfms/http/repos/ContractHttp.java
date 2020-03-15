@@ -14,8 +14,8 @@ import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.responses.CidListResponse;
-import io.proximax.dfms.http.responses.ContractResponse;
+import io.proximax.dfms.http.dtos.CidListDTO;
+import io.proximax.dfms.http.dtos.ContractWapperDTO;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.UpdatesSubscription;
 import io.reactivex.Completable;
@@ -62,7 +62,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
       return makeRequest(request).map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, ContractResponse.class)).map(ContractResponse::getContract)
+            .map(str -> getGson().fromJson(str, ContractWapperDTO.class)).map(ContractWapperDTO::getContract)
             .map(Contract::fromDto);
    }
 
@@ -72,8 +72,8 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       RequestBody body = RequestBody.create(null, new byte[] {});
       Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListResponse.class))
-            .map(CidListResponse::getIds).flatMapIterable(list -> list).map(Cid::decode).toList().toObservable();
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListDTO.class))
+            .map(CidListDTO::getIds).flatMapIterable(list -> list).map(Cid::decode).toList().toObservable();
    }
 
    @Override

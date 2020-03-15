@@ -3,23 +3,23 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.dfms.http.responses;
+package io.proximax.dfms.http.dtos;
 
 import com.google.gson.annotations.SerializedName;
 
 import io.proximax.dfms.gen.model.ContractDTO;
 
 /**
- * TODO add proper description
+ * Wrapper for ContractDTO
  */
-public class ContractResponse {
+public class ContractWapperDTO {
    @SerializedName("Contract")
    private final ContractDTO contract;
 
    /**
     * @param contract
     */
-   public ContractResponse(ContractDTO contract) {
+   public ContractWapperDTO(ContractDTO contract) {
       this.contract = contract;
    }
 

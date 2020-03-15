@@ -8,7 +8,7 @@ package io.proximax.dfms.model.drive;
 import java.util.Objects;
 
 import io.proximax.cid.Cid;
-import io.proximax.dfms.http.responses.DriveItemResponse;
+import io.proximax.dfms.http.dtos.DriveItemDTO;
 
 /**
  * TODO add proper description
@@ -88,7 +88,7 @@ public class DriveItem {
     * @param dto response representation
     * @return instance of drive item
     */
-   public static DriveItem fromDto(DriveItemResponse dto) {
+   public static DriveItem fromDto(DriveItemDTO dto) {
       return new DriveItem(dto.getName(), DriveItemType.getByCode(dto.getType()), dto.getSize(),
             Cid.decode(dto.getCid()));
    }
