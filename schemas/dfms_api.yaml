@@ -6,8 +6,8 @@ info:
     DFMS node HTTP API.
     [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http)
     [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)
-    
-    API does not tries to follow idiomatic REST or other API patterns for reasons. 
+
+    API does not tries to follow idiomatic REST or other API patterns for reasons.
   version: "1.0.0"
   title: DFMS API
   license:
@@ -34,16 +34,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/contract'
-        '400': 
+                $ref: '#/components/schemas/contractDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /contract/compose:
     post:
-      tags: 
+      tags:
       - ContractClient
       summary: Creates new Drive contract
       description: |
-        Compose synchronously announces invites to the Network with current node as an 
+        Compose synchronously announces invites to the Network with current node as an
         owner and tries to find members which agrees on specified parameters and options.
         It does not guarantee success on resolving members. On success persists contract
         locally and gives ability to use DriveFS.
@@ -51,7 +51,7 @@ paths:
       parameters:
         - in: query
           name: arg1
-          description: | 
+          description: |
             Total Drive space in MB. NOTE - Actual parameter name is 'arg'
           required: true
           schema:
@@ -112,12 +112,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/contract'
-        '400': 
+                $ref: '#/components/schemas/contractDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /contract/ls:
     post:
-      tags: 
+      tags:
       - ContractClient
       summary: List Drive contracts node aware of
       description: |
@@ -131,8 +131,8 @@ paths:
               schema:
                 type: array
                 items:
-                 $ref: '#/components/schemas/contract'
-        '400': 
+                 $ref: '#/components/schemas/contractDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /contract/ammends:
     post:
@@ -148,7 +148,7 @@ paths:
         '200':
           description: |
             Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
-          headers: 
+          headers:
             -X-Stream-Output:
               schema:
                 type: integer
@@ -159,8 +159,8 @@ paths:
               schema:
                 type: array
                 items:
-                 $ref: '#/components/schemas/contract'
-        '400': 
+                 $ref: '#/components/schemas/contractDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/add:
     post:
@@ -192,8 +192,8 @@ paths:
                 type: object
                 properties:
                  cid:
-                  $ref: '#/components/schemas/cid'
-        '400': 
+                  $ref: '#/components/schemas/cidDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/get:
     post:
@@ -222,7 +222,7 @@ paths:
                 type: string
                 description: Tar encoded file or directory.
                 format: tar
-        '400': 
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/rm:
     post:
@@ -244,7 +244,7 @@ paths:
       responses:
         '200':
           description: Success
-        '400': 
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/mv:
     post:
@@ -263,7 +263,7 @@ paths:
       responses:
         '200':
           description: Success
-        '400': 
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/cp:
     post:
@@ -282,7 +282,7 @@ paths:
       responses:
         '200':
           description: Success
-        '400': 
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/mkdir:
     post:
@@ -298,7 +298,7 @@ paths:
       responses:
         '200':
           description: Success
-        '400': 
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/ls:
     post:
@@ -318,8 +318,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/stat'
-        '400': 
+                  $ref: '#/components/schemas/statDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/stat:
     post:
@@ -337,8 +337,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/stat'
-        '400': 
+                $ref: '#/components/schemas/statDTO'
+        '400':
           $ref: '#/components/responses/errorResp'
   /drive/flush:
     post:
@@ -352,7 +352,7 @@ paths:
       responses:
         '200':
           description: Success
-        '400': 
+        '400':
           $ref: '#/components/responses/errorResp'
 components:
   responses:
@@ -361,26 +361,26 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/error'
+            $ref: '#/components/schemas/errorDTO'
   parameters:
     cidParam:
       in: query
-      name: arg
-      description: | 
+      name: arg1
+      description: |
         [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represents either data or Drive.
       required: true
       schema:
         type: string
     srcParam:
       in: query
-      name: arg
+      name: arg2
       description: The source path of the file in Drive.
       required: true
       schema:
         type: string
     dstParam:
       in: query
-      name: arg
+      name: arg3
       description: The destination path.
       required: true
       schema:
@@ -394,7 +394,7 @@ components:
         type: boolean
         default: false
   schemas:
-    stat:
+    statDTO:
       type: object
       description: File statistics
       properties:
@@ -408,15 +408,15 @@ components:
           enum:
             - "file"
             - "dir"
-    cid:
+    cidDTO:
       type: string
       description: |
         [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
-    contract:
+    contractDTO:
       type: object
       properties:
         drive:
-          $ref: '#/components/schemas/cid'
+          $ref: '#/components/schemas/cidDTO'
         owner:
           type: string
           description: Hex encoded public key.
@@ -437,10 +437,7 @@ components:
         space:
           type: integer
           format: int64
-        payedReplicas:
-          type: integer
-          format: uint16
-        minReplicators:
+        replicas:
           type: integer
           format: uint16
         percentApprovers:
@@ -452,7 +449,7 @@ components:
         billingPeriod:
           type: integer
           format: int
-    error:
+    errorDTO:
       type: object
       properties:
         message:
@@ -460,7 +457,7 @@ components:
           description: Error message
         code:
           type: integer
-          enum: 
+          enum:
           - 0
           - 1
           - 2
@@ -473,5 +470,5 @@ components:
                   perform the requested operation.
         type:
           type: string
-          enum: 
+          enum:
           - "error"
