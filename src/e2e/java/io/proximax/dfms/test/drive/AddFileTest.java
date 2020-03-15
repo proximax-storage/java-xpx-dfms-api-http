@@ -16,10 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.vfs2.FileSystemException;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
@@ -30,10 +28,9 @@ import io.proximax.dfms.model.drive.DriveItemType;
 import io.proximax.dfms.model.drive.content.FileSystemContent;
 
 /**
- * TODO add proper description
+ * Make sure we can add files
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class AddFileTest {
 
    private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
@@ -50,28 +47,27 @@ class AddFileTest {
    }
 
    @Test
-   void test01AddFile() throws IOException, InterruptedException {
+   void addFile() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(
             new File("src/e2e/resources/simple/subdir/test_image_file.png").toPath());
       Cid cid = drive.add(CONTRACT, path + ".png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
-      System.out.println("ID of uploaded data: " + cid);
+      assertFile("", path + ".png");
    }
 
    @Test
-   void test01AddFileToNewDir() throws IOException, InterruptedException {
+   void addFileToNewDir() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(
             new File("src/e2e/resources/simple/subdir/test_image_file.png").toPath());
       drive.makeDir(CONTRACT, path + "subdir").timeout(30, TimeUnit.SECONDS).blockingAwait();
       Cid cid = drive.add(CONTRACT, path + "subdir/file.png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
-      System.out.println("ID of uploaded data: " + cid);
+      assertFile(path + "subdir", "file.png");
    }
 
-   @Test
-   void test03StatUploadedFile() {
-      DriveItem item = drive.stat(CONTRACT, path + ".png").blockingFirst();
-      assertEquals(path + ".png", item.getName());
+   void assertFile(String filePath, String fileName) {
+      DriveItem item = drive.stat(CONTRACT, filePath + "/" + fileName).blockingFirst();
+      assertEquals(fileName, item.getName());
       assertEquals(DriveItemType.FILE, item.getType());
       assertEquals(581312l, item.getSize());
       assertEquals(Cid.decode("zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"), item.getCid());

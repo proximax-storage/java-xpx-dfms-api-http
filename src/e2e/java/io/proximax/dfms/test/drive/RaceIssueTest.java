@@ -15,10 +15,9 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
@@ -28,10 +27,9 @@ import io.proximax.dfms.model.drive.content.FileSystemContent;
 import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**
- * TODO add proper description
+ * Tests that (used to) break server
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class RaceIssueTest {
 
    private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
@@ -56,10 +54,12 @@ class RaceIssueTest {
    }
 
    @Test
+   @Disabled("Disabled by default before server is fixed")
    void killServer() throws IOException {
       DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
       drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
+      // any operation shortly after delete seems to break the server
       drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
 }

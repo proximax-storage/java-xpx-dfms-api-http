@@ -75,7 +75,7 @@ test {
 
 // versions of dependencies
 ext {
-    okHttp3Version = '3.14.1'
+    okHttp3Version = '3.14.7'
     junitVersion = '5.4.2'
 }
 

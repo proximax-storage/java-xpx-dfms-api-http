@@ -15,6 +15,14 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 
+/**
+ * <p>
+ * IPFS-like request body describing the files and directories that are being uploaded.
+ * </p>
+ * <p>
+ * NOTE that the content is placed on the path not to the path. That beans the root element name is lost
+ * </p>
+ */
 public class MultipartRequestContent extends RequestBody {
    /** random number generator for boundary generator */
    private static final Random RANDOM = new Random();

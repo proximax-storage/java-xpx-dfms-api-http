@@ -8,14 +8,11 @@ package io.proximax.dfms.test.drive;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.vfs2.FileObject;
@@ -23,6 +20,7 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -35,10 +33,11 @@ import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.DriveItemType;
 import io.proximax.dfms.model.drive.content.FileSystemContent;
+import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**
- * TODO add proper description
+ * Test file/directory operations like copy, move, mkdir
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
@@ -84,43 +83,55 @@ class FileOperationsTest {
    @Test
    void test02CopyFile() throws IOException {
       String targetPath = path + "copy_dst";
-      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = content.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
-      }
       drive.copy(CONTRACT, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      DriveContent newContent = drive.get(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = newContent.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
-      }
+      // assert the target
+      DriveItem source = drive.stat(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      DriveItem target = drive.stat(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      assertEquals(source.getSize(), target.getSize());
+      assertEquals(source.getType(), target.getType());
+      assertEquals(source.getCid(), target.getCid());
+      assertEquals(targetPath, target.getName());
+      assertEquals(path, source.getName());
    }
 
    @Test
    void test03MoveFile() throws IOException {
+      // store current source
+      DriveItem source = drive.stat(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      // make the move
       String targetPath = path + "move_dst";
-      DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = content.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + path + ".tar", is);
-      }
       drive.move(CONTRACT, path, targetPath).timeout(30, TimeUnit.SECONDS).blockingAwait();
-      DriveContent newContent = drive.get(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      try (InputStream is = newContent.getInputStream()) {
-//         writeToFile("/home/fiddis/tono/proximax/java-xpx-dfms-http-api/out-" + targetPath + ".tar", is);
-      }
+      // make sure source no longer exists
+      assertThrows(DFMSResponseException.class,
+            () -> drive.stat(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      // assert the target
+      DriveItem target = drive.stat(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      assertEquals(source.getSize(), target.getSize());
+      assertEquals(source.getType(), target.getType());
+      assertEquals(source.getCid(), target.getCid());
+      assertEquals(targetPath, target.getName());
+      assertEquals(path, source.getName());
       // move the stuff back
       drive.move(CONTRACT, targetPath, path).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      // make sure target no longer exists
+      assertThrows(DFMSResponseException.class,
+            () -> drive.stat(CONTRACT, targetPath).timeout(30, TimeUnit.SECONDS).blockingFirst());
+
    }
 
    @Test
    void test04Mkdir() throws IOException {
       // remove the content
       drive.makeDir(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingAwait();
-      // now try to retrieve the content again
-      drive.get(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingFirst();
+      // now try to stat the directory
+      DriveItem target = drive.stat(CONTRACT, path + "somedir").timeout(30, TimeUnit.SECONDS).blockingFirst();
+      assertEquals(path + "somedir", target.getName());
+      assertEquals(DriveItemType.DIRECTORY, target.getType());
+      assertEquals(0, target.getSize());
    }
 
    @Test
-//   @Disabled("Running this and then removal of parent dir breaks contract until restart........")
+   @Disabled("Running this breaks storage server until restart........")
    void test04RemoveFile() throws IOException {
       // remove the content
       drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
@@ -129,6 +140,7 @@ class FileOperationsTest {
    }
 
    @Test
+   @Disabled("Running this breaks storage server until restart........")
    void test05RemoveAll() throws IOException, InterruptedException {
       // remove the content
       drive.remove(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingAwait();

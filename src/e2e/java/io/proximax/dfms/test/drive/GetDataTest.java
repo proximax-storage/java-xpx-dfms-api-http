@@ -6,14 +6,12 @@
 package io.proximax.dfms.test.drive;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.vfs2.FileObject;
@@ -21,25 +19,20 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.model.drive.DriveContent;
-import io.proximax.dfms.model.drive.DriveItem;
-import io.proximax.dfms.model.drive.DriveItemType;
 import io.proximax.dfms.model.drive.content.FileSystemContent;
 import io.proximax.dfms.test.utils.DriveContentUtils;
 
 /**
- * TODO add proper description
+ * retrieve actual data from the DFMS
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class GetDataTest {
 
    private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
@@ -64,11 +57,9 @@ class GetDataTest {
    }
 
    @Test
-   void test01AddDirectory() throws IOException, InterruptedException {
+   void checkDirectory() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
-      Cid cid = drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      assertNotNull(cid);
-      System.out.println("ID of uploaded data: " + cid);
+      drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       // now make request for that data
       {
          DriveContent content = drive.get(CONTRACT, path).timeout(30, TimeUnit.SECONDS).blockingFirst();
@@ -95,34 +86,6 @@ class GetDataTest {
          // make sure we have the file
          assertTrue(image.isFile());
          assertEquals("test_image_file.png", image.getName().getBaseName());
-      }
-      // now try adding the directory as subdirectory of original upload
-      {
-         drive.add(CONTRACT, path+"/subdir2", new FileSystemContent(new File("src/e2e/resources/simple").toPath())).timeout(30, TimeUnit.SECONDS).blockingFirst();
-         DriveContent content = drive.get(CONTRACT, path+"/subdir").timeout(30, TimeUnit.SECONDS).blockingFirst();
-         // test the contents
-//         DriveContentUtils.writeToFile(content, new File("subdirtest.tar"));
-//         FileObject rootDir = DriveContentUtils.openContent(fsManager, content, path);
-//         assertEquals(path, rootDir.getName().getBaseName());
-//         assertEquals(4, rootDir.getChildren().length);
-//         FileObject subDir = rootDir.getChild("subdir");
-//         assertEquals(1, subDir.getChildren().length);
-      }
-      {
-         List<DriveItem> items = drive.ls(CONTRACT, path+"/subdir").blockingFirst();
-         assertEquals(1, items.size());
-         DriveItem item = items.get(0);
-         assertEquals("test_image_file.png", item.getName());
-         assertEquals(DriveItemType.FILE, item.getType());
-         assertEquals(581312l, item.getSize());
-         assertEquals(Cid.decode("zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"), item.getCid());
-      }
-      {
-         DriveItem item = drive.stat(CONTRACT, path+"/subdir/test_image_file.png").blockingFirst();
-         assertEquals("test_image_file.png", item.getName());
-         assertEquals(DriveItemType.FILE, item.getType());
-         assertEquals(581312l, item.getSize());
-         assertEquals(Cid.decode("zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"), item.getCid());
       }
    }
 }
