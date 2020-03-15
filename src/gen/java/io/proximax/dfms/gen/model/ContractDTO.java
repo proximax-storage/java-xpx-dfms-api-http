@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contract
+ * ContractDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-11T21:14:21.192+01:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
 public class ContractDTO {
   public static final String SERIALIZED_NAME_DRIVE = "drive";
   @SerializedName(SERIALIZED_NAME_DRIVE)
@@ -59,13 +59,9 @@ public class ContractDTO {
   @SerializedName(SERIALIZED_NAME_SPACE)
   private Long space;
 
-  public static final String SERIALIZED_NAME_PAYED_REPLICAS = "payedReplicas";
-  @SerializedName(SERIALIZED_NAME_PAYED_REPLICAS)
-  private Integer payedReplicas;
-
-  public static final String SERIALIZED_NAME_MIN_REPLICATORS = "minReplicators";
-  @SerializedName(SERIALIZED_NAME_MIN_REPLICATORS)
-  private Integer minReplicators;
+  public static final String SERIALIZED_NAME_REPLICAS = "replicas";
+  @SerializedName(SERIALIZED_NAME_REPLICAS)
+  private Integer replicas;
 
   public static final String SERIALIZED_NAME_PERCENT_APPROVERS = "percentApprovers";
   @SerializedName(SERIALIZED_NAME_PERCENT_APPROVERS)
@@ -249,49 +245,26 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO payedReplicas(Integer payedReplicas) {
+  public ContractDTO replicas(Integer replicas) {
     
-    this.payedReplicas = payedReplicas;
+    this.replicas = replicas;
     return this;
   }
 
    /**
-   * Get payedReplicas
-   * @return payedReplicas
+   * Get replicas
+   * @return replicas
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public Integer getPayedReplicas() {
-    return payedReplicas;
+  public Integer getReplicas() {
+    return replicas;
   }
 
 
-  public void setPayedReplicas(Integer payedReplicas) {
-    this.payedReplicas = payedReplicas;
-  }
-
-
-  public ContractDTO minReplicators(Integer minReplicators) {
-    
-    this.minReplicators = minReplicators;
-    return this;
-  }
-
-   /**
-   * Get minReplicators
-   * @return minReplicators
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public Integer getMinReplicators() {
-    return minReplicators;
-  }
-
-
-  public void setMinReplicators(Integer minReplicators) {
-    this.minReplicators = minReplicators;
+  public void setReplicas(Integer replicas) {
+    this.replicas = replicas;
   }
 
 
@@ -372,31 +345,30 @@ public class ContractDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ContractDTO contract = (ContractDTO) o;
-    return Objects.equals(this.drive, contract.drive) &&
-        Objects.equals(this.owner, contract.owner) &&
-        Objects.equals(this.replicators, contract.replicators) &&
-        Objects.equals(this.root, contract.root) &&
-        Objects.equals(this.created, contract.created) &&
-        Objects.equals(this.duration, contract.duration) &&
-        Objects.equals(this.space, contract.space) &&
-        Objects.equals(this.payedReplicas, contract.payedReplicas) &&
-        Objects.equals(this.minReplicators, contract.minReplicators) &&
-        Objects.equals(this.percentApprovers, contract.percentApprovers) &&
-        Objects.equals(this.billingPrice, contract.billingPrice) &&
-        Objects.equals(this.billingPeriod, contract.billingPeriod);
+    ContractDTO contractDTO = (ContractDTO) o;
+    return Objects.equals(this.drive, contractDTO.drive) &&
+        Objects.equals(this.owner, contractDTO.owner) &&
+        Objects.equals(this.replicators, contractDTO.replicators) &&
+        Objects.equals(this.root, contractDTO.root) &&
+        Objects.equals(this.created, contractDTO.created) &&
+        Objects.equals(this.duration, contractDTO.duration) &&
+        Objects.equals(this.space, contractDTO.space) &&
+        Objects.equals(this.replicas, contractDTO.replicas) &&
+        Objects.equals(this.percentApprovers, contractDTO.percentApprovers) &&
+        Objects.equals(this.billingPrice, contractDTO.billingPrice) &&
+        Objects.equals(this.billingPeriod, contractDTO.billingPeriod);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(drive, owner, replicators, root, created, duration, space, payedReplicas, minReplicators, percentApprovers, billingPrice, billingPeriod);
+    return Objects.hash(drive, owner, replicators, root, created, duration, space, replicas, percentApprovers, billingPrice, billingPeriod);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Contract {\n");
+    sb.append("class ContractDTO {\n");
     sb.append("    drive: ").append(toIndentedString(drive)).append("\n");
     sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
     sb.append("    replicators: ").append(toIndentedString(replicators)).append("\n");
@@ -404,8 +376,7 @@ public class ContractDTO {
     sb.append("    created: ").append(toIndentedString(created)).append("\n");
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    space: ").append(toIndentedString(space)).append("\n");
-    sb.append("    payedReplicas: ").append(toIndentedString(payedReplicas)).append("\n");
-    sb.append("    minReplicators: ").append(toIndentedString(minReplicators)).append("\n");
+    sb.append("    replicas: ").append(toIndentedString(replicas)).append("\n");
     sb.append("    percentApprovers: ").append(toIndentedString(percentApprovers)).append("\n");
     sb.append("    billingPrice: ").append(toIndentedString(billingPrice)).append("\n");
     sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");

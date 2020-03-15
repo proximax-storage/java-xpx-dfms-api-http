@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -28,8 +28,8 @@ import java.io.IOException;
  * File statistics
  */
 @ApiModel(description = "File statistics")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-09T22:50:52.261+01:00[Europe/Prague]")
-public class Stat {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
+public class StatDTO {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)
   private String name;
@@ -90,7 +90,7 @@ public class Stat {
   private TypeEnum type;
 
 
-  public Stat name(String name) {
+  public StatDTO name(String name) {
     
     this.name = name;
     return this;
@@ -113,7 +113,7 @@ public class Stat {
   }
 
 
-  public Stat size(Integer size) {
+  public StatDTO size(Integer size) {
     
     this.size = size;
     return this;
@@ -136,7 +136,7 @@ public class Stat {
   }
 
 
-  public Stat type(TypeEnum type) {
+  public StatDTO type(TypeEnum type) {
     
     this.type = type;
     return this;
@@ -167,10 +167,10 @@ public class Stat {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Stat stat = (Stat) o;
-    return Objects.equals(this.name, stat.name) &&
-        Objects.equals(this.size, stat.size) &&
-        Objects.equals(this.type, stat.type);
+    StatDTO statDTO = (StatDTO) o;
+    return Objects.equals(this.name, statDTO.name) &&
+        Objects.equals(this.size, statDTO.size) &&
+        Objects.equals(this.type, statDTO.type);
   }
 
   @Override
@@ -182,7 +182,7 @@ public class Stat {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Stat {\n");
+    sb.append("class StatDTO {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");

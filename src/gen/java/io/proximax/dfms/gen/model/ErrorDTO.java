@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -25,10 +25,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Error
+ * ErrorDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-09T22:50:52.261+01:00[Europe/Prague]")
-public class Error {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
+public class ErrorDTO {
   public static final String SERIALIZED_NAME_MESSAGE = "message";
   @SerializedName(SERIALIZED_NAME_MESSAGE)
   private String message;
@@ -136,7 +136,7 @@ public class Error {
   private TypeEnum type;
 
 
-  public Error message(String message) {
+  public ErrorDTO message(String message) {
     
     this.message = message;
     return this;
@@ -159,7 +159,7 @@ public class Error {
   }
 
 
-  public Error code(CodeEnum code) {
+  public ErrorDTO code(CodeEnum code) {
     
     this.code = code;
     return this;
@@ -182,7 +182,7 @@ public class Error {
   }
 
 
-  public Error type(TypeEnum type) {
+  public ErrorDTO type(TypeEnum type) {
     
     this.type = type;
     return this;
@@ -213,10 +213,10 @@ public class Error {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Error error = (Error) o;
-    return Objects.equals(this.message, error.message) &&
-        Objects.equals(this.code, error.code) &&
-        Objects.equals(this.type, error.type);
+    ErrorDTO errorDTO = (ErrorDTO) o;
+    return Objects.equals(this.message, errorDTO.message) &&
+        Objects.equals(this.code, errorDTO.code) &&
+        Objects.equals(this.type, errorDTO.type);
   }
 
   @Override
@@ -228,7 +228,7 @@ public class Error {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Error {\n");
+    sb.append("class ErrorDTO {\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");

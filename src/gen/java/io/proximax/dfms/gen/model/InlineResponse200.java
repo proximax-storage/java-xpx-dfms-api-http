@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * InlineResponse200
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-12-09T22:50:52.261+01:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
 public class InlineResponse200 {
   public static final String SERIALIZED_NAME_CID = "cid";
   @SerializedName(SERIALIZED_NAME_CID)
