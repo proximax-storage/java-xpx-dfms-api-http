@@ -5,13 +5,13 @@
  */
 package io.proximax.dfms.model.drive;
 
-import java.util.Objects;
+import org.apache.commons.lang3.Validate;
 
 import io.proximax.cid.Cid;
 import io.proximax.dfms.http.dtos.DriveItemDTO;
 
 /**
- * TODO add proper description
+ * representation of information about an item on the drive
  */
 public class DriveItem {
    private final String name;
@@ -26,6 +26,11 @@ public class DriveItem {
     * @param cid
     */
    public DriveItem(String name, DriveItemType type, long size, Cid cid) {
+      // validations
+      Validate.notNull(name, "name is mandatory");
+      Validate.notNull(type, "type is mandatory");
+      Validate.notNull(cid, "cid is mandatory");
+      // assignments
       this.name = name;
       this.type = type;
       this.size = size;
@@ -62,7 +67,13 @@ public class DriveItem {
 
    @Override
    public int hashCode() {
-      return Objects.hash(cid);
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((cid == null) ? 0 : cid.hashCode());
+      result = prime * result + ((name == null) ? 0 : name.hashCode());
+      result = prime * result + (int) (size ^ (size >>> 32));
+      result = prime * result + ((type == null) ? 0 : type.hashCode());
+      return result;
    }
 
    @Override
@@ -74,7 +85,21 @@ public class DriveItem {
       if (getClass() != obj.getClass())
          return false;
       DriveItem other = (DriveItem) obj;
-      return Objects.equals(cid, other.cid);
+      if (cid == null) {
+         if (other.cid != null)
+            return false;
+      } else if (!cid.equals(other.cid))
+         return false;
+      if (name == null) {
+         if (other.name != null)
+            return false;
+      } else if (!name.equals(other.name))
+         return false;
+      if (size != other.size)
+         return false;
+      if (type != other.type)
+         return false;
+      return true;
    }
 
    @Override

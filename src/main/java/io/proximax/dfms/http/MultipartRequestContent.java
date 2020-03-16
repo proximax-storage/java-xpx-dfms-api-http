@@ -54,6 +54,7 @@ public class MultipartRequestContent extends RequestBody {
    public MultipartRequestContent(DriveContent content, String boundary) {
       // validate input
       Validate.notNull(content, "Content can not be null");
+      Validate.notNull(boundary, "boundary can not be null");
       // store input
       this.content = content;
       // create boundary and content type
@@ -86,6 +87,13 @@ public class MultipartRequestContent extends RequestBody {
       writeBoundary(sink, true);
    }
 
+   /**
+    * @return he boundary that will be used for this request
+    */
+   public String getBoundary() {
+      return boundary;
+   }
+   
    /**
     * create random boundary string to separate multi-part form fields
     * 

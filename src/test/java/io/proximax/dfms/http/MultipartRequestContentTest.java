@@ -5,6 +5,7 @@
  */
 package io.proximax.dfms.http;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -47,6 +48,21 @@ class MultipartRequestContentTest {
       body.writeTo(sink);
       writeToDisk("simple-file.txt", sink);
       assertBufferContent(sink, "simple-file.txt");      
+   }
+   
+   @Test
+   void testBoundaryGenerator() {
+      DriveContent content = new FileSystemContent(Paths.get(".", "src", "test", "resources", "simple", "text1.txt"));
+      MultipartRequestContent body1 = new MultipartRequestContent(content);
+      MultipartRequestContent body2 = new MultipartRequestContent(content);
+      assertNotEquals(body1.getBoundary(), body2.getBoundary());
+   }
+   
+   @Test
+   void testContentType() {
+      DriveContent content = new FileSystemContent(Paths.get(".", "src", "test", "resources", "simple", "text1.txt"));
+      MultipartRequestContent body = new MultipartRequestContent(content);
+      assertTrue(body.contentType().toString().contains(body.getBoundary()));
    }
    
    /**
