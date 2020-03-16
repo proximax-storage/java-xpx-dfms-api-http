@@ -23,7 +23,8 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                'io/proximax/sdk/gen/**'
+                'io/proximax/sdk/gen/**',
+                'io/proximax/cid/**'
             ])
         })
     }
