@@ -30,6 +30,7 @@ import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.model.exceptions.ResponseErrorType;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -125,20 +126,7 @@ public class HttpRepository<T extends ServiceNode> {
     * @return observable response
     */
    protected Observable<Response> makeRequest(Request request) {
-      return Observable.create(emitter -> {
-         getClient().newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-               emitter.onNext(response);
-               emitter.onComplete();
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-               emitter.onError(e);
-            }
-         });
-      });
+      return Observable.create(emitter -> getClient().newCall(request).enqueue(new OkHttp3ResponseCallback(emitter)));
    }
 
    /**
@@ -163,9 +151,7 @@ public class HttpRepository<T extends ServiceNode> {
     */
    public String mapStringOrError(final Response response) {
       try (ResponseBody body = mapRespBodyOrError(response)) {
-         String bodyString = body.string();
-//         System.out.println("got response -> " + bodyString);
-         return bodyString;
+         return body.string();
       } catch (IOException e) {
          throw new DFMSRuntimeException("Failed to read response body", e);
       }
@@ -186,10 +172,33 @@ public class HttpRepository<T extends ServiceNode> {
             ErrorDTO err = getGson().fromJson(responseBody, ErrorDTO.class);
             return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode()), err.getMessage());
          } catch (JsonSyntaxException e) {
-            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody);
+            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody, e);
          }
       } catch (IOException e) {
-         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body");
+         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body", e);
+      }
+   }
+
+   /**
+    * response callback which forwards events to observable emitter
+    */
+   static class OkHttp3ResponseCallback implements Callback {
+      private final ObservableEmitter<Response> emitter;
+
+      public OkHttp3ResponseCallback(ObservableEmitter<Response> emitter) {
+         super();
+         this.emitter = emitter;
+      }
+
+      @Override
+      public void onResponse(Call call, Response response) throws IOException {
+         emitter.onNext(response);
+         emitter.onComplete();
+      }
+
+      @Override
+      public void onFailure(Call call, IOException e) {
+         emitter.onError(e);
       }
    }
 }

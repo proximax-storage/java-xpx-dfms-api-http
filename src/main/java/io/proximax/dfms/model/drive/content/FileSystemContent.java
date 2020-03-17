@@ -28,6 +28,9 @@ public class FileSystemContent extends BaseContent {
 
    @Override
    public InputStream getInputStream() throws IOException {
+      if (isNode()) {
+         throw new IllegalStateException("Cannot open input stream for directory " + source);
+      }
       return Files.newInputStream(source);
    }
 
