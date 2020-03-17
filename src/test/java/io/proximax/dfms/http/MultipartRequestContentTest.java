@@ -36,7 +36,7 @@ class MultipartRequestContentTest {
       RequestBody body = new MultipartRequestContent(content, BOUNDARY);
       Buffer sink = new Buffer();
       body.writeTo(sink);
-      writeToDisk("simple-dir.txt", sink);
+//      writeToDisk("simple-dir.txt", sink);
       assertBufferContent(sink, "simple-dir.txt");
    }
 
@@ -46,7 +46,7 @@ class MultipartRequestContentTest {
       RequestBody body = new MultipartRequestContent(content, BOUNDARY);
       Buffer sink = new Buffer();
       body.writeTo(sink);
-      writeToDisk("simple-file.txt", sink);
+//      writeToDisk("simple-file.txt", sink);
       assertBufferContent(sink, "simple-file.txt");      
    }
    
