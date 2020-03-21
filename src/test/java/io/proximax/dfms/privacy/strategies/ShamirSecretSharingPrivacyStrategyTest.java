@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.bouncycastle.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import com.codahale.shamir.Scheme;
@@ -87,7 +87,7 @@ public class ShamirSecretSharingPrivacyStrategyTest {
 
       final InputStream encrypted = unitUnderTest.encryptStream(new ByteArrayInputStream(SAMPLE_DATA));
 
-      assertFalse(Arrays.areEqual(SAMPLE_DATA, IOUtils.toByteArray(encrypted)));
+      assertFalse(Arrays.equals(SAMPLE_DATA, IOUtils.toByteArray(encrypted)));
    }
 
    @Test
@@ -101,7 +101,7 @@ public class ShamirSecretSharingPrivacyStrategyTest {
 
       final InputStream encrypted = unitUnderTest.encryptStream(new ByteArrayInputStream(SAMPLE_DATA));
 
-      assertFalse(Arrays.areEqual(SAMPLE_DATA, IOUtils.toByteArray(encrypted)));
+      assertFalse(Arrays.equals(SAMPLE_DATA, IOUtils.toByteArray(encrypted)));
    }
 
    @Test

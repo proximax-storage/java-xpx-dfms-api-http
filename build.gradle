@@ -75,8 +75,8 @@ test {
 
 // versions of dependencies
 ext {
-    okHttp3Version = '3.14.7'
-    junitVersion = '5.4.2'
+    okHttp3Version = '4.4.1'
+    junitVersion = '5.6.0'
 }
 
 dependencies {
@@ -86,6 +86,8 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.11'
     // libp2p for peer to peer operations
     api 'io.libp2p:jvm-libp2p-minimal:0.1.0-RELEASE'
+    // can not use CID as server does not use supported encoding - got own copy
+    //api 'com.github.ipld:java-cid:1.1.1'
     
     // support for shamir privacy strategy
     implementation 'com.codahale:shamir:0.6.0'
