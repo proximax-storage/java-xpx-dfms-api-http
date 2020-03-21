@@ -17,7 +17,7 @@ public class DriveItemListDTO {
    private final List<DriveItemDTO> items;
 
    /**
-    * @param items
+    * @param items list of items
     */
    public DriveItemListDTO(List<DriveItemDTO> items) {
       this.items = items;

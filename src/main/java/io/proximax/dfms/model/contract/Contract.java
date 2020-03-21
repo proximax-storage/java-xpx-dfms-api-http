@@ -27,13 +27,13 @@ public class Contract {
    private final BigInteger totalSpace;
 
    /**
-    * @param cid
-    * @param owner
-    * @param members
-    * @param duration
-    * @param created
-    * @param root
-    * @param totalSpace
+    * @param cid CID of the contract
+    * @param owner the owner
+    * @param members list of members
+    * @param duration duration for which the contract is valid TODO blocks or millis
+    * @param created timestamp when the contract was created
+    * @param root root of the contract TODO what is it?
+    * @param totalSpace total space TODO available or consumed
     */
    public Contract(Cid cid, String owner, List<String> members, BigInteger duration, BigInteger created, String root,
          BigInteger totalSpace) {
@@ -95,9 +95,15 @@ public class Contract {
       return totalSpace;
    }
 
-   public static Contract fromDto(ContractDTO obj) {
-      return new Contract(Cid.decode(obj.getDrive()), obj.getOwner(), obj.getReplicators(),
-            BigInteger.valueOf(obj.getDuration()), BigInteger.valueOf(obj.getCreated()), obj.getRoot(),
-            BigInteger.valueOf(obj.getSpace()));
+   /**
+    * build instance form the DTO object
+    * 
+    * @param dto DTO retrieved form the REST API
+    * @return contract instance
+    */
+   public static Contract fromDto(ContractDTO dto) {
+      return new Contract(Cid.decode(dto.getDrive()), dto.getOwner(), dto.getReplicators(),
+            BigInteger.valueOf(dto.getDuration()), BigInteger.valueOf(dto.getCreated()), dto.getRoot(),
+            BigInteger.valueOf(dto.getSpace()));
    }
 }

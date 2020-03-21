@@ -17,7 +17,7 @@ public class ContractWapperDTO {
    private final ContractDTO contract;
 
    /**
-    * @param contract
+    * @param contract actual contract
     */
    public ContractWapperDTO(ContractDTO contract) {
       this.contract = contract;

@@ -21,10 +21,10 @@ public class DriveItemDTO {
    private final DriveItemCid cid;
    
    /**
-    * @param name
-    * @param type
-    * @param size
-    * @param cid
+    * @param name name of the drive item
+    * @param type type of the drive item (file/dir)
+    * @param size size of the file or 0 for directory
+    * @param cid representation of CID
     */
    public DriveItemDTO(String name, String type, long size, DriveItemCid cid) {
       this.name = name;
@@ -57,12 +57,15 @@ public class DriveItemDTO {
       return cid.getCid();
    }
    
+   /**
+    * cid is present wrapped in an object with key /
+    */
    public static final class DriveItemCid {
       @SerializedName("/")
       private final String cid;
 
       /**
-       * @param cid
+       * @param cid the actual CID value
        */
       public DriveItemCid(String cid) {
          this.cid = cid;

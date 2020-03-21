@@ -6,27 +6,21 @@
 package io.proximax.dfms.model.exceptions;
 
 /**
- * TODO add proper description
+ * Generic exception raised by the DFMS API
  */
 public class DFMSRuntimeException extends RuntimeException {
    private static final long serialVersionUID = -2388261742030070521L;
 
    /**
-    * 
-    */
-   public DFMSRuntimeException() {
-   }
-
-   /**
-    * @param message
-    * @param cause
+    * @param message exception message
+    * @param cause original throwable
     */
    public DFMSRuntimeException(String message, Throwable cause) {
       super(message, cause);
    }
 
    /**
-    * @param message
+    * @param message exception message
     */
    public DFMSRuntimeException(String message) {
       super(message);

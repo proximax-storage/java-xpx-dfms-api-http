@@ -46,6 +46,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
     * 
     * @param api the storage API
     * @param apiPath the path to the API on the node
+    * @param client the HTTP client to be used to execute requests
     */
    public DriveHttp(StorageApi api, String apiPath, OkHttpClient client) {
       super(api, Optional.of(apiPath), client);

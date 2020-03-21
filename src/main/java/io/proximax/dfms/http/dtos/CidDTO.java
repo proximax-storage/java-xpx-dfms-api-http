@@ -15,7 +15,7 @@ public class CidDTO {
    private final String id;
 
    /**
-    * @param id
+    * @param id string representation
     */
    public CidDTO(String id) {
       this.id = id;

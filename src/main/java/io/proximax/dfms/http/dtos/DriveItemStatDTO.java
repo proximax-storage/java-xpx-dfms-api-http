@@ -15,7 +15,7 @@ public class DriveItemStatDTO {
    private final DriveItemDTO item;
 
    /**
-    * @param item
+    * @param item drive item
     */
    public DriveItemStatDTO(DriveItemDTO item) {
       this.item = item;

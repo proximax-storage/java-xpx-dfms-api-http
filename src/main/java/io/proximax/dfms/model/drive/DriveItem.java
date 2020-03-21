@@ -20,10 +20,10 @@ public class DriveItem {
    private final Cid cid;
 
    /**
-    * @param name
-    * @param type
-    * @param size
-    * @param cid
+    * @param name name of the item
+    * @param type type of the item (file or directory)
+    * @param size size of file or 0 for directory
+    * @param cid CID of the item
     */
    public DriveItem(String name, DriveItemType type, long size, Cid cid) {
       // validations

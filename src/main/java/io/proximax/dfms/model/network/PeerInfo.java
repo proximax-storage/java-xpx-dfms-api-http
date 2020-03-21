@@ -19,8 +19,8 @@ public class PeerInfo {
    private final PeerId id;
    private final List<Multiaddr> addresses;
    /**
-    * @param id
-    * @param addresses
+    * @param id the ID of the peer
+    * @param addresses addresses of the peer
     */
    public PeerInfo(PeerId id, Multiaddr ... addresses) {
       this.id = id;

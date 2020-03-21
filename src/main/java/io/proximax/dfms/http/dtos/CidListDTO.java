@@ -17,7 +17,7 @@ public class CidListDTO {
    private final List<String> ids;
 
    /**
-    * @param ids
+    * @param ids list of string IDs
     */
    public CidListDTO(List<String> ids) {
       this.ids = ids;
@@ -28,24 +28,5 @@ public class CidListDTO {
     */
    public List<String> getIds() {
       return ids;
-   }
-   
-   public static class CidDTO {
-      @SerializedName("Id")
-      private final String id;
-
-      /**
-       * @param id
-       */
-      public CidDTO(String id) {
-         this.id = id;
-      }
-
-      /**
-       * @return the id
-       */
-      public String getId() {
-         return id;
-      }
    }
 }

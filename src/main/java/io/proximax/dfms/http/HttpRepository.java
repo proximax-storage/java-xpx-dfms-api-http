@@ -111,6 +111,7 @@ public class HttpRepository<T extends ServiceNode> {
     * get URL builder for specified command representing relative URL segments
     * 
     * @param command relative URL path segments (e.g. drive/remove)
+    * @param arguments collection of arguments what will be part of the URL
     * @return the URL builder
     */
    protected HttpUrl.Builder buildUrl(String command, String... arguments) {

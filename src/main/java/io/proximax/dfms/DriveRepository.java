@@ -42,76 +42,76 @@ public interface DriveRepository {
     * retrieves content for a specific contract at a given path. The content is represented as an input stream
     * of a tar file containing the directory
     * 
-    * @param id
-    * @param path
-    * @return
+    * @param contract CID of the contract
+    * @param path the path for given contract
+    * @return content instance
     */
-   Observable<DriveContent> get(Cid id, String path);
+   Observable<DriveContent> get(Cid contract, String path);
 
    /**
     * removes reference of the file at a given path from a specific Drive.
     * 
-    * @param id
-    * @param path
-    * @return
+    * @param contract CID of the contract
+    * @param path path to the item
+    * @return confirmation that request was fulfilled
     */
-   Completable remove(Cid id, String path);
+   Completable remove(Cid contract, String path);
 
    /**
     * moves file in a specific Drive from one path to another.
     * 
-    * @param id
-    * @param sourcePath
-    * @param destinationPath
-    * @return
+    * @param contract CID of the contract
+    * @param sourcePath path to be moved to new location
+    * @param destinationPath destination of the move
+    * @return confirmation that request was fulfilled
     */
-   Completable move(Cid id, String sourcePath, String destinationPath);
+   Completable move(Cid contract, String sourcePath, String destinationPath);
 
    /**
     * <p>copies file in a specific Drive from one path to another.</p> 
     * <p>NOTE: Does not do actual copy, only copies reference(a.k.a SymLink). That way file is not duplicated on a disk, but accessible from different paths.</p>
     * 
-    * @param id
-    * @param sourcePath
-    * @param destinationPath
-    * @return
+    * @param contract CID of the contract
+    * @param sourcePath path to copy form
+    * @param destinationPath path to copy to
+    * @return confirmation that request was fulfilled
     */
-   Completable copy(Cid id, String sourcePath, String destinationPath);
+   Completable copy(Cid contract, String sourcePath, String destinationPath);
 
    /**
     * creates new directory in a specific Drive at a given path.
     * 
-    * @param id
-    * @param path
-    * @return
+    * @param contract CID of the contract
+    * @param path path to the item
+    * @return confirmation that request was fulfilled
     */
-   Completable makeDir(Cid id, String path);
+   Completable makeDir(Cid contract, String path);
 
    /**
     * returns information about a file or directory at a given path of a specific Drive
     * 
-    * @param id
-    * @param path
-    * @return
+    * @param contract CID of the contract
+    * @param path path to the item
+    * @return observable drive item
     */
-   Observable<DriveItem> stat(Cid id, String path);
+   Observable<DriveItem> stat(Cid contract, String path);
 
    /**
     *  lists all the files and directories of a specific Drive and information about them at a given path.
     *  
-    * @param id
-    * @param path
-    * @return
+    * @param contract CID of the contract
+    * @param path path to the item
+    * @return observable list of drive items
     */
-   Observable<List<DriveItem>> ls(Cid id, String path);
+   Observable<List<DriveItem>> ls(Cid contract, String path);
 
    /**
     * uploads the state of a Drive to all contract members.
     * 
-    * @param id
-    * @param path
-    * @return
+    * @param contract CID of the contract
+    * @param path path to the item
+    * @return confirmation that request was fulfilled
     */
-   Completable flush(Cid id, String path);
+   Completable flush(Cid contract, String path);
 
 }

@@ -21,9 +21,9 @@ public class ErrorDTO {
    private final String type;
 
    /**
-    * @param message
-    * @param code
-    * @param type
+    * @param message error message
+    * @param code error code
+    * @param type type of he error
     */
    public ErrorDTO(String message, int code, String type) {
       this.message = message;

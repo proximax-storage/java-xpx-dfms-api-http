@@ -61,7 +61,7 @@ public interface ContractRepository {
    /**
     * Lists all the contracts in which Node participates as an owner or member
     * 
-    * @return
+    * @return observable list of CIDs
     */
    Observable<List<Cid>> list();
 
@@ -76,14 +76,14 @@ public interface ContractRepository {
    /**
     * triggers node to automatically accept incoming contracts.
     * 
-    * @return
+    * @return confirmation that accepting has started
     */
    Completable startAccepting();
 
    /**
     * stops accepting process.
     * 
-    * @return
+    * @return confirmation that accepting has stopped
     */
    Completable stopAccepting();
 

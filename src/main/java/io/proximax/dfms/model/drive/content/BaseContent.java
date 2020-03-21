@@ -10,7 +10,7 @@ import java.util.Optional;
 import io.proximax.dfms.model.drive.DriveContent;
 
 /**
- * TODO add proper description
+ * common implementation of content types
  */
 public abstract class BaseContent implements DriveContent {
 
@@ -18,8 +18,8 @@ public abstract class BaseContent implements DriveContent {
    private final boolean isNode;
 
    /**
-    * @param name
-    * @param isNode
+    * @param name name of the content
+    * @param isNode indication whether this is directory or file with actual content
     */
    public BaseContent(Optional<String> name, boolean isNode) {
       this.name = name;

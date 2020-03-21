@@ -42,8 +42,9 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
    }.getType();
 
    /**
-    * @param api
-    * @param apiPath
+    * @param api the storage API
+    * @param apiPath the path to the API on the node
+    * @param client the HTTP client to be used to execute requests
     */
    public NetworkHttp(StorageApi api, String apiPath, OkHttpClient client) {
       super(api, Optional.of(apiPath), client);
