@@ -29,6 +29,7 @@ import io.proximax.dfms.http.dtos.ErrorDTO;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.model.exceptions.ResponseErrorType;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import okhttp3.Call;
@@ -37,6 +38,7 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -109,7 +111,7 @@ public class HttpRepository<T extends ServiceNode> {
     * get URL builder for specified command representing relative URL segments
     * 
     * @param command relative URL path segments (e.g. drive/remove)
-    * @return the url builder
+    * @return the URL builder
     */
    protected HttpUrl.Builder buildUrl(String command, String... arguments) {
       HttpUrl.Builder builder = getApiUrl().newBuilder().addPathSegments(command);
@@ -126,7 +128,8 @@ public class HttpRepository<T extends ServiceNode> {
     * @return observable response
     */
    protected Observable<Response> makeRequest(Request request) {
-      return Observable.create(emitter -> getClient().newCall(request).enqueue(new OkHttp3ResponseCallback(emitter)));
+      final Call call = getClient().newCall(request);
+      return Observable.create(emitter -> call.enqueue(new OkHttp3ResponseCallback(emitter)));
    }
 
    /**
@@ -177,6 +180,54 @@ public class HttpRepository<T extends ServiceNode> {
       } catch (IOException e) {
          return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body", e);
       }
+   }
+
+   /**
+    * POST request with empty request body
+    * 
+    * @param url we are making the POST request to
+    * @return completable for the action
+    */
+   protected Completable makePostCompletable(HttpUrl url) {
+      RequestBody body = RequestBody.create(new byte[0]);
+      Request request = new Request.Builder().url(url).post(body).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
+   }
+
+   /**
+    * GET request without expected response
+    * 
+    * @param url we are making the GET request to
+    * @return completable for the action
+    */
+   protected Completable makeGetCompletable(HttpUrl url) {
+      Request request = new Request.Builder().url(url).build();
+      Call call = getClient().newCall(request);
+      return Completable.fromAction(call::execute);
+   }
+
+   /**
+    * POST request with response content
+    * 
+    * @param url we are making the GET request to
+    * @return observable for the action
+    */
+   protected Observable<Response> makePostObservable(HttpUrl url) {
+      RequestBody body = RequestBody.create(new byte[0]);
+      Request request = new Request.Builder().url(url).post(body).build();
+      return makeRequest(request);
+   }
+
+   /**
+    * GET request with response content
+    * 
+    * @param url we are making the GET request to
+    * @return observable for the action
+    */
+   protected Observable<Response> makeGetObservable(HttpUrl url) {
+      Request request = new Request.Builder().url(url).build();
+      return makeRequest(request);
    }
 
    /**

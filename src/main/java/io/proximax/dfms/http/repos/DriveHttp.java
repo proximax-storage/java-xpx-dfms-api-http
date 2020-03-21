@@ -22,11 +22,9 @@ import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.content.InputStreamContent;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Drive repository implementation using HTTP protocol
@@ -65,53 +63,40 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Observable<DriveContent> get(Cid id, String path) {
       HttpUrl url = buildUrl(URL_GET, id.toString(), path).build();
-      Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(this::mapRespBodyOrError)
+      return makeGetObservable(url).map(this::mapRespBodyOrError)
             .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
    }
 
    @Override
    public Completable remove(Cid id, String path) {
       HttpUrl url = buildUrl(URL_REMOVE, id.toString(), path).build();
-      Request request = new Request.Builder().url(url).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makeGetCompletable(url);
    }
 
    @Override
    public Completable move(Cid id, String sourcePath, String destinationPath) {
       HttpUrl url = buildUrl(URL_MOVE, id.toString(), sourcePath, destinationPath).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makePostCompletable(url);
    }
 
    @Override
    public Completable copy(Cid id, String sourcePath, String destinationPath) {
       HttpUrl url = buildUrl(URL_COPY, id.toString(), sourcePath, destinationPath).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makePostCompletable(url);
    }
 
    @Override
    public Completable makeDir(Cid id, String path) {
       HttpUrl url = buildUrl(URL_MKDIR, id.toString(), path).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makePostCompletable(url);
 
    }
 
    @Override
    public Observable<DriveItem> stat(Cid id, String path) {
       HttpUrl url = buildUrl(URL_STAT, id.toString(), path).build();
-      Request request = new Request.Builder().url(url).build();
-      return makeRequest(request)
+      return makeGetObservable(url)
          .map(this::mapStringOrError)
          .map(str -> getGson().fromJson(str, DriveItemStatDTO.class))
          .map(DriveItemStatDTO::getItem)
@@ -121,8 +106,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Observable<List<DriveItem>> ls(Cid id, String path) {
       HttpUrl url = buildUrl(URL_LS, id.toString(), path).build();
-      Request request = new Request.Builder().url(url).build();
-      return makeRequest(request)
+      return makeGetObservable(url)
          .map(this::mapStringOrError)
          .map(str -> getGson().fromJson(str, DriveItemListDTO.class))
          .flatMapIterable(DriveItemListDTO::getItems)
@@ -133,9 +117,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Completable flush(Cid id, String path) {
       HttpUrl url = buildUrl(URL_FLUSH, id.toString(), path).build();
-      Request request = new Request.Builder().url(url).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makeGetCompletable(url);
    
    }
 }

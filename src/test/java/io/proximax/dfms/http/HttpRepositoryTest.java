@@ -7,6 +7,7 @@ package io.proximax.dfms.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
@@ -23,12 +25,16 @@ import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.http.HttpRepository.OkHttp3ResponseCallback;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
+import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -177,4 +183,89 @@ class HttpRepositoryTest {
 
       assertThrows(DFMSResponseException.class, () -> repo.mapRespBodyOrError(response));
    }
+   
+   @Test
+   void testCompletablePost() throws IOException {
+      // prepare client
+      Call call = Mockito.mock(Call.class);
+      Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
+      // prepare repo
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      // make the request
+      final HttpUrl url = repo.getApiUrl();
+      Completable postCompletion = repo.makePostCompletable(url);
+      // test
+      assertNotNull(postCompletion);
+      // capture the request
+      ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
+      Mockito.verify(client).newCall(requestCaptor.capture());
+      Request actualRequest = requestCaptor.getValue();
+      assertEquals(url, actualRequest.url());
+      assertEquals(0, actualRequest.body().contentLength());
+      assertEquals("POST", actualRequest.method());
+   }
+   
+   @Test
+   void testCompletableGet() throws IOException {
+      // prepare client
+      Call call = Mockito.mock(Call.class);
+      Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
+      // prepare repo
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      // make the request
+      final HttpUrl url = repo.getApiUrl();
+      Completable getCompletion = repo.makeGetCompletable(url);
+      // test
+      assertNotNull(getCompletion);
+      // capture the request
+      ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
+      Mockito.verify(client).newCall(requestCaptor.capture());
+      Request actualRequest = requestCaptor.getValue();
+      assertEquals(url, actualRequest.url());
+      assertNull(actualRequest.body());
+      assertEquals("GET", actualRequest.method());
+   }
+   
+   @Test
+   void testObservablePost() throws IOException {
+      // prepare client
+      Call call = Mockito.mock(Call.class);
+      Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
+      // prepare repo
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      // make the request
+      final HttpUrl url = repo.getApiUrl();
+      Observable<Response> postObs = repo.makePostObservable(url);
+      // test
+      assertNotNull(postObs);
+      // capture the request
+      ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
+      Mockito.verify(client).newCall(requestCaptor.capture());
+      Request actualRequest = requestCaptor.getValue();
+      assertEquals(url, actualRequest.url());
+      assertEquals(0, actualRequest.body().contentLength());
+      assertEquals("POST", actualRequest.method());
+   }
+   
+   @Test
+   void testOnservableGet() throws IOException {
+      // prepare client
+      Call call = Mockito.mock(Call.class);
+      Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
+      // prepare repo
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      // make the request
+      final HttpUrl url = repo.getApiUrl();
+      Observable<Response> getObs = repo.makeGetObservable(url);
+      // test
+      assertNotNull(getObs);
+      // capture the request
+      ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
+      Mockito.verify(client).newCall(requestCaptor.capture());
+      Request actualRequest = requestCaptor.getValue();
+      assertEquals(url, actualRequest.url());
+      assertNull(actualRequest.body());
+      assertEquals("GET", actualRequest.method());
+   }
+   
 }

@@ -21,11 +21,9 @@ import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.model.network.PeerInfo;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * TODO add proper description
@@ -56,10 +54,7 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList())
             .toArray(new String[addresses.length]);
       HttpUrl url = buildUrl(URL_CONNECT, args).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makePostCompletable(url);
    }
 
    @Override
@@ -67,10 +62,7 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList())
             .toArray(new String[addresses.length]);
       HttpUrl url = buildUrl(URL_DISCONNECT, args).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+      return makePostCompletable(url);
    }
 
    @Override

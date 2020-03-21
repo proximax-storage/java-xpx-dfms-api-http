@@ -22,8 +22,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Contract repository implementation using HTTP protocol
@@ -49,19 +47,15 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
    public Observable<Contract> compose(BigInteger space, Duration duration) {
       // TODO what is the duration field? openapi says: Drive contract duration. Might be in millisecconds or blocks.
       HttpUrl url = buildUrl(URL_COMPOSE, space.toString(), Long.toString(duration.toMillis())).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, Contract.class));
+      return makePostObservable(url).map(this::mapStringOrError).map(str -> getGson().fromJson(str, Contract.class));
    }
 
    @Override
    public Observable<Contract> get(Cid id) {
       HttpUrl url = buildUrl(URL_GET, id.toString()).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError)
+      return makePostObservable(url).map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, ContractWapperDTO.class)).map(ContractWapperDTO::getContract)
             .map(Contract::fromDto);
    }
@@ -69,20 +63,16 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
    @Override
    public Observable<List<Cid>> list() {
       HttpUrl url = buildUrl(URL_LS).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListDTO.class))
+      return makePostObservable(url).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListDTO.class))
             .map(CidListDTO::getIds).flatMapIterable(list -> list).map(Cid::decode).toList().toObservable();
    }
 
    @Override
    public Observable<UpdatesSubscription> amendments(Cid id) {
       HttpUrl url = buildUrl(URL_AMENDS, id.toString()).build();
-      RequestBody body = RequestBody.create(null, new byte[] {});
-      Request request = new Request.Builder().url(url).post(body).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError)
+      return makePostObservable(url).map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, UpdatesSubscription.class));
    }
 
