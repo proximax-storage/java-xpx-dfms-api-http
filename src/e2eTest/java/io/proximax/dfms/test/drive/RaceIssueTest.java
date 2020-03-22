@@ -56,7 +56,7 @@ class RaceIssueTest {
    @Test
    @Disabled("Disabled by default before server is fixed")
    void killServer() throws IOException {
-      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
+      DriveContent addContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       drive.remove(CONTRACT, path + "/text1.txt").timeout(30, TimeUnit.SECONDS).blockingAwait();
       // any operation shortly after delete seems to break the server

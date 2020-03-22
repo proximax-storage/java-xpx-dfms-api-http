@@ -23,6 +23,8 @@ plugins {
     id 'maven-publish'
     // sign the artifacts and pom
     id 'signing'
+    // support for integration tests
+    id 'org.unbroken-dome.test-sets' version '2.2.1'
     // code coverage reporting
     id 'jacoco'
     // integrate coverage with github
@@ -35,8 +37,6 @@ plugins {
 
 // define contents of the build
 apply from: "$rootDir/gradle/content.gradle"
-// load setup for integration tests
-apply from: "$rootDir/gradle/integration.gradle"
 // load setup for coverage reports
 apply from: "$rootDir/gradle/coverage.gradle"
 // loak setup for publishing
@@ -67,9 +67,13 @@ sourceSets {
     }
 }
 
-// testing details
-test {
-    // use JUnit5
+// declare e2e test set
+testSets {
+    e2eTest
+}
+
+// Make all tests use JUnit 5
+tasks.withType(Test) {
     useJUnitPlatform()
 }
 
@@ -106,20 +110,19 @@ dependencies {
 
 	// mockito for mocking
     testImplementation 'org.mockito:mockito-all:1.9.5'
-    // Logging facade
+    // Logging facade and impl
 	testImplementation 'org.slf4j:slf4j-api:1.7.26'
-	// log implementation
 	testRuntimeOnly 'ch.qos.logback:logback-classic:1.2.3'
     // Tests
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.6.0'
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    
     // tar utility to check content of server responses
-    testImplementation('org.apache.commons:commons-vfs2:2.6.0') {
+    e2eTestImplementation('org.apache.commons:commons-vfs2:2.6.0') {
     	exclude group: 'org.apache.hadoop', module: 'hadoop-hdfs-client'
     }
     // without this VFS2 can not open TARs
-    testImplementation 'org.apache.commons:commons-compress:1.20'
-    
+    e2eTestImplementation 'org.apache.commons:commons-compress:1.20'
 }

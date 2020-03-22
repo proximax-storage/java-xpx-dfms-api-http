@@ -58,7 +58,7 @@ class GetDataTest {
 
    @Test
    void checkDirectory() throws IOException, InterruptedException {
-      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
+      DriveContent addContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       // now make request for that data
       {

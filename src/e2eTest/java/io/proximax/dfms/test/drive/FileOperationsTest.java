@@ -66,7 +66,7 @@ class FileOperationsTest {
 
    @Test
    void test01AddDirectory() throws IOException, InterruptedException {
-      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
+      DriveContent addContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       Cid cid = drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       System.out.println("ID of uploaded data: " + cid);

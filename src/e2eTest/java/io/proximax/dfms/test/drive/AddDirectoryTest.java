@@ -53,7 +53,7 @@ class AddDirectoryTest {
    void addDirectoryAsFileSystemContent() throws IOException, InterruptedException {
       final String path = "addDirFs" + Long.toString(RANDOM.nextLong());
 
-      DriveContent addContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
+      DriveContent addContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       Cid cid = drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       // check the resulting structure
@@ -64,7 +64,7 @@ class AddDirectoryTest {
    void addDirectoryAsDirContent() throws IOException, InterruptedException {
       final String path = "addDirDir" + Long.toString(RANDOM.nextLong());
 
-      DriveContent simpleDirContent = new FileSystemContent(new File("src/e2e/resources/simple").toPath());
+      DriveContent simpleDirContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       DriveContent content = new DirectoryContent(Optional.of("to be lost"), simpleDirContent);
       Cid cid = drive.add(CONTRACT, path, content).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);

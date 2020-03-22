@@ -55,7 +55,7 @@ class AddFileTest {
    @Test
    void addFile() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(
-            new File("src/e2e/resources/simple/subdir/test_image_file.png").toPath());
+            new File("src/e2eTest/resources/simple/subdir/test_image_file.png").toPath());
       Cid cid = drive.add(CONTRACT, path + ".png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
       assertFile("", path + ".png");
@@ -64,7 +64,7 @@ class AddFileTest {
    @Test
    void addFileToNewDir() throws IOException, InterruptedException {
       DriveContent addContent = new FileSystemContent(
-            new File("src/e2e/resources/simple/subdir/test_image_file.png").toPath());
+            new File("src/e2eTest/resources/simple/subdir/test_image_file.png").toPath());
       drive.makeDir(CONTRACT, path + "subdir").timeout(30, TimeUnit.SECONDS).blockingAwait();
       Cid cid = drive.add(CONTRACT, path + "subdir/file.png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertNotNull(cid);
@@ -73,7 +73,7 @@ class AddFileTest {
 
    @Test
    void addFileAsInputStream() throws FileNotFoundException, IOException {
-      try (FileInputStream fis = new FileInputStream("src/e2e/resources/simple/subdir/test_image_file.png")) {
+      try (FileInputStream fis = new FileInputStream("src/e2eTest/resources/simple/subdir/test_image_file.png")) {
          DriveContent content = new InputStreamContent(Optional.of("will be lost"), fis);
          drive.add(CONTRACT, path + "-as-stream.png", content).timeout(30, TimeUnit.SECONDS).blockingFirst();
       }
@@ -82,7 +82,7 @@ class AddFileTest {
    
    @Test
    void addFileAsByteArray() throws FileNotFoundException, IOException {
-      try (FileInputStream fis = new FileInputStream("src/e2e/resources/simple/subdir/test_image_file.png")) {
+      try (FileInputStream fis = new FileInputStream("src/e2eTest/resources/simple/subdir/test_image_file.png")) {
          DriveContent content = new ByteArrayContent(Optional.of("will be lost"), IOUtils.toByteArray(fis));
          drive.add(CONTRACT, path + "-as-array.png", content).timeout(30, TimeUnit.SECONDS).blockingFirst();
       }
