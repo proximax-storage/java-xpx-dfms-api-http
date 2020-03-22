@@ -7,64 +7,64 @@ package io.proximax.dfms.model.contract;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.proximax.cid.Cid;
+import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.gen.model.ContractDTO;
 
 /**
- * TODO add proper description
+ * Representation of drive contract. Contract is an agreement between client and replicator peers on some amount of disk
+ * Space
  */
 public class Contract {
-   private final Cid cid;
-//   private final PeerId owner;
-   private final String owner;
-//   private final List<PeerId> members;
-   private final List<String> members;
+   private final Cid id;
+   private final PublicKey owner;
+   private final List<PublicKey> replicators;
    private final BigInteger duration;
    private final BigInteger created;
-//   private final Cid root;
-   private final String root;
-   private final BigInteger totalSpace;
+   private final Cid root;
+   private final BigInteger space;
 
    /**
-    * @param cid CID of the contract
-    * @param owner the owner
-    * @param members list of members
+    * @param id CID identifier of Contract's Drive
+    * @param owner owner of the Contract. Has write access on the Contract's Drive and can control it's state.
+    * @param replicators nodes which are responsible for replication of DriveFS
     * @param duration duration for which the contract is valid TODO blocks or millis
-    * @param created timestamp when the contract was created
-    * @param root root of the contract TODO what is it?
-    * @param totalSpace total space TODO available or consumed
+    * @param created block height when the Contract was started.
+    * @param root CID of Drive's top-level directory. It is used as an entry point to access DriveFS
+    * @param space total physical Space used by Drive on replicator nodes.
     */
-   public Contract(Cid cid, String owner, List<String> members, BigInteger duration, BigInteger created, String root,
-         BigInteger totalSpace) {
-      this.cid = cid;
+   public Contract(Cid id, PublicKey owner, List<PublicKey> replicators, BigInteger duration, BigInteger created,
+         Cid root, BigInteger space) {
+      this.id = id;
       this.owner = owner;
-      this.members = members;
+      this.replicators = replicators;
       this.duration = duration;
       this.created = created;
       this.root = root;
-      this.totalSpace = totalSpace;
+      this.space = space;
    }
 
    /**
     * @return the cid
     */
    public Cid getCid() {
-      return cid;
+      return id;
    }
 
    /**
     * @return the owner
     */
-   public String getOwner() {
+   public PublicKey getOwner() {
       return owner;
    }
 
    /**
     * @return the members
     */
-   public List<String> getMembers() {
-      return members;
+   public List<PublicKey> getReplicators() {
+      return replicators;
    }
 
    /**
@@ -84,7 +84,7 @@ public class Contract {
    /**
     * @return the root
     */
-   public String getRoot() {
+   public Cid getRoot() {
       return root;
    }
 
@@ -92,7 +92,7 @@ public class Contract {
     * @return the totalSpace
     */
    public BigInteger getTotalSpace() {
-      return totalSpace;
+      return space;
    }
 
    /**
@@ -102,8 +102,14 @@ public class Contract {
     * @return contract instance
     */
    public static Contract fromDto(ContractDTO dto) {
-      return new Contract(Cid.decode(dto.getDrive()), dto.getOwner(), dto.getReplicators(),
-            BigInteger.valueOf(dto.getDuration()), BigInteger.valueOf(dto.getCreated()), dto.getRoot(),
-            BigInteger.valueOf(dto.getSpace()));
+      // map the data
+      Cid id = Cid.decode(dto.getDrive());
+      PublicKey owner = PublicKey.fromHexString(dto.getOwner());
+      List<PublicKey> replicators = dto.getReplicators().stream().map(PublicKey::fromHexString)
+            .collect(Collectors.toList());
+      Cid root = Cid.decode(dto.getRoot());
+      // create the instance
+      return new Contract(id, owner, replicators, BigInteger.valueOf(dto.getDuration()),
+            BigInteger.valueOf(dto.getCreated()), root, BigInteger.valueOf(dto.getSpace()));
    }
 }
