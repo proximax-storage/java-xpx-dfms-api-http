@@ -6,10 +6,16 @@
 package io.proximax.cid;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.cid.Cid.Codec;
 import io.proximax.cid.multibase.Base32;
+import io.proximax.cid.multihash.Multihash;
+import io.proximax.cid.multihash.Multihash.Type;
+import io.proximax.core.crypto.PublicKey;
 
 
 /**
@@ -18,18 +24,18 @@ import io.proximax.cid.multibase.Base32;
 class CidTest {
 
    @Test
-   void test1() {
-      Cid.decode("QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn");
+   void testLegacyFormat() {
+      assertNotNull(Cid.decode("QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn"));
    }
 
    @Test
-   void test2() {
-      Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+   void testBase32EncodedCid() {
+      assertNotNull(Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu"));
    }
 
    @Test
-   void test3() {
-      Cid.decode("zdpuAyvkgEDQm9TenwGkd5eNaosSxjgEYd8QatfPetgB1CdEZ");
+   void testBase58EncodedCid() {
+      assertNotNull(Cid.decode("zdpuAyvkgEDQm9TenwGkd5eNaosSxjgEYd8QatfPetgB1CdEZ"));
    }
    
    @Test
@@ -38,5 +44,17 @@ class CidTest {
       byte[] multibaseBytes = Base32.decode(base);
       byte[] apacheBytes = new org.apache.commons.codec.binary.Base32().decode(base);
       assertArrayEquals(apacheBytes, multibaseBytes);
+   }
+   
+   @Test
+   void testConversions() {
+      final String pubKeyStr = "08011220201b155bf3ebe4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b";
+      PublicKey pubKey = PublicKey.fromHexString(pubKeyStr);
+      Cid cid = cidFromPublicKey(pubKey);
+      assertEquals(Cid.decode("bAEGAAJAIAEJCAIA3CVN7H27E3TFFEJKJVGBVUIOQCDIH43BVJ4G7GCQKAUCLQPY3"), cid);
+   }
+   
+   public static Cid cidFromPublicKey(PublicKey publicKey) {
+      return Cid.buildCidV1(Codec.PROXIMA_X, Type.id, publicKey.getRaw());
    }
 }

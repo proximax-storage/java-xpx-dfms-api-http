@@ -13,193 +13,208 @@ import java.util.stream.Stream;
 import io.proximax.cid.multibase.Multibase;
 import io.proximax.cid.multihash.Multihash;
 
-
+/**
+ * self-described identifier
+ */
 public class Cid extends Multihash {
 
-    public static final class CidEncodingException extends RuntimeException {
+   /**
+    * Exception indicating that encoding failed
+    */
+   public static final class CidEncodingException extends RuntimeException {
+      private static final long serialVersionUID = -1092275854036133476L;
 
-        public CidEncodingException(String message) {
-            super(message);
-        }
-    }
+      public CidEncodingException(String message) {
+         super(message);
+      }
+   }
 
-    public enum Codec {
-        ProximaX(0x0C),
-        Raw(0x55),
-        DagProtobuf(0x70),
-        DagCbor(0x71),
-        EthereumBlock(0x90),
-        EthereumTx(0x91),
-        BitcoinBlock(0xb0),
-        BitcoinTx(0xb1),
-        ZcashBlock(0xc0),
-        ZcashTx(0xc1);
+   /**
+    * Codec used to handle the Cid
+    */
+   public enum Codec {
+      PROXIMA_X(0x0C), 
+      RAW(0x55), 
+      DAG_PROTOBUFF(0x70), 
+      DAG_CBOR(0x71), 
+      ETHEREUM_BLOCK(0x90), 
+      ETHEREUM_TX(0x91),
+      BITCOIN_BLOCK(0xb0), 
+      BITCOIN_TX(0xb1), 
+      ZCASH_BLOCK(0xc0), 
+      ZCASH_TX(0xc1);
 
-        public long type;
+      private final long type;
 
-        Codec(long type) {
-            this.type = type;
-        }
+      Codec(long type) {
+         this.type = type;
+      }
 
-        private static Map<Long, Codec> lookup = new TreeMap<>();
-        static {
-            for (Codec c: Codec.values())
-                lookup.put(c.type, c);
-        }
+      private static Map<Long, Codec> lookup = new TreeMap<>();
+      static {
+         for (Codec c : Codec.values())
+            lookup.put(c.type, c);
+      }
 
-        public static Codec lookup(long c) {
-            if (!lookup.containsKey(c))
-                throw new IllegalStateException("Unknown Codec type: " + c);
-            return lookup.get(c);
-        }
-    }
+      public static Codec lookup(long c) {
+         if (!lookup.containsKey(c))
+            throw new IllegalStateException("Unknown Codec type: " + c);
+         return lookup.get(c);
+      }
+   }
 
-    public final long version;
-    public final Codec codec;
+   public final long version;
+   public final Codec codec;
 
-    public Cid(long version, Codec codec, Multihash hash) {
-        super(hash);
-        this.version = version;
-        this.codec = codec;
-    }
+   public Cid(long version, Codec codec, Multihash hash) {
+      super(hash);
+      this.version = version;
+      this.codec = codec;
+   }
 
-    public Cid(long version, Codec codec, Multihash.Type type, byte[] hash) {
-        super(type, hash);
-        this.version = version;
-        this.codec = codec;
-    }
+   public Cid(long version, Codec codec, Multihash.Type type, byte[] hash) {
+      super(type, hash);
+      this.version = version;
+      this.codec = codec;
+   }
 
-    public Cid(Multihash h) {
-        this(0, Codec.DagProtobuf, h);
-    }
+   public Cid(Multihash h) {
+      this(0, Codec.DAG_PROTOBUFF, h);
+   }
 
-    private byte[] toBytesV0() {
-        return super.toBytes();
-    }
+   private byte[] toBytesV0() {
+      return super.toBytes();
+   }
 
-    private static final int MAX_VARINT_LEN64 = 10;
+   private static final int MAX_VARINT_LEN64 = 10;
 
-    private byte[] toBytesV1() {
-        byte[] hashBytes = super.toBytes();
-        byte[] res = new byte[2 * MAX_VARINT_LEN64 + hashBytes.length];
-        int index = putUvarint(res, 0, version);
-        index = putUvarint(res, index, codec.type);
-        System.arraycopy(hashBytes, 0, res, index, hashBytes.length);
-        return Arrays.copyOfRange(res, 0, index + hashBytes.length);
-    }
+   private byte[] toBytesV1() {
+      byte[] hashBytes = super.toBytes();
+      byte[] res = new byte[2 * MAX_VARINT_LEN64 + hashBytes.length];
+      int index = putUvarint(res, 0, version);
+      index = putUvarint(res, index, codec.type);
+      System.arraycopy(hashBytes, 0, res, index, hashBytes.length);
+      return Arrays.copyOfRange(res, 0, index + hashBytes.length);
+   }
 
-    public byte[] toBytes() {
-        if (version == 0)
-            return toBytesV0();
-        else if (version == 1)
-            return toBytesV1();
-        throw new IllegalStateException("Unknown cid version: " + version);
-    }
+   @Override
+   public byte[] toBytes() {
+      if (version == 0)
+         return toBytesV0();
+      else if (version == 1)
+         return toBytesV1();
+      throw new IllegalStateException("Unknown cid version: " + version);
+   }
 
-    @Override
-    public String toString() {
-        if (version == 0) {
-            return super.toString();
-        } else if (version == 1) {
-            return Multibase.encode(Multibase.Base.Base58BTC, toBytesV1());
-        }
-        throw new IllegalStateException("Unknown Cid version: " + version);
-    }
+   @Override
+   public String toString() {
+      if (version == 0) {
+         return super.toString();
+      } else if (version == 1) {
+         return Multibase.encode(Multibase.Base.Base32, toBytesV1());
+      }
+      throw new IllegalStateException("Unknown Cid version: " + version);
+   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (! (o instanceof Multihash)) return false;
-        if (!super.equals(o)) return false;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o)
+         return true;
+      if (!(o instanceof Multihash))
+         return false;
+      if (!super.equals(o))
+         return false;
 
-        if (o instanceof Cid) {
-            Cid cid = (Cid) o;
+      if (o instanceof Cid) {
+         Cid cid = (Cid) o;
 
-            if (version != cid.version) return false;
-            return codec == cid.codec;
-        }
-        // o must be a Multihash
-        return version == 0 && super.equals(o);
-    }
+         if (version != cid.version)
+            return false;
+         return codec == cid.codec;
+      }
+      // o must be a Multihash
+      return version == 0 && super.equals(o);
+   }
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        if (version == 0)
-            return result;
-        result = 31 * result + (int) (version ^ (version >>> 32));
-        result = 31 * result + (codec != null ? codec.hashCode() : 0);
-        return result;
-    }
+   @Override
+   public int hashCode() {
+      int result = super.hashCode();
+      if (version == 0)
+         return result;
+      result = 31 * result + (int) (version ^ (version >>> 32));
+      result = 31 * result + (codec != null ? codec.hashCode() : 0);
+      return result;
+   }
 
-    public static Cid buildCidV0(Multihash h) {
-        return new Cid(h);
-    }
+   public static Cid buildCidV0(Multihash h) {
+      return new Cid(h);
+   }
 
-    public static Cid buildCidV1(Codec c, Multihash.Type type, byte[] hash) {
-        return new Cid(1, c, type, hash);
-    }
+   public static Cid buildCidV1(Codec c, Multihash.Type type, byte[] hash) {
+      return new Cid(1, c, type, hash);
+   }
 
-    public static Cid decode(String v) {
-        if (v.length() < 2)
-            throw new IllegalStateException("Cid too short!");
+   public static Cid decode(String v) {
+      if (v.length() < 2)
+         throw new IllegalStateException("Cid too short!");
 
-        // support legacy format
-        if (v.length() == 46 && v.startsWith("Qm"))
-            return buildCidV0(Multihash.fromBase58(v));
+      // support legacy format
+      if (v.length() == 46 && v.startsWith("Qm"))
+         return buildCidV0(Multihash.fromBase58(v));
 
-        byte[] data = Multibase.decode(v);
-        return cast(data);
-    }
+      byte[] data = Multibase.decode(v);
+      return cast(data);
+   }
 
-    public static Cid cast(byte[] data) {
-        if (data.length == 34 && data[0] == 18 && data[1] == 32)
-            return buildCidV0(new Multihash(data));
+   public static Cid cast(byte[] data) {
+      if (data.length == 34 && data[0] == 18 && data[1] == 32)
+         return buildCidV0(new Multihash(data));
 
-        InputStream in = new ByteArrayInputStream(data);
-        try {
-            long version = readVarint(in);
-            if (version != 0 && version != 1)
-                throw new CidEncodingException("Invalid Cid version number: " + version);
+      InputStream in = new ByteArrayInputStream(data);
+      try {
+         long version = readVarint(in);
+         if (version != 0 && version != 1)
+            throw new CidEncodingException("Invalid Cid version number: " + version);
 
-            long codec = readVarint(in);
-            if (version != 0 && version != 1)
-                throw new CidEncodingException("Invalid Cid version number: " + version);
+         long codec = readVarint(in);
+         if (version != 0 && version != 1)
+            throw new CidEncodingException("Invalid Cid version number: " + version);
 
-            Multihash hash = Multihash.deserialize(new DataInputStream(in));
+         Multihash hash = Multihash.deserialize(new DataInputStream(in));
 
-            return new Cid(version, Codec.lookup(codec), hash);
-        } catch (IOException e) {
-            throw new CidEncodingException("Invalid cid bytes: " + Stream.of(data).map(b -> String.format("%02x", b)).reduce("", (a, b) -> a + b));
-        }
-    }
+         return new Cid(version, Codec.lookup(codec), hash);
+      } catch (IOException e) {
+         throw new CidEncodingException(
+               "Invalid cid bytes: " + Stream.of(data).map(b -> String.format("%02x", b)).reduce("", (a, b) -> a + b));
+      }
+   }
 
-    private static long readVarint(InputStream in) throws IOException {
-        long x = 0;
-        int s=0;
-        for (int i=0; i < 10; i++) {
-            int b = in.read();
-            if (b == -1)
-                throw new EOFException();
-            if (b < 0x80) {
-                if (i > 9 || i == 9 && b > 1) {
-                    throw new IllegalStateException("Overflow reading varint" +(-(i + 1)));
-                }
-                return x | (((long)b) << s);
+   private static long readVarint(InputStream in) throws IOException {
+      long x = 0;
+      int s = 0;
+      for (int i = 0; i < 10; i++) {
+         int b = in.read();
+         if (b == -1)
+            throw new EOFException();
+         if (b < 0x80) {
+            if (i > 9 || i == 9 && b > 1) {
+               throw new IllegalStateException("Overflow reading varint" + (-(i + 1)));
             }
-            x |= ((long)b & 0x7f) << s;
-            s += 7;
-        }
-        throw new IllegalStateException("Varint too long!");
-    }
+            return x | (((long) b) << s);
+         }
+         x |= ((long) b & 0x7f) << s;
+         s += 7;
+      }
+      throw new IllegalStateException("Varint too long!");
+   }
 
-    private static int putUvarint(byte[] buf, int index, long x) {
-        while (x >= 0x80) {
-            buf[index] = (byte)(x | 0x80);
-            x >>= 7;
-            index++;
-        }
-        buf[index] = (byte)x;
-        return index + 1;
-    }
+   private static int putUvarint(byte[] buf, int index, long x) {
+      while (x >= 0x80) {
+         buf[index] = (byte) (x | 0x80);
+         x >>= 7;
+         index++;
+      }
+      buf[index] = (byte) x;
+      return index + 1;
+   }
 }
