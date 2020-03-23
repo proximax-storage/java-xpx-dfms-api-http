@@ -50,7 +50,7 @@ class E2EContractHttpTest {
    void getContract() throws IOException {
       ContractRepository contracts = api.createContractRepository();
       // retrieve info by contract id
-      Contract contr = ((ContractHttp) contracts).get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      Contract contr = contracts.get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(CONTRACT, contr.getCid());
    }
 }
