@@ -18,6 +18,7 @@ import io.libp2p.core.multiformats.Multiaddr;
 import io.proximax.dfms.NetworkRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.http.HttpRepository;
+import io.proximax.dfms.http.dtos.PeerIdDTO;
 import io.proximax.dfms.model.network.PeerInfo;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -79,7 +80,9 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_ID).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, PeerId.class));
+      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, PeerIdDTO.class))
+            .map(PeerIdDTO::getId)
+            .map(PeerId::fromBase58);
    }
 
    @Override
