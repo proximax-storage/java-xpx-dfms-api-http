@@ -1,4 +1,4 @@
-package io.proximax.cid;
+package io.proximax.dfms.cid;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-import io.proximax.cid.multibase.Multibase;
-import io.proximax.cid.multihash.Multihash;
+import io.proximax.dfms.cid.multibase.Multibase;
+import io.proximax.dfms.cid.multihash.Multihash;
 
 /**
  * self-described identifier
@@ -108,14 +108,24 @@ public class Cid extends Multihash {
 
    @Override
    public String toString() {
+      return toString(Multibase.Base.Base32);
+   }
+
+   /**
+    * format Cid to string using specified base encoding
+    * 
+    * @param base the base encoding
+    * @return string representation
+    */
+   public String toString(Multibase.Base base) {
       if (version == 0) {
          return super.toString();
       } else if (version == 1) {
-         return Multibase.encode(Multibase.Base.Base32, toBytesV1());
+         return Multibase.encode(base, toBytesV1());
       }
       throw new IllegalStateException("Unknown Cid version: " + version);
    }
-
+   
    @Override
    public boolean equals(Object o) {
       if (this == o)

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.cid.Cid;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.dtos.DriveItemDTO;
 
 class DriveItemTest {

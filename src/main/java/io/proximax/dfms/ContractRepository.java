@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.time.Duration;
 import java.util.List;
 
-import io.proximax.cid.Cid;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.UpdatesSubscription;
 import io.reactivex.Completable;

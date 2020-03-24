@@ -12,8 +12,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.cid.Cid;
 import io.proximax.core.crypto.PublicKey;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.ContractDTO;
 
 /**

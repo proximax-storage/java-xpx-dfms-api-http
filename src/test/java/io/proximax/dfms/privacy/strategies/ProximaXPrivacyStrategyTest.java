@@ -18,10 +18,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import io.proximax.cipher.BlockchainKeysCipherEncryptor;
 import io.proximax.core.crypto.CryptoEngines;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
+import io.proximax.dfms.cipher.BlockchainKeysCipherEncryptor;
 import io.proximax.dfms.privacy.PrivacyType;
 import io.proximax.dfms.privacy.strategies.ProximaXKeysPrivacyStrategy;
 

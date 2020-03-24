@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.cid.Cid;
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
 import io.proximax.dfms.http.dtos.CidDTO;
@@ -25,6 +25,8 @@ import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+
+import static io.proximax.dfms.utils.HttpUtils.encode;
 
 /**
  * Drive repository implementation using HTTP protocol
@@ -54,7 +56,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException {
-      HttpUrl url = buildUrl(URL_ADD, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_ADD, encode(id), path).build();
       Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content)).build();
       // make the request
       return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidDTO.class))
@@ -63,7 +65,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Observable<DriveContent> get(Cid id, String path) {
-      HttpUrl url = buildUrl(URL_GET, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_GET, encode(id), path).build();
       // caller is responsible to call close on the input stream
       return makeGetObservable(url).map(this::mapRespBodyOrError)
             .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
@@ -71,32 +73,32 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Completable remove(Cid id, String path) {
-      HttpUrl url = buildUrl(URL_REMOVE, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_REMOVE, encode(id), path).build();
       return makeGetCompletable(url);
    }
 
    @Override
    public Completable move(Cid id, String sourcePath, String destinationPath) {
-      HttpUrl url = buildUrl(URL_MOVE, id.toString(), sourcePath, destinationPath).build();
+      HttpUrl url = buildUrl(URL_MOVE, encode(id), sourcePath, destinationPath).build();
       return makePostCompletable(url);
    }
 
    @Override
    public Completable copy(Cid id, String sourcePath, String destinationPath) {
-      HttpUrl url = buildUrl(URL_COPY, id.toString(), sourcePath, destinationPath).build();
+      HttpUrl url = buildUrl(URL_COPY, encode(id), sourcePath, destinationPath).build();
       return makePostCompletable(url);
    }
 
    @Override
    public Completable makeDir(Cid id, String path) {
-      HttpUrl url = buildUrl(URL_MKDIR, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_MKDIR, encode(id), path).build();
       return makePostCompletable(url);
 
    }
 
    @Override
    public Observable<DriveItem> stat(Cid id, String path) {
-      HttpUrl url = buildUrl(URL_STAT, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_STAT, encode(id), path).build();
       return makeGetObservable(url)
          .map(this::mapStringOrError)
          .map(str -> getGson().fromJson(str, DriveItemStatDTO.class))
@@ -106,7 +108,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Observable<List<DriveItem>> ls(Cid id, String path) {
-      HttpUrl url = buildUrl(URL_LS, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_LS, encode(id), path).build();
       return makeGetObservable(url)
          .map(this::mapStringOrError)
          .map(str -> getGson().fromJson(str, DriveItemListDTO.class))
@@ -117,7 +119,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
 
    @Override
    public Completable flush(Cid id, String path) {
-      HttpUrl url = buildUrl(URL_FLUSH, id.toString(), path).build();
+      HttpUrl url = buildUrl(URL_FLUSH, encode(id), path).build();
       return makeGetCompletable(url);
    
    }

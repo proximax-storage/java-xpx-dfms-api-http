@@ -1,4 +1,4 @@
-package io.proximax.core.utils;
+package io.proximax.dfms.utils;
 
 import java.security.SecureRandom;
 

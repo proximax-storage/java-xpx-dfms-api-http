@@ -7,7 +7,7 @@ package io.proximax.dfms.model.drive;
 
 import org.apache.commons.lang3.Validate;
 
-import io.proximax.cid.Cid;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.dtos.DriveItemDTO;
 
 /**

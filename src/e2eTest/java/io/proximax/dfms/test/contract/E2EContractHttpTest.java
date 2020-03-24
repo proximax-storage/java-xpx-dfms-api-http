@@ -16,9 +16,9 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
 
 /**

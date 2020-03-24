@@ -1,4 +1,4 @@
-package io.proximax.cipher;
+package io.proximax.dfms.cipher;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,6 +15,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import io.proximax.dfms.cipher.PBECipherEncryptor;
 
 public class PBECipherEncryptorTest {
 

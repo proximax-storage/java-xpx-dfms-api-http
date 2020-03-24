@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.cid.multibase.Multibase.Base;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 
 /**
@@ -33,5 +35,15 @@ public class HttpUtils {
       } catch (UnsupportedEncodingException e) {
          throw new DFMSRuntimeException("Failed to encode the file name", e);
       }
+   }
+   
+   /**
+    * server expects CIDs to be encoded in Base58BTC format
+    * 
+    * @param cid the cid to encode
+    * @return expected string representation of cid
+    */
+   public static String encode(Cid cid) {
+      return cid.toString(Base.Base58BTC);
    }
 }

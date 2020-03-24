@@ -1,4 +1,4 @@
-package io.proximax.cid.multihash;
+package io.proximax.dfms.cid.multihash;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-import io.proximax.cid.multibase.Base16;
-import io.proximax.cid.multibase.Base58;
+import io.proximax.dfms.cid.multibase.Base16;
+import io.proximax.dfms.cid.multibase.Base58;
 
 public class Multihash {
     public enum Type {

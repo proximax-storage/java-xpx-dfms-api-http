@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.cid;
+package io.proximax.dfms.cid;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,11 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.cid.Cid.Codec;
-import io.proximax.cid.multibase.Base32;
-import io.proximax.cid.multihash.Multihash;
-import io.proximax.cid.multihash.Multihash.Type;
 import io.proximax.core.crypto.PublicKey;
+import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.cid.Cid.Codec;
+import io.proximax.dfms.cid.multibase.Base32;
+import io.proximax.dfms.cid.multihash.Multihash;
+import io.proximax.dfms.cid.multihash.Multihash.Type;
 
 
 /**

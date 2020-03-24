@@ -1,4 +1,4 @@
-package io.proximax.cipher;
+package io.proximax.dfms.cipher;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
+import io.proximax.dfms.cipher.BlockchainKeysCipherEncryptor;
 
 public class BlockchainKeysCipherEncryptorTest {
 

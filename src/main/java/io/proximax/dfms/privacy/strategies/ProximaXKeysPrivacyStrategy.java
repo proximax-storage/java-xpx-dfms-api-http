@@ -4,10 +4,10 @@ import java.io.InputStream;
 
 import org.apache.commons.lang3.Validate;
 
-import io.proximax.cipher.BlockchainKeysCipherEncryptor;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
+import io.proximax.dfms.cipher.BlockchainKeysCipherEncryptor;
 import io.proximax.dfms.privacy.PrivacyStrategy;
 import io.proximax.dfms.privacy.PrivacyType;
 

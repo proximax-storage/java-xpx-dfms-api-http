@@ -19,10 +19,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import io.proximax.cipher.PBECipherEncryptor;
-import io.proximax.core.utils.PasswordUtils;
+import io.proximax.dfms.cipher.PBECipherEncryptor;
 import io.proximax.dfms.privacy.PrivacyType;
 import io.proximax.dfms.privacy.strategies.PasswordPrivacyStrategy;
+import io.proximax.dfms.utils.PasswordUtils;
 
 public class PasswordPrivacyStrategyTest {
 

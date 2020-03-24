@@ -1,4 +1,4 @@
-package io.proximax.cid.multibase;
+package io.proximax.dfms.cid.multibase;
 
 import java.math.BigInteger;
 

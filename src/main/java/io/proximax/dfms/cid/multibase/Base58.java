@@ -1,4 +1,4 @@
-package io.proximax.cid.multibase;
+package io.proximax.dfms.cid.multibase;
 
 /**
  * Copyright 2011 Google Inc.

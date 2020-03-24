@@ -11,7 +11,7 @@ import org.apache.commons.lang3.Validate;
 
 import com.codahale.shamir.Scheme;
 
-import io.proximax.cipher.PBECipherEncryptor;
+import io.proximax.dfms.cipher.PBECipherEncryptor;
 import io.proximax.dfms.privacy.PrivacyStrategy;
 import io.proximax.dfms.privacy.PrivacyType;
 

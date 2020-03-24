@@ -5,14 +5,16 @@
  */
 package io.proximax.dfms.http.repos;
 
+import static io.proximax.dfms.utils.HttpUtils.encode;
+
 import java.math.BigInteger;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.CidListDTO;
 import io.proximax.dfms.http.dtos.ContractWapperDTO;
@@ -22,7 +24,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-
 /**
  * Contract repository implementation using HTTP protocol
  */
@@ -54,7 +55,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
 
    @Override
    public Observable<Contract> get(Cid id) {
-      HttpUrl url = buildUrl(URL_GET, id.toString()).build();
+      HttpUrl url = buildUrl(URL_GET, encode(id)).build();
       // make the request
       return makePostObservable(url).map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, ContractWapperDTO.class)).map(ContractWapperDTO::getContract)
@@ -71,7 +72,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
 
    @Override
    public Observable<UpdatesSubscription> amendments(Cid id) {
-      HttpUrl url = buildUrl(URL_AMENDS, id.toString()).build();
+      HttpUrl url = buildUrl(URL_AMENDS, encode(id)).build();
       // make the request
       return makePostObservable(url).map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, UpdatesSubscription.class));

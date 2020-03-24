@@ -1,15 +1,15 @@
 package io.proximax.dfms.privacy.strategies;
 
-import static io.proximax.core.utils.PasswordUtils.MINIMUM_PASSWORD_LENGTH;
+import static io.proximax.dfms.utils.PasswordUtils.MINIMUM_PASSWORD_LENGTH;
 
 import java.io.InputStream;
 
 import org.apache.commons.lang3.Validate;
 
-import io.proximax.cipher.PBECipherEncryptor;
-import io.proximax.core.utils.PasswordUtils;
+import io.proximax.dfms.cipher.PBECipherEncryptor;
 import io.proximax.dfms.privacy.PrivacyStrategy;
 import io.proximax.dfms.privacy.PrivacyType;
+import io.proximax.dfms.utils.PasswordUtils;
 
 /**
  * The privacy strategy that secures the data using a long password, 50 characters minimum.

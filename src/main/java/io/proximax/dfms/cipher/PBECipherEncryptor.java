@@ -1,4 +1,4 @@
-package io.proximax.cipher;
+package io.proximax.dfms.cipher;
 
 import static java.util.Arrays.asList;
 
