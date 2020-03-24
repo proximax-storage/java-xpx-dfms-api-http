@@ -1,11 +1,11 @@
 package io.proximax.dfms.privacy.strategies;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.Validate;
 
@@ -83,9 +83,7 @@ public final class ShamirSecretSharingPrivacyStrategy implements PrivacyStrategy
     */
    public static ShamirSecretSharingPrivacyStrategy create(int secretTotalPartCount, int secretMinimumPartCountToBuild,
          SecretPart... secretParts) {
-      return new ShamirSecretSharingPrivacyStrategy(new PBECipherEncryptor(), secretTotalPartCount,
-            secretMinimumPartCountToBuild,
-            Stream.of(secretParts).collect(Collectors.toMap(parts -> parts.index, parts -> parts.data)));
+      return create(secretTotalPartCount, secretMinimumPartCountToBuild, Arrays.asList(secretParts));
    }
 
    /**
@@ -98,8 +96,9 @@ public final class ShamirSecretSharingPrivacyStrategy implements PrivacyStrategy
     */
    public static ShamirSecretSharingPrivacyStrategy create(int secretTotalPartCount, int secretMinimumPartCountToBuild,
          List<SecretPart> secretParts) {
-      return new ShamirSecretSharingPrivacyStrategy(new PBECipherEncryptor(), secretTotalPartCount,
-            secretMinimumPartCountToBuild, secretParts == null ? Collections.emptyMap()
+      return create(secretTotalPartCount,
+            secretMinimumPartCountToBuild,
+            secretParts == null ? Collections.emptyMap()
                   : secretParts.stream().collect(Collectors.toMap(parts -> parts.index, parts -> parts.data)));
    }
 
@@ -137,14 +136,17 @@ public final class ShamirSecretSharingPrivacyStrategy implements PrivacyStrategy
       }
 
       /**
-       * Construct instance of this model
-       * 
-       * @param index the index of the secret part
-       * @param secretPart the data of the secret part
-       * @return instance of this model
+       * @return the index
        */
-      public static SecretPart secretPart(int index, byte[] secretPart) {
-         return new SecretPart(index, secretPart);
+      public int getIndex() {
+         return index;
+      }
+
+      /**
+       * @return the data
+       */
+      public byte[] getData() {
+         return data;
       }
    }
 }

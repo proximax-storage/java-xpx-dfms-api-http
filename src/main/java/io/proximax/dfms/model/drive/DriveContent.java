@@ -52,29 +52,6 @@ public interface DriveContent {
    public abstract List<DriveContent> getChildren();
 
    /**
-    * <p>get byte array representing the content of the node</p>
-    * 
-    * <p>Note that some implementations might not allow repeated calls to this method. For example when
-    * backed by InputStream which will get depleted by call to this method</p>
-    * 
-    * @return content as byte array
-    * @throws IOException when content is not available
-    */
-   default byte[] toByteArray() throws IOException {
-      // copy content from input stream and return as an byte array
-      try (InputStream in = getInputStream(); ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
-         // use 10kB as buffer to copy content over
-         byte[] tmp = new byte[10240];
-         int len;
-         while ((len = in.read(tmp)) >= 0) {
-            bout.write(tmp, 0, len);
-         }
-         // return the byte array with the content
-         return bout.toByteArray();
-      }
-   }
-   
-   /**
     * create new content defined as path. Can be directory or file. See {@link FileSystemContent} for details
     * 
     * @param path the path to represent

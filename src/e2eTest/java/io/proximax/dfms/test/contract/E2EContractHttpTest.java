@@ -19,11 +19,10 @@ import org.junit.jupiter.api.Test;
 import io.proximax.cid.Cid;
 import io.proximax.dfms.ContractRepository;
 import io.proximax.dfms.StorageApi;
-import io.proximax.dfms.http.repos.ContractHttp;
 import io.proximax.dfms.model.contract.Contract;
 
 /**
- * TODO add proper description
+ * integration tests for contract endpoints
  */
 class E2EContractHttpTest {
 
@@ -51,6 +50,6 @@ class E2EContractHttpTest {
       ContractRepository contracts = api.createContractRepository();
       // retrieve info by contract id
       Contract contr = contracts.get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      assertEquals(CONTRACT, contr.getCid());
+      assertEquals(CONTRACT, contr.getId());
    }
 }

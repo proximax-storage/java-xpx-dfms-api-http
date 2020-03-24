@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import com.codahale.shamir.Scheme;
 
 import io.proximax.dfms.privacy.PrivacyType;
-import io.proximax.dfms.privacy.strategies.ShamirSecretSharingPrivacyStrategy;
+import io.proximax.dfms.privacy.strategies.ShamirSecretSharingPrivacyStrategy.SecretPart;
 
 public class ShamirSecretSharingPrivacyStrategyTest {
 
@@ -38,6 +39,25 @@ public class ShamirSecretSharingPrivacyStrategyTest {
 
    private static final Map<Integer, byte[]> SECRET_PARTS = SCHEME.split(SECRET);
 
+   @Test
+   void testStaticCreate() throws IOException {
+      final int totalParts = 3;
+      final int minParts = 2;
+      final Scheme scheme = Scheme.of(totalParts, minParts);
+      final Map<Integer, byte[]> parts = scheme.split(SECRET);
+      final SecretPart part1 = new SecretPart(1, parts.get(1));
+      final SecretPart part2 = new SecretPart(2, parts.get(2));
+      final SecretPart part3 = new SecretPart(3, parts.get(3));
+      final ShamirSecretSharingPrivacyStrategy encryptor = ShamirSecretSharingPrivacyStrategy
+            .create(totalParts, minParts, part1, part3);
+      final InputStream encrypted = encryptor.encryptStream(new ByteArrayInputStream(SAMPLE_DATA));
+      // make sure output is not he same as input
+      final ShamirSecretSharingPrivacyStrategy decryptor = ShamirSecretSharingPrivacyStrategy
+            .create(totalParts, minParts, part2, part3);
+      InputStream decrypted = decryptor.decryptStream(encrypted);
+      assertTrue(Arrays.equals(SAMPLE_DATA, IOUtils.toByteArray(decrypted)));
+   }
+   
    @Test
    public void shouldReturnCorrectPrivacyType() {
       final int privacyType = ShamirSecretSharingPrivacyStrategy
@@ -162,4 +182,10 @@ public class ShamirSecretSharingPrivacyStrategyTest {
       assertThrows(IOException.class, () -> IOUtils.toByteArray(unitUnderTest.decryptStream(encryptedStream)));
    }
 
+   @Test
+   void testSecretPart() {
+      SecretPart part = new SecretPart(5, new byte[] {5,2,8,3});
+      assertEquals(5, part.getIndex());
+      assertArrayEquals(new byte[] {5,2,8,3}, part.getData());
+   }
 }

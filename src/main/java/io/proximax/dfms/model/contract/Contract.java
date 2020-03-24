@@ -47,9 +47,9 @@ public class Contract {
    }
 
    /**
-    * @return the cid
+    * @return the id
     */
-   public Cid getCid() {
+   public Cid getId() {
       return id;
    }
 
@@ -91,7 +91,7 @@ public class Contract {
    /**
     * @return the totalSpace
     */
-   public BigInteger getTotalSpace() {
+   public BigInteger getSpace() {
       return space;
    }
 
