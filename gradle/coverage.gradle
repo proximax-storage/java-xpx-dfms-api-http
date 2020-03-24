@@ -21,11 +21,14 @@ jacocoTestReport {
         html.enabled true
     }
     afterEvaluate {
-        classDirectories.from(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                'src/gen/**',
-                'src/main/java/io/proximax/cid/**'
-            ])
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['io/proximax/dfms/gen/**', 'io/proximax/cid/**'])
         }))
+    }
+}
+
+test {
+    jacoco {
+        excludes = ['io.proximax.dfms.gen.*', 'io.proximax.cid.*']
     }
 }
