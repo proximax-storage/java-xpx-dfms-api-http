@@ -8,6 +8,7 @@ package io.proximax.dfms.utils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.cid.multibase.Multibase.Base;
@@ -45,5 +46,15 @@ public class HttpUtils {
     */
    public static String encode(Cid cid) {
       return cid.toString(Base.Base58BTC);
+   }
+   
+   /**
+    * encode path to be safe for URLs
+    * 
+    * @param path the path to use
+    * @return encoded file name
+    */
+   public static String encode(Path path) {
+      return encode(path.toString());
    }
 }

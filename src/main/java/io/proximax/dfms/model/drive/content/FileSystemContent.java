@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
-import io.proximax.dfms.utils.FileSystemUtils;
+import io.proximax.dfms.utils.HttpUtils;
 
 /**
  * represents contents defined by a path. This can be either actual content or node
@@ -22,7 +22,7 @@ public class FileSystemContent extends BaseContent {
 
    public FileSystemContent(Path source) {
       // Files.isDirectory seems to have performance issues in Java8 so using File as intermediary
-      super(Optional.of(FileSystemUtils.encode(source.getFileName())), source.toFile().isDirectory());
+      super(Optional.of(HttpUtils.encode(source.getFileName())), source.toFile().isDirectory());
       this.source = source;
    }
 

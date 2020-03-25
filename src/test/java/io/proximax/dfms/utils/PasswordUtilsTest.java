@@ -11,10 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.dfms.utils.PasswordUtils;
-
 /**
- * TODO add proper description
+ * {@link PasswordUtils} tests
  */
 class PasswordUtilsTest {
    private static final int MIN_LEN = PasswordUtils.MINIMUM_PASSWORD_LENGTH;
