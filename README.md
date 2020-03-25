@@ -1,7 +1,7 @@
 <p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-dfms-api-http/raw/master/docs/images/logo.jpg" alt="ProximaX DFMS Storage Java SDK"></a></p>
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Coverage Status](https://coveralls.io/repos/github/proximax-storage/java-xpx-dfms-api-http/badge.png?branch=master)](https://coveralls.io/github/proximax-storage/java-xpx-dfms-api-http?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/proximax-storage/java-xpx-dfms-api-http/badge.svg?branch=master)](https://coveralls.io/github/proximax-storage/java-xpx-dfms-api-http?branch=master)
 [![Build Status](https://travis-ci.com/proximax-storage/java-xpx-dfms-api-http.svg?branch=master)](https://travis-ci.com/proximax-storage/java-xpx-dfms-api-http)
 
 # ProximaX DFMS Storage Java SDK #
