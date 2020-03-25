@@ -129,12 +129,12 @@ extends java.lang.Object</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#Contract-io.proximax.cid.Cid-io.proximax.core.crypto.PublicKey-java.util.List-java.math.BigInteger-java.math.BigInteger-io.proximax.cid.Cid-java.math.BigInteger-">Contract</a></span>(<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;id,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#Contract-io.proximax.dfms.cid.Cid-io.proximax.core.crypto.PublicKey-java.util.List-java.math.BigInteger-java.math.BigInteger-io.proximax.dfms.cid.Cid-java.math.BigInteger-">Contract</a></span>(<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;id,
         io.proximax.core.crypto.PublicKey&nbsp;owner,
         java.util.List&lt;io.proximax.core.crypto.PublicKey&gt;&nbsp;replicators,
         java.math.BigInteger&nbsp;duration,
         java.math.BigInteger&nbsp;created,
-        <a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;root,
+        <a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;root,
         java.math.BigInteger&nbsp;space)</code>&nbsp;</td>
 </tr>
 </table>
@@ -159,16 +159,16 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getCid--">getCid</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.math.BigInteger</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getCreated--">getCreated</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.math.BigInteger</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getDuration--">getDuration</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getId--">getId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>io.proximax.core.crypto.PublicKey</code></td>
@@ -179,12 +179,12 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getReplicators--">getReplicators</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a></code></td>
+<td class="colFirst"><code><a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getRoot--">getRoot</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.math.BigInteger</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getTotalSpace--">getTotalSpace</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/contract/Contract.html#getSpace--">getSpace</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -208,18 +208,18 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="Contract-io.proximax.cid.Cid-io.proximax.core.crypto.PublicKey-java.util.List-java.math.BigInteger-java.math.BigInteger-io.proximax.cid.Cid-java.math.BigInteger-">
+<a name="Contract-io.proximax.dfms.cid.Cid-io.proximax.core.crypto.PublicKey-java.util.List-java.math.BigInteger-java.math.BigInteger-io.proximax.dfms.cid.Cid-java.math.BigInteger-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Contract</h4>
-<pre>public&nbsp;Contract(<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;id,
+<pre>public&nbsp;Contract(<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;id,
                 io.proximax.core.crypto.PublicKey&nbsp;owner,
                 java.util.List&lt;io.proximax.core.crypto.PublicKey&gt;&nbsp;replicators,
                 java.math.BigInteger&nbsp;duration,
                 java.math.BigInteger&nbsp;created,
-                <a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;root,
+                <a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;root,
                 java.math.BigInteger&nbsp;space)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -241,16 +241,16 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getCid--">
+<a name="getId--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getCid</h4>
-<pre>public&nbsp;<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;getCid()</pre>
+<h4>getId</h4>
+<pre>public&nbsp;<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;getId()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the cid</dd>
+<dd>the id</dd>
 </dl>
 </li>
 </ul>
@@ -312,20 +312,20 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getRoot</h4>
-<pre>public&nbsp;<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;getRoot()</pre>
+<pre>public&nbsp;<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;getRoot()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the root</dd>
 </dl>
 </li>
 </ul>
-<a name="getTotalSpace--">
+<a name="getSpace--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getTotalSpace</h4>
-<pre>public&nbsp;java.math.BigInteger&nbsp;getTotalSpace()</pre>
+<h4>getSpace</h4>
+<pre>public&nbsp;java.math.BigInteger&nbsp;getSpace()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the totalSpace</dd>

@@ -176,7 +176,7 @@ implements <a href="../../../../../io/proximax/dfms/ContractRepository.html" tit
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>io.reactivex.Observable&lt;<a href="../../../../../io/proximax/dfms/model/contract/UpdatesSubscription.html" title="class in io.proximax.dfms.model.contract">UpdatesSubscription</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/http/repos/ContractHttp.html#amendments-io.proximax.cid.Cid-">amendments</a></span>(<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;id)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/http/repos/ContractHttp.html#amendments-io.proximax.dfms.cid.Cid-">amendments</a></span>(<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;id)</code>
 <div class="block">Creates subscription for Drive contract corrections for contract in local storage and/or in blockchain.</div>
 </td>
 </tr>
@@ -190,12 +190,12 @@ implements <a href="../../../../../io/proximax/dfms/ContractRepository.html" tit
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>io.reactivex.Observable&lt;<a href="../../../../../io/proximax/dfms/model/contract/Contract.html" title="class in io.proximax.dfms.model.contract">Contract</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/http/repos/ContractHttp.html#get-io.proximax.cid.Cid-">get</a></span>(<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;id)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/http/repos/ContractHttp.html#get-io.proximax.dfms.cid.Cid-">get</a></span>(<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;id)</code>
 <div class="block">Searches for Drive contract information in local storage and/or in blockchain.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/http/repos/ContractHttp.html#list--">list</a></span>()</code>
 <div class="block">Lists all the contracts in which Node participates as an owner or member</div>
 </td>
@@ -299,18 +299,18 @@ implements <a href="../../../../../io/proximax/dfms/ContractRepository.html" tit
 </dl>
 </li>
 </ul>
-<a name="get-io.proximax.cid.Cid-">
+<a name="get-io.proximax.dfms.cid.Cid-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;io.reactivex.Observable&lt;<a href="../../../../../io/proximax/dfms/model/contract/Contract.html" title="class in io.proximax.dfms.model.contract">Contract</a>&gt;&nbsp;get(<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;id)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html#get-io.proximax.cid.Cid-">ContractRepository</a></code></span></div>
+<pre>public&nbsp;io.reactivex.Observable&lt;<a href="../../../../../io/proximax/dfms/model/contract/Contract.html" title="class in io.proximax.dfms.model.contract">Contract</a>&gt;&nbsp;get(<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;id)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html#get-io.proximax.dfms.cid.Cid-">ContractRepository</a></code></span></div>
 <div class="block">Searches for Drive contract information in local storage and/or in blockchain.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../io/proximax/dfms/ContractRepository.html#get-io.proximax.cid.Cid-">get</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html" title="interface in io.proximax.dfms">ContractRepository</a></code></dd>
+<dd><code><a href="../../../../../io/proximax/dfms/ContractRepository.html#get-io.proximax.dfms.cid.Cid-">get</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html" title="interface in io.proximax.dfms">ContractRepository</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>id</code> - CID of the Drive contract</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -324,7 +324,7 @@ implements <a href="../../../../../io/proximax/dfms/ContractRepository.html" tit
 <ul class="blockList">
 <li class="blockList">
 <h4>list</h4>
-<pre>public&nbsp;io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&gt;&gt;&nbsp;list()</pre>
+<pre>public&nbsp;io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&gt;&gt;&nbsp;list()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html#list--">ContractRepository</a></code></span></div>
 <div class="block">Lists all the contracts in which Node participates as an owner or member</div>
 <dl>
@@ -335,18 +335,18 @@ implements <a href="../../../../../io/proximax/dfms/ContractRepository.html" tit
 </dl>
 </li>
 </ul>
-<a name="amendments-io.proximax.cid.Cid-">
+<a name="amendments-io.proximax.dfms.cid.Cid-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>amendments</h4>
-<pre>public&nbsp;io.reactivex.Observable&lt;<a href="../../../../../io/proximax/dfms/model/contract/UpdatesSubscription.html" title="class in io.proximax.dfms.model.contract">UpdatesSubscription</a>&gt;&nbsp;amendments(<a href="../../../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;id)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html#amendments-io.proximax.cid.Cid-">ContractRepository</a></code></span></div>
+<pre>public&nbsp;io.reactivex.Observable&lt;<a href="../../../../../io/proximax/dfms/model/contract/UpdatesSubscription.html" title="class in io.proximax.dfms.model.contract">UpdatesSubscription</a>&gt;&nbsp;amendments(<a href="../../../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;id)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html#amendments-io.proximax.dfms.cid.Cid-">ContractRepository</a></code></span></div>
 <div class="block">Creates subscription for Drive contract corrections for contract in local storage and/or in blockchain.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../io/proximax/dfms/ContractRepository.html#amendments-io.proximax.cid.Cid-">amendments</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html" title="interface in io.proximax.dfms">ContractRepository</a></code></dd>
+<dd><code><a href="../../../../../io/proximax/dfms/ContractRepository.html#amendments-io.proximax.dfms.cid.Cid-">amendments</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../io/proximax/dfms/ContractRepository.html" title="interface in io.proximax.dfms">ContractRepository</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>id</code> - CID of the Drive contract</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

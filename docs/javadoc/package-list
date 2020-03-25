@@ -1,9 +1,8 @@
-io.proximax.cid
-io.proximax.cid.multibase
-io.proximax.cid.multihash
-io.proximax.cipher
-io.proximax.core.utils
 io.proximax.dfms
+io.proximax.dfms.cid
+io.proximax.dfms.cid.multibase
+io.proximax.dfms.cid.multihash
+io.proximax.dfms.cipher
 io.proximax.dfms.gen.model
 io.proximax.dfms.http
 io.proximax.dfms.http.dtos

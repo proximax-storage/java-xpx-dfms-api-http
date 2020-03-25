@@ -132,8 +132,8 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>io.reactivex.Observable&lt;<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#add-io.proximax.cid.Cid-java.lang.String-io.proximax.dfms.model.drive.DriveContent-">add</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colFirst"><code>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#add-io.proximax.dfms.cid.Cid-java.lang.String-io.proximax.dfms.model.drive.DriveContent-">add</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
    java.lang.String&nbsp;path,
    <a href="../../../io/proximax/dfms/model/drive/DriveContent.html" title="interface in io.proximax.dfms.model.drive">DriveContent</a>&nbsp;content)</code>
 <div class="block">adds the content to a specific Drive and to a given path.</div>
@@ -141,7 +141,7 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>io.reactivex.Completable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#copy-io.proximax.cid.Cid-java.lang.String-java.lang.String-">copy</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#copy-io.proximax.dfms.cid.Cid-java.lang.String-java.lang.String-">copy</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
     java.lang.String&nbsp;sourcePath,
     java.lang.String&nbsp;destinationPath)</code>
 <div class="block">copies file in a specific Drive from one path to another.</div>
@@ -149,35 +149,35 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>io.reactivex.Completable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#flush-io.proximax.cid.Cid-java.lang.String-">flush</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#flush-io.proximax.dfms.cid.Cid-java.lang.String-">flush</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
      java.lang.String&nbsp;path)</code>
 <div class="block">uploads the state of a Drive to all contract members.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/model/drive/DriveContent.html" title="interface in io.proximax.dfms.model.drive">DriveContent</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#get-io.proximax.cid.Cid-java.lang.String-">get</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#get-io.proximax.dfms.cid.Cid-java.lang.String-">get</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
    java.lang.String&nbsp;path)</code>
 <div class="block">retrieves content for a specific contract at a given path.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../io/proximax/dfms/model/drive/DriveItem.html" title="class in io.proximax.dfms.model.drive">DriveItem</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#ls-io.proximax.cid.Cid-java.lang.String-">ls</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#ls-io.proximax.dfms.cid.Cid-java.lang.String-">ls</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
   java.lang.String&nbsp;path)</code>
 <div class="block">lists all the files and directories of a specific Drive and information about them at a given path.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>io.reactivex.Completable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#makeDir-io.proximax.cid.Cid-java.lang.String-">makeDir</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#makeDir-io.proximax.dfms.cid.Cid-java.lang.String-">makeDir</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
        java.lang.String&nbsp;path)</code>
 <div class="block">creates new directory in a specific Drive at a given path.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>io.reactivex.Completable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#move-io.proximax.cid.Cid-java.lang.String-java.lang.String-">move</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#move-io.proximax.dfms.cid.Cid-java.lang.String-java.lang.String-">move</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
     java.lang.String&nbsp;sourcePath,
     java.lang.String&nbsp;destinationPath)</code>
 <div class="block">moves file in a specific Drive from one path to another.</div>
@@ -185,14 +185,14 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>io.reactivex.Completable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#remove-io.proximax.cid.Cid-java.lang.String-">remove</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#remove-io.proximax.dfms.cid.Cid-java.lang.String-">remove</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
       java.lang.String&nbsp;path)</code>
 <div class="block">removes reference of the file at a given path from a specific Drive.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/model/drive/DriveItem.html" title="class in io.proximax.dfms.model.drive">DriveItem</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#stat-io.proximax.cid.Cid-java.lang.String-">stat</a></span>(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../io/proximax/dfms/DriveRepository.html#stat-io.proximax.dfms.cid.Cid-java.lang.String-">stat</a></span>(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
     java.lang.String&nbsp;path)</code>
 <div class="block">returns information about a file or directory at a given path of a specific Drive</div>
 </td>
@@ -212,13 +212,13 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="add-io.proximax.cid.Cid-java.lang.String-io.proximax.dfms.model.drive.DriveContent-">
+<a name="add-io.proximax.dfms.cid.Cid-java.lang.String-io.proximax.dfms.model.drive.DriveContent-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>io.reactivex.Observable&lt;<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&gt;&nbsp;add(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&gt;&nbsp;add(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                  java.lang.String&nbsp;path,
                                  <a href="../../../io/proximax/dfms/model/drive/DriveContent.html" title="interface in io.proximax.dfms.model.drive">DriveContent</a>&nbsp;content)
                           throws java.io.IOException</pre>
@@ -235,13 +235,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="get-io.proximax.cid.Cid-java.lang.String-">
+<a name="get-io.proximax.dfms.cid.Cid-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/model/drive/DriveContent.html" title="interface in io.proximax.dfms.model.drive">DriveContent</a>&gt;&nbsp;get(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/model/drive/DriveContent.html" title="interface in io.proximax.dfms.model.drive">DriveContent</a>&gt;&nbsp;get(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                           java.lang.String&nbsp;path)</pre>
 <div class="block">retrieves content for a specific contract at a given path. The content is represented as an input stream
  of a tar file containing the directory</div>
@@ -254,13 +254,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="remove-io.proximax.cid.Cid-java.lang.String-">
+<a name="remove-io.proximax.dfms.cid.Cid-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>io.reactivex.Completable&nbsp;remove(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Completable&nbsp;remove(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                 java.lang.String&nbsp;path)</pre>
 <div class="block">removes reference of the file at a given path from a specific Drive.</div>
 <dl>
@@ -272,13 +272,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="move-io.proximax.cid.Cid-java.lang.String-java.lang.String-">
+<a name="move-io.proximax.dfms.cid.Cid-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>move</h4>
-<pre>io.reactivex.Completable&nbsp;move(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Completable&nbsp;move(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                               java.lang.String&nbsp;sourcePath,
                               java.lang.String&nbsp;destinationPath)</pre>
 <div class="block">moves file in a specific Drive from one path to another.</div>
@@ -292,13 +292,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="copy-io.proximax.cid.Cid-java.lang.String-java.lang.String-">
+<a name="copy-io.proximax.dfms.cid.Cid-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>io.reactivex.Completable&nbsp;copy(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Completable&nbsp;copy(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                               java.lang.String&nbsp;sourcePath,
                               java.lang.String&nbsp;destinationPath)</pre>
 <div class="block"><p>copies file in a specific Drive from one path to another.</p> 
@@ -313,13 +313,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="makeDir-io.proximax.cid.Cid-java.lang.String-">
+<a name="makeDir-io.proximax.dfms.cid.Cid-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeDir</h4>
-<pre>io.reactivex.Completable&nbsp;makeDir(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Completable&nbsp;makeDir(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                  java.lang.String&nbsp;path)</pre>
 <div class="block">creates new directory in a specific Drive at a given path.</div>
 <dl>
@@ -331,13 +331,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="stat-io.proximax.cid.Cid-java.lang.String-">
+<a name="stat-io.proximax.dfms.cid.Cid-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>stat</h4>
-<pre>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/model/drive/DriveItem.html" title="class in io.proximax.dfms.model.drive">DriveItem</a>&gt;&nbsp;stat(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Observable&lt;<a href="../../../io/proximax/dfms/model/drive/DriveItem.html" title="class in io.proximax.dfms.model.drive">DriveItem</a>&gt;&nbsp;stat(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                         java.lang.String&nbsp;path)</pre>
 <div class="block">returns information about a file or directory at a given path of a specific Drive</div>
 <dl>
@@ -349,13 +349,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="ls-io.proximax.cid.Cid-java.lang.String-">
+<a name="ls-io.proximax.dfms.cid.Cid-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ls</h4>
-<pre>io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../io/proximax/dfms/model/drive/DriveItem.html" title="class in io.proximax.dfms.model.drive">DriveItem</a>&gt;&gt;&nbsp;ls(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Observable&lt;java.util.List&lt;<a href="../../../io/proximax/dfms/model/drive/DriveItem.html" title="class in io.proximax.dfms.model.drive">DriveItem</a>&gt;&gt;&nbsp;ls(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                                       java.lang.String&nbsp;path)</pre>
 <div class="block">lists all the files and directories of a specific Drive and information about them at a given path.</div>
 <dl>
@@ -367,13 +367,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="flush-io.proximax.cid.Cid-java.lang.String-">
+<a name="flush-io.proximax.dfms.cid.Cid-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>flush</h4>
-<pre>io.reactivex.Completable&nbsp;flush(<a href="../../../io/proximax/cid/Cid.html" title="class in io.proximax.cid">Cid</a>&nbsp;contract,
+<pre>io.reactivex.Completable&nbsp;flush(<a href="../../../io/proximax/dfms/cid/Cid.html" title="class in io.proximax.dfms.cid">Cid</a>&nbsp;contract,
                                java.lang.String&nbsp;path)</pre>
 <div class="block">uploads the state of a Drive to all contract members.</div>
 <dl>

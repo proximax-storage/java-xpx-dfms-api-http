@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":17,"i1":17,"i2":17,"i3":17,"i4":6,"i5":6,"i6":6,"i7":6,"i8":18};
+var methods = {"i0":17,"i1":17,"i2":17,"i3":17,"i4":6,"i5":6,"i6":6,"i7":6};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -175,12 +175,6 @@ var activeTableTab = "activeTableTab";
 <div class="block">check whether this node represents node (does not have content but has children) or content</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>default byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/proximax/dfms/model/drive/DriveContent.html#toByteArray--">toByteArray</a></span>()</code>
-<div class="block">get byte array representing the content of the node</div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -256,26 +250,6 @@ var activeTableTab = "activeTableTab";
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the child nodes</dd>
-</dl>
-</li>
-</ul>
-<a name="toByteArray--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toByteArray</h4>
-<pre>default&nbsp;byte[]&nbsp;toByteArray()
-                    throws java.io.IOException</pre>
-<div class="block"><p>get byte array representing the content of the node</p>
- 
- <p>Note that some implementations might not allow repeated calls to this method. For example when
- backed by InputStream which will get depleted by call to this method</p></div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>content as byte array</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code> - when content is not available</dd>
 </dl>
 </li>
 </ul>
