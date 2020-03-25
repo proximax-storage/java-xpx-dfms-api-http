@@ -22,13 +22,13 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['io/proximax/dfms/gen/**', 'io/proximax/cid/**'])
+            fileTree(dir: it, exclude: ['io/proximax/dfms/gen/**', 'io/proximax/dfms/cid/**'])
         }))
     }
 }
 
 test {
     jacoco {
-        excludes = ['io.proximax.dfms.gen.*', 'io.proximax.cid.*']
+        excludes = ['io.proximax.dfms.gen.*', 'io.proximax.dfms.cid.*']
     }
 }
