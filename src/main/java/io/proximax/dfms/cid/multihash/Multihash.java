@@ -1,144 +1,158 @@
 package io.proximax.dfms.cid.multihash;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
 
-import io.proximax.dfms.cid.multibase.Base16;
+import org.apache.commons.lang3.Validate;
+
 import io.proximax.dfms.cid.multibase.Base58;
 
+/**
+ * self-described hash. First 2 bytes represent type of the hashing function used ( {@link MultihashType} ) and length
+ * of the hashed data in bytes
+ */
 public class Multihash {
-    public enum Type {
-        id(0, -1),
-        md5(0xd5, 16),
-        sha1(0x11, 20),
-        sha2_256(0x12, 32),
-        sha2_512(0x13, 64),
-        sha3_224(0x17, 24),
-        sha3_256(0x16, 32),
-        sha3_512(0x14, 64),
-        keccak_224(0x1a, 24),
-        keccak_256(0x1b, 32),
-        keccak_384(0x1c, 48),
-        keccak_512(0x1d, 64),
-        blake2b(0x40, 64),
-        blake2s(0x41, 32);
 
-        public final int index, length;
+   private final MultihashType type;
+   private final byte[] hash;
 
-        Type(final int index, final int length) {
-            this.index = index;
-            this.length = length;
-        }
+   /**
+    * <p>
+    * create new Multihash instance specifying type and hash bytes.
+    * </p>
+    * <p>
+    * <b>NOTICE</b> that hash byte array is internally used and even though this object is expected to be immutable it
+    * can be changed if the array is changed externally
+    * </p>
+    * 
+    * @param type type of the hashing algorithm
+    * @param hash byte array representing the hash data
+    */
+   public Multihash(final MultihashType type, final byte[] hash) {
+      // validate input
+      Validate.exclusiveBetween(0, 128, hash.length, "Hash length needs to be less than 128 byt was %d", hash.length);
+      if (type == MultihashType.ID) {
+         Validate.inclusiveBetween(0,
+               64,
+               hash.length,
+               "Identity hash length should not be more than 64 but was %d",
+               hash.length);
+      } else {
+         Validate
+               .isTrue(hash.length == type.getLength(), "Expected length %d but got %d", type.getLength(), hash.length);
+      }
+      // make assignments
+      this.type = type;
+      this.hash = hash;
+   }
 
-        private static Map<Integer, Type> lookup = new TreeMap<>();
-        static {
-            for (Type t: Type.values())
-                lookup.put(t.index, t);
-        }
+   /**
+    * Create copy of original multihash instance. Underlying byte array with hash data is reused with new instance
+    * 
+    * @param original the original instance used as source of data
+    */
+   public static Multihash create(final Multihash original) {
+      return new Multihash(original.type, original.hash);
+   }
 
-        public static Type lookup(int t) {
-            if (!lookup.containsKey(t))
-                throw new IllegalStateException("Unknown Multihash type: "+t);
-            return lookup.get(t);
-        }
+   /**
+    * create new multihash instance from serialized bytes of another multihash instance. This assumes first byte is hash
+    * type index and second byte is length
+    * 
+    * @param multihashBytes byte array with serialized multihash instance
+    * @return multihash instance based on parameter
+    */
+   public static Multihash create(final byte[] multihashBytes) {
+      // take first byte for index
+      int index = multihashBytes[0] & 0xff;
+      // ignore second byte (size) and read all remaining bytes as hash data
+      byte[] hashBytes = Arrays.copyOfRange(multihashBytes, 2, multihashBytes.length);
+      // create new instance
+      return new Multihash(MultihashType.getByIndex(index), hashBytes);
+   }
 
-    }
+   /**
+    * serialize this multihash instance to byte array
+    * 
+    * @return byte array representing this multihash instance
+    */
+   public byte[] toBytes() {
+      // result will have extra 2 bytes for index and length
+      byte[] multihashBytes = new byte[hash.length + 2];
+      // write index and length on first 2 bytes
+      multihashBytes[0] = (byte) type.getIndex();
+      multihashBytes[1] = (byte) hash.length;
+      // write hash to remaining bytes
+      System.arraycopy(hash, 0, multihashBytes, 2, hash.length);
+      // return the result
+      return multihashBytes;
+   }
 
-    private final Type type;
-    private final byte[] hash;
+   /**
+    * @return the type of the hashing function used for this multihash
+    */
+   public MultihashType getType() {
+      return type;
+   }
 
-    public Multihash(final Type type, final byte[] hash) {
-        if (hash.length > 127)
-            throw new IllegalStateException("Unsupported hash size: "+hash.length);
-        if (hash.length != type.length && type != Type.id)
-            throw new IllegalStateException("Incorrect hash length: " + hash.length + " != "+type.length);
-        if (type == Type.id && hash.length > 64)
-            throw new IllegalStateException("Unsupported size for identity hash! "+ hash.length);
-        this.type = type;
-        this.hash = hash;
-    }
+   /**
+    * hash bytes. Makes copy of the byte array to prevent external modification as {@link Multihash} is considered
+    * immutable
+    * 
+    * @return copy of the hash byte array
+    */
+   public byte[] getHash() {
+      return Arrays.copyOf(hash, hash.length);
+   }
 
-    public Multihash(Multihash toClone) {
-        this(toClone.type, toClone.hash); // N.B. despite being a byte[], hash is immutable
-    }
+   /**
+    * serialize this multihash into {@link DataOutput}. Multihash i serialized into array and all bytes are written at
+    * once. This should be fine as multihash is fairly small
+    * 
+    * @param dout
+    * @throws IOException
+    */
+   public void serialize(final DataOutput dout) throws IOException {
+      dout.write(toBytes());
+   }
 
-    public Multihash(final byte[] multihash) {
-        this(Type.lookup(multihash[0] & 0xff), Arrays.copyOfRange(multihash, 2, multihash.length));
-    }
+   /**
+    * deserialize the multihash from the {@link DataInput}
+    * 
+    * @param din
+    * @return
+    * @throws IOException
+    */
+   public static Multihash deserialize(final DataInput din) throws IOException {
+      // read type index and length
+      int typeIndex = din.readUnsignedByte();
+      int len = din.readUnsignedByte();
+      // lookup the type
+      MultihashType type = MultihashType.getByIndex(typeIndex);
+      // read the hash data
+      byte[] hash = new byte[len];
+      din.readFully(hash);
+      // return instance
+      return new Multihash(type, hash);
+   }
 
-    public byte[] toBytes() {
-        byte[] res = new byte[hash.length+2];
-        res[0] = (byte)type.index;
-        res[1] = (byte)hash.length;
-        System.arraycopy(hash, 0, res, 2, hash.length);
-        return res;
-    }
-  
-    public Type getType() {
-        return type;
-    }
+   @Override
+   public String toString() {
+      // Base58 is used for toString
+      return Base58.encode(toBytes());
+   }
 
-    public byte[] getHash() {
-        return Arrays.copyOf(hash, hash.length);
-    }
+   @Override
+   public boolean equals(final Object o) {
+      if (!(o instanceof Multihash))
+         return false;
+      return type == ((Multihash) o).type && Arrays.equals(hash, ((Multihash) o).hash);
+   }
 
-    public void serialize(DataOutput dout) throws IOException {
-        dout.write(toBytes());
-    }
-
-    public static Multihash deserialize(DataInput din) throws IOException {
-        int type = din.readUnsignedByte();
-        int len = din.readUnsignedByte();
-        Type t = Type.lookup(type);
-        byte[] hash = new byte[len];
-        din.readFully(hash);
-        return new Multihash(t, hash);
-    }
-
-    @Override
-    public String toString() {
-        return toBase58();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Multihash))
-            return false;
-        return type == ((Multihash) o).type && Arrays.equals(hash, ((Multihash) o).hash);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(hash) ^ type.hashCode();
-    }
-
-    public String toHex() {
-        return Base16.encode(toBytes());
-    }
-
-    public String toBase58() {
-        return Base58.encode(toBytes());
-    }
-
-    public static Multihash fromHex(String hex) {
-        if (hex.length() % 2 != 0)
-            throw new IllegalStateException("Odd number of hex digits!");
-
-        try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
-            for (int i = 0; i < hex.length() - 1; i += 2)
-                bout.write(Integer.valueOf(hex.substring(i, i + 2), 16));
-            return new Multihash(bout.toByteArray());
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to handle Multihash conversion to Hex properly");
-        }
-    }
-
-    public static Multihash fromBase58(String base58) {
-        return new Multihash(Base58.decode(base58));
-    }
+   @Override
+   public int hashCode() {
+      return Arrays.hashCode(hash) ^ type.hashCode();
+   }
 }

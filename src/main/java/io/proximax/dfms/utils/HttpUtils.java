@@ -45,7 +45,7 @@ public class HttpUtils {
     * @return expected string representation of cid
     */
    public static String encode(Cid cid) {
-      return cid.toString(Base.Base58BTC);
+      return cid.encode(Base.Base58BTC);
    }
    
    /**
