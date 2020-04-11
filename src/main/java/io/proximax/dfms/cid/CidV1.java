@@ -65,7 +65,7 @@ public class CidV1 implements Cid {
 
    @Override
    public String toString() {
-      return encode(Multibase.Base.Base32);
+      return encode(Multibase.BASE_32);
    }
 
    /**

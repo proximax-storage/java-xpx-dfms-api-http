@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.cid.multibase.Multibase.Base;
+import io.proximax.dfms.cid.multibase.Multibase;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 
 /**
@@ -45,7 +45,7 @@ public class HttpUtils {
     * @return expected string representation of cid
     */
    public static String encode(Cid cid) {
-      return cid.encode(Base.Base58BTC);
+      return cid.encode(Multibase.BASE_58_BTC);
    }
    
    /**

@@ -30,8 +30,8 @@ public interface Cid {
     * @param base encoding to use
     * @return encoded string
     */
-   default String encode(Multibase.Base base) {
-      return Multibase.encode(base, toBytes());
+   default String encode(Multibase base) {
+      return base.encode(toBytes());
    }
 
    /**

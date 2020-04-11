@@ -10,8 +10,10 @@ import org.apache.commons.lang3.Validate;
 import io.proximax.dfms.cid.multibase.Base58;
 
 /**
- * self-described hash. First 2 bytes represent type of the hashing function used ( {@link MultihashType} ) and length
+ * Self-described hash. First 2 bytes represent type of the hashing function used ( {@link MultihashType} ) and length
  * of the hashed data in bytes
+ * 
+ * @see <a href="https://github.com/multiformats/multihash">Multihash specification</a>
  */
 public class Multihash {
 
@@ -31,18 +33,12 @@ public class Multihash {
     * @param hash byte array representing the hash data
     */
    public Multihash(final MultihashType type, final byte[] hash) {
-      // validate input
-      Validate.exclusiveBetween(0, 128, hash.length, "Hash length needs to be less than 128 byt was %d", hash.length);
-      if (type == MultihashType.ID) {
-         Validate.inclusiveBetween(0,
-               64,
-               hash.length,
-               "Identity hash length should not be more than 64 but was %d",
-               hash.length);
-      } else {
-         Validate
-               .isTrue(hash.length == type.getLength(), "Expected length %d but got %d", type.getLength(), hash.length);
-      }
+      Validate.inclusiveBetween(type.getMinLength(),
+            type.getMaxLength(),
+            hash.length,
+            "Hash with length %d is not valid for hash type %s",
+            hash.length,
+            type);
       // make assignments
       this.type = type;
       this.hash = hash;

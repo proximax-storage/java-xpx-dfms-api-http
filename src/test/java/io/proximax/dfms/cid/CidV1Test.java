@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.dfms.cid.multibase.Base32;
-import io.proximax.dfms.cid.multibase.Multibase.Base;
+import io.proximax.dfms.cid.multibase.Multibase;
 import io.proximax.dfms.cid.multihash.MultihashType;
 
 /**
- * {@link Cid} tests
+ * {@link CidV1} tests
  */
 class CidV1Test {
 
@@ -42,6 +42,6 @@ class CidV1Test {
    @Test
    void testEncode() {
       Cid cid = CidV1.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
-      assertEquals("bAEGBEIBONDKKRHXFPRZWRLGXXLTAVQHWEH2YLHU4HGO5LXJXPQBPFSW2LU======", cid.encode(Base.Base32));
+      assertEquals("bAEGBEIBONDKKRHXFPRZWRLGXXLTAVQHWEH2YLHU4HGO5LXJXPQBPFSW2LU======", cid.encode(Multibase.BASE_32));
    }
 }
