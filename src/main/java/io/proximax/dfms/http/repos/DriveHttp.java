@@ -5,6 +5,8 @@
  */
 package io.proximax.dfms.http.repos;
 
+import static io.proximax.dfms.utils.HttpUtils.encode;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -14,19 +16,20 @@ import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
+import io.proximax.dfms.http.RawMultipartRequestContent;
 import io.proximax.dfms.http.dtos.CidDTO;
 import io.proximax.dfms.http.dtos.DriveItemListDTO;
 import io.proximax.dfms.http.dtos.DriveItemStatDTO;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.content.InputStreamContent;
+import io.proximax.dfms.model.drive.content.RawInputStreamContent;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-
-import static io.proximax.dfms.utils.HttpUtils.encode;
+import okhttp3.RequestBody;
 
 /**
  * Drive repository implementation using HTTP protocol
@@ -57,7 +60,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException {
       HttpUrl url = buildUrl(URL_ADD, encode(id), path).build();
-      Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content)).build();
+      Request request = new Request.Builder().url(url).post(createRequestBody(content)).build();
       // make the request
       return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidDTO.class))
             .map(CidDTO::getId).map(Cid::decode);
@@ -122,5 +125,19 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       HttpUrl url = buildUrl(URL_FLUSH, encode(id), path).build();
       return makeGetCompletable(url);
    
+   }
+   
+   /**
+    * create new request body from the content
+    * 
+    * @param content the drive content used to create request body
+    */
+   protected static RequestBody createRequestBody(DriveContent content) {
+      if (content instanceof RawInputStreamContent) {
+         RawInputStreamContent rawContent = (RawInputStreamContent) content;
+         return new RawMultipartRequestContent(rawContent.getContentType(), rawContent.getInputStream());
+      } else {
+         return new MultipartRequestContent(content, MultipartRequestContent.createBoundary());
+      }
    }
 }

@@ -24,7 +24,7 @@ import okhttp3.RequestBody;
 import okio.Buffer;
 
 /**
- * TODO add proper description
+ * {@link MultipartRequestContent} tests
  */
 class MultipartRequestContentTest {
 
@@ -53,15 +53,15 @@ class MultipartRequestContentTest {
    @Test
    void testBoundaryGenerator() {
       DriveContent content = new FileSystemContent(Paths.get(".", "src", "test", "resources", "simple", "text1.txt"));
-      MultipartRequestContent body1 = new MultipartRequestContent(content);
-      MultipartRequestContent body2 = new MultipartRequestContent(content);
+      MultipartRequestContent body1 = new MultipartRequestContent(content, MultipartRequestContent.createBoundary());
+      MultipartRequestContent body2 = new MultipartRequestContent(content, MultipartRequestContent.createBoundary());
       assertNotEquals(body1.getBoundary(), body2.getBoundary());
    }
    
    @Test
    void testContentType() {
       DriveContent content = new FileSystemContent(Paths.get(".", "src", "test", "resources", "simple", "text1.txt"));
-      MultipartRequestContent body = new MultipartRequestContent(content);
+      MultipartRequestContent body = new MultipartRequestContent(content, MultipartRequestContent.createBoundary());
       assertTrue(body.contentType().toString().contains(body.getBoundary()));
    }
    
