@@ -62,15 +62,6 @@ public class MultipartRequestContent extends RequestBody {
       this.contentType = MediaType.get("multipart/form-data; boundary=" + boundary);
    }
 
-   /**
-    * create new instance with random boundary
-    * 
-    * @param content the drive content used to create request body
-    */
-   public MultipartRequestContent(DriveContent content) {
-      this(content, createBoundary());
-   }
-
    @Override
    public MediaType contentType() {
       return contentType;
@@ -99,7 +90,7 @@ public class MultipartRequestContent extends RequestBody {
     * 
     * @return boundary string
     */
-   private static String createBoundary() {
+   public static String createBoundary() {
       final int numChars = BOUNDARY_CHARS.length();
       final StringBuilder b = new StringBuilder();
       for (int i = 0; i < BOUNDARY_SIZE; i++) {
