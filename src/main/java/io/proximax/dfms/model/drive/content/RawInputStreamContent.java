@@ -22,9 +22,9 @@ public class RawInputStreamContent extends InputStreamContent {
     * @param inputStream input stream containing request body
     * @param contentType content type of data in the input stream
     */
-   public RawInputStreamContent(Optional<String> name, InputStream inputStream, MediaType contentType) {
+   public RawInputStreamContent(Optional<String> name, InputStream inputStream, String contentType) {
       super(name, inputStream);
-      this.contentType = contentType;
+      this.contentType = MediaType.get(contentType);
    }
 
    /**

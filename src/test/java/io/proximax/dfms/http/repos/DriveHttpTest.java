@@ -3,7 +3,7 @@
  */
 package io.proximax.dfms.http.repos;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
@@ -14,7 +14,6 @@ import io.proximax.dfms.http.MultipartRequestContent;
 import io.proximax.dfms.http.RawMultipartRequestContent;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /**
@@ -33,7 +32,7 @@ class DriveHttpTest {
    void testRawContentFactory() {
       DriveContent content = new RawInputStreamContent(Optional.of("hello"),
             new ByteArrayInputStream(new byte[] { 1, 2, 3 }),
-            MediaType.get("multipart/form-data; boundary=" + MultipartRequestContent.createBoundary()));
+            "multipart/form-data; boundary=" + MultipartRequestContent.createBoundary());
       RequestBody body = DriveHttp.createRequestBody(content);
       assertTrue(body instanceof RawMultipartRequestContent);
    }
