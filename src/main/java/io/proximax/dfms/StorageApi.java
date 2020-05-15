@@ -6,6 +6,7 @@
 package io.proximax.dfms;
 
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import io.proximax.dfms.http.repos.ContractHttp;
 import io.proximax.dfms.http.repos.DriveHttp;
@@ -36,7 +37,10 @@ public class StorageApi implements ServiceNode {
    public StorageApi(URL nodeUrl, String apiPath) {
       this.nodeUrl = nodeUrl;
       this.apiPath = apiPath;
-      this.client = new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(Level.BASIC))
+      this.client = new OkHttpClient.Builder()
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(Level.BASIC))
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build();
    }
 
