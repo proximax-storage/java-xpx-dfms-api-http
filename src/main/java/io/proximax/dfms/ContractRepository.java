@@ -6,13 +6,13 @@
 package io.proximax.dfms;
 
 import java.math.BigInteger;
-import java.time.Duration;
 import java.util.List;
 
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
+import io.proximax.dfms.model.contract.ContractDuration;
+import io.proximax.dfms.model.contract.ContractOptions;
 import io.proximax.dfms.model.contract.UpdatesSubscription;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -46,9 +46,10 @@ public interface ContractRepository {
     * 
     * @param space total space reserved by Drive contract on member nodes. TODO in bytes?
     * @param duration duration of the contract
+    * @param options the contract options
     * @return the contract created based on the request
     */
-   Observable<Contract> compose(BigInteger space, Duration duration);
+   Observable<Contract> compose(BigInteger space, ContractDuration duration, ContractOptions options);
 
    /**
     * Searches for Drive contract information in local storage and/or in blockchain.
@@ -72,19 +73,5 @@ public interface ContractRepository {
     * @return TODO stream of contracts??
     */
    Observable<UpdatesSubscription> amendments(Cid id);
-
-   /**
-    * triggers node to automatically accept incoming contracts.
-    * 
-    * @return confirmation that accepting has started
-    */
-   Completable startAccepting();
-
-   /**
-    * stops accepting process.
-    * 
-    * @return confirmation that accepting has stopped
-    */
-   Completable stopAccepting();
 
 }

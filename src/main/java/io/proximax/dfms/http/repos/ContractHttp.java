@@ -8,7 +8,6 @@ package io.proximax.dfms.http.repos;
 import static io.proximax.dfms.utils.HttpUtils.encode;
 
 import java.math.BigInteger;
-import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +18,9 @@ import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.CidListDTO;
 import io.proximax.dfms.http.dtos.ContractWapperDTO;
 import io.proximax.dfms.model.contract.Contract;
+import io.proximax.dfms.model.contract.ContractDuration;
+import io.proximax.dfms.model.contract.ContractOptions;
 import io.proximax.dfms.model.contract.UpdatesSubscription;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -46,9 +46,8 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
    }
 
    @Override
-   public Observable<Contract> compose(BigInteger space, Duration duration) {
-      // TODO what is the duration field? openapi says: Drive contract duration. Might be in millisecconds or blocks.
-      HttpUrl url = buildUrl(URL_COMPOSE, space.toString(), Long.toString(duration.toMillis())).build();
+   public Observable<Contract> compose(BigInteger space, ContractDuration duration, ContractOptions options) {
+      HttpUrl url = buildUrl(URL_COMPOSE, options.asOptionMap(), space.toString(), duration.encode()).build();
       // make the request
       return makePostObservable(url).map(this::mapStringOrError).map(str -> getGson().fromJson(str, Contract.class));
    }
@@ -76,18 +75,6 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
       // make the request
       return makePostObservable(url).map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, UpdatesSubscription.class));
-   }
-
-   @Override
-   public Completable startAccepting() {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-   @Override
-   public Completable stopAccepting() {
-      // TODO Auto-generated method stub
-      return null;
    }
 
 }
