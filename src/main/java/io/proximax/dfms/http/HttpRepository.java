@@ -17,6 +17,8 @@
 package io.proximax.dfms.http;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
@@ -114,10 +116,25 @@ public class HttpRepository<T extends ServiceNode> {
     * @param arguments collection of arguments what will be part of the URL
     * @return the URL builder
     */
-   protected HttpUrl.Builder buildUrl(String command, String... arguments) {
+   protected HttpUrl.Builder buildUrl(String command,  String... arguments) {
+      return buildUrl(command, new HashMap<>(), arguments);
+   }
+
+   /**
+    * get URL builder for specified command representing relative URL segments
+    * 
+    * @param command relative URL path segments (e.g. drive/remove)
+    * @param options explicit key-value pairs for query parameters
+    * @param arguments collection of arguments what will be part of the URL
+    * @return the URL builder
+    */
+   protected HttpUrl.Builder buildUrl(String command, Map<String, String> options, String... arguments) {
       HttpUrl.Builder builder = getApiUrl().newBuilder().addPathSegments(command);
       for (String argument : arguments) {
          builder.addQueryParameter(QUERY_PARAM_ARG, argument);
+      }
+      for (Map.Entry<String, String> entry : options.entrySet()) {
+         builder.addQueryParameter(entry.getKey(), entry.getValue());
       }
       return builder;
    }
