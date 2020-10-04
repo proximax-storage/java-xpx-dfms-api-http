@@ -16,6 +16,7 @@
 
 package io.proximax.dfms.http;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +58,7 @@ public class HttpRepository<T extends ServiceNode> {
    private final T api;
    private final HttpUrl apiUrl;
    private final OkHttpClient client;
+   private final OkHttpClient longPollingClient;
    private final Gson gson;
 
    /**
@@ -66,7 +68,7 @@ public class HttpRepository<T extends ServiceNode> {
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to use for requests
     */
-   protected HttpRepository(T api, Optional<String> apiPath, OkHttpClient client) {
+   protected HttpRepository(T api, Optional<String> apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
       Validate.notNull(api, "api has to be provided");
       Validate.notNull(apiPath, "apiPath is mandatory");
       Validate.isTrue(!apiPath.orElse("").startsWith("/"), "apiPath can not start by / and has to be relative");
@@ -75,8 +77,9 @@ public class HttpRepository<T extends ServiceNode> {
       this.apiUrl = HttpUrl.get(api.getUrl()).newBuilder().addPathSegments(apiPath.orElse("")).build();
       // validate the URL
       Validate.notNull(apiUrl, "Only HTTP/S URLs are supported");
-      // create the client
+      // keep clients
       this.client = client;
+      this.longPollingClient = longPollingClient;
       // gson instance
       this.gson = new Gson();
    }
@@ -93,6 +96,13 @@ public class HttpRepository<T extends ServiceNode> {
     */
    public OkHttpClient getClient() {
       return client;
+   }
+
+   /**
+    * @return the longPollingClient
+    */
+   public OkHttpClient getLongPollingClient() {
+      return longPollingClient;
    }
 
    /**
@@ -116,7 +126,7 @@ public class HttpRepository<T extends ServiceNode> {
     * @param arguments collection of arguments what will be part of the URL
     * @return the URL builder
     */
-   protected HttpUrl.Builder buildUrl(String command,  String... arguments) {
+   protected HttpUrl.Builder buildUrl(String command, String... arguments) {
       return buildUrl(command, new HashMap<>(), arguments);
    }
 
@@ -145,8 +155,9 @@ public class HttpRepository<T extends ServiceNode> {
     * @param request the request to make
     * @return observable response
     */
-   protected Observable<Response> makeRequest(Request request) {
-      final Call call = getClient().newCall(request);
+   protected Observable<Response> makeRequest(Request request, boolean longPolling) {
+      OkHttpClient clientForRequest = longPolling ? getLongPollingClient() : getClient();
+      final Call call = clientForRequest.newCall(request);
       return Observable.create(emitter -> call.enqueue(new OkHttp3ResponseCallback(emitter)));
    }
 
@@ -176,6 +187,23 @@ public class HttpRepository<T extends ServiceNode> {
       } catch (IOException e) {
          throw new DFMSRuntimeException("Failed to read response body", e);
       }
+   }
+
+   /**
+    * create observable on response body that emits new string for every line that is appended to the body
+    * 
+    * @param respBody response body
+    * @return observable that emits string for every line of response body content stream
+    */
+   protected static Observable<String> longPollingObserver(ResponseBody respBody) {
+      return Observable.create(emitter -> {
+         try (BufferedReader reader = new BufferedReader(respBody.charStream())) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+               emitter.onNext(line);
+            }
+         }
+      });
    }
 
    /**
@@ -231,10 +259,10 @@ public class HttpRepository<T extends ServiceNode> {
     * @param url we are making the GET request to
     * @return observable for the action
     */
-   protected Observable<Response> makePostObservable(HttpUrl url) {
+   protected Observable<Response> makePostObservable(HttpUrl url, boolean longPolling) {
       RequestBody body = RequestBody.create(new byte[0]);
       Request request = new Request.Builder().url(url).post(body).build();
-      return makeRequest(request);
+      return makeRequest(request, longPolling);
    }
 
    /**
@@ -243,9 +271,9 @@ public class HttpRepository<T extends ServiceNode> {
     * @param url we are making the GET request to
     * @return observable for the action
     */
-   protected Observable<Response> makeGetObservable(HttpUrl url) {
+   protected Observable<Response> makeGetObservable(HttpUrl url, boolean longPolling) {
       Request request = new Request.Builder().url(url).build();
-      return makeRequest(request);
+      return makeRequest(request, longPolling);
    }
 
    /**

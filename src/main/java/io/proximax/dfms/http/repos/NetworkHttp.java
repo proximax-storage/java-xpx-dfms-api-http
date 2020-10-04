@@ -5,20 +5,19 @@
  */
 package io.proximax.dfms.http.repos;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.gson.reflect.TypeToken;
 
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
 import io.proximax.dfms.NetworkRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.http.HttpRepository;
+import io.proximax.dfms.http.dtos.AddressListDTO;
 import io.proximax.dfms.http.dtos.PeerIdDTO;
+import io.proximax.dfms.http.dtos.PeerInfoListDTO;
 import io.proximax.dfms.model.network.PeerInfo;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -37,18 +36,13 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
    private static final String URL_ID = "net/id";
    private static final String URL_ADDRS = "net/addrs";
 
-   private static final Type PEER_INFO_LIST_TYPE = new TypeToken<List<PeerInfo>>() {
-   }.getType();
-   private static final Type ADDRS_LIST_TYPE = new TypeToken<List<Multiaddr>>() {
-   }.getType();
-
    /**
     * @param api the storage API
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to be used to execute requests
     */
-   public NetworkHttp(StorageApi api, String apiPath, OkHttpClient client) {
-      super(api, Optional.of(apiPath), client);
+   public NetworkHttp(StorageApi api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+      super(api, Optional.of(apiPath), client, longPollingClient);
    }
 
    @Override
@@ -72,7 +66,9 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_PEERS).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(this::mapStringOrError).map(this::toPeerInfoList);
+      return makeRequest(request, false).map(this::mapStringOrError).map(str -> getGson().fromJson(str, PeerInfoListDTO.class))
+            .map(PeerInfoListDTO::getPeers)
+            .map(PeerInfo::fromDtos);
    }
 
    @Override
@@ -80,7 +76,7 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_ID).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, PeerIdDTO.class))
+      return makeRequest(request, false).map(this::mapStringOrError).map(str -> getGson().fromJson(str, PeerIdDTO.class))
             .map(PeerIdDTO::getId)
             .map(PeerId::fromBase58);
    }
@@ -90,15 +86,8 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
       HttpUrl url = buildUrl(URL_ADDRS).build();
       Request request = new Request.Builder().url(url).build();
       // caller is responsible to call close on the input stream
-      return makeRequest(request).map(this::mapStringOrError).map(this::toAddrsList);
-   }
-
-   private List<PeerInfo> toPeerInfoList(String json) {
-      return getGson().fromJson(json, PEER_INFO_LIST_TYPE);
-   }
-
-   private List<Multiaddr> toAddrsList(String json) {
-      return getGson().fromJson(json, ADDRS_LIST_TYPE);
+      return makeRequest(request, false).map(this::mapStringOrError).map(str -> getGson().fromJson(str, AddressListDTO.class))
+            .map(AddressListDTO::getMultiAddresses);
    }
 
 }

@@ -20,13 +20,32 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
  */
 public class StorageApi implements ServiceNode {
 
+   /** default API path */
    public static final String API_PATH = "api/v1";
 
    /** URL of the node */
    private final URL nodeUrl;
    /** the path to the API on the node */
    private final String apiPath;
+   /** client initialized for standard socket communication */
    private final OkHttpClient client;
+   /** client initialized for infinite read timeouts */
+   private final OkHttpClient longPollingClient;
+
+   /**
+    * Create new storage API with manually defining all the parameters
+    * 
+    * @param nodeUrl URL of the node
+    * @param apiPath API path prefixed to all requests - {@link #API_PATH}
+    * @param client
+    * @param longPollingClient
+    */
+   public StorageApi(URL nodeUrl, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+      this.nodeUrl = nodeUrl;
+      this.apiPath = apiPath;
+      this.client = client;
+      this.longPollingClient = longPollingClient;
+   }
 
    /**
     * Create new instance running at specified URL
@@ -35,12 +54,21 @@ public class StorageApi implements ServiceNode {
     * @param apiPath the path to the API
     */
    public StorageApi(URL nodeUrl, String apiPath) {
-      this.nodeUrl = nodeUrl;
-      this.apiPath = apiPath;
-      this.client = new OkHttpClient.Builder()
+      this(nodeUrl, apiPath, createClient(30), createClient(0));
+   }
+
+   /**
+    * create new http client with required initialization
+    * 
+    * @param readTimeoutSeconds number of seconds of read timeout. 0 for no timeout
+    * @return initialized http client
+    */
+   protected static OkHttpClient createClient(long readTimeoutSeconds) {
+      return new OkHttpClient.Builder()
             .addInterceptor(new HttpLoggingInterceptor().setLevel(Level.BASIC))
             .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(readTimeoutSeconds, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build();
    }
 
@@ -59,7 +87,7 @@ public class StorageApi implements ServiceNode {
     * @return new instance
     */
    public DriveRepository createDriveRepository() {
-      return new DriveHttp(this, apiPath, client);
+      return new DriveHttp(this, apiPath, client, longPollingClient);
    }
 
    /**
@@ -68,11 +96,11 @@ public class StorageApi implements ServiceNode {
     * @return new instance
     */
    public ContractRepository createContractRepository() {
-      return new ContractHttp(this, apiPath, client);
+      return new ContractHttp(this, apiPath, client, longPollingClient);
    }
 
    public NetworkRepository createNetworkRepository() {
-      return new NetworkHttp(this, apiPath, client);
+      return new NetworkHttp(this, apiPath, client, longPollingClient);
    }
 
    @Override

@@ -34,12 +34,12 @@ public class ContractDuration {
    }
 
    /**
-    * encode the duration to URL parameter. Duration is represented as number of nanoseconds
+    * encode the duration to URL parameter. Duration is represented as number of seconds
     * 
-    * @return string representing number of nanoseconds of the duration
+    * @return string representing number of seconds of the duration with "s" as suffix to indicate unit
     */
    public String encode() {
-      return Long.toString(duration.toNanos());
+      return Long.toString(duration.toMillis()/1000) + "s";
    }
    
    /**

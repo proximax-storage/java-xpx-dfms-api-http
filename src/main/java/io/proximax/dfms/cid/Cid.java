@@ -1,5 +1,7 @@
 package io.proximax.dfms.cid;
 
+import org.apache.commons.lang3.Validate;
+
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.cid.multibase.Multibase;
 import io.proximax.dfms.cid.multihash.Multihash;
@@ -41,6 +43,7 @@ public interface Cid {
     * @return the Cid instance
     */
    static Cid decode(String cidString) {
+      Validate.notNull(cidString, "Can not decode CID from null");
       if (cidString.startsWith("Q") && cidString.length() == 46) {
          // CidV0 is Base58 encoded (starts by Q) and is 46 character long
          return CidV0.decode(cidString);

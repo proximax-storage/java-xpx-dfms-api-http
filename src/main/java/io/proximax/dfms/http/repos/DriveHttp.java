@@ -53,8 +53,8 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to be used to execute requests
     */
-   public DriveHttp(StorageApi api, String apiPath, OkHttpClient client) {
-      super(api, Optional.of(apiPath), client);
+   public DriveHttp(StorageApi api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+      super(api, Optional.of(apiPath), client, longPollingClient);
    }
 
    @Override
@@ -62,7 +62,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
       HttpUrl url = buildUrl(URL_ADD, encode(id), path).build();
       Request request = new Request.Builder().url(url).post(createRequestBody(content)).build();
       // make the request
-      return makeRequest(request).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidDTO.class))
+      return makeRequest(request, false).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidDTO.class))
             .map(CidDTO::getId).map(Cid::decode);
    }
 
@@ -70,7 +70,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    public Observable<DriveContent> get(Cid id, String path) {
       HttpUrl url = buildUrl(URL_GET, encode(id), path).build();
       // caller is responsible to call close on the input stream
-      return makeGetObservable(url).map(this::mapRespBodyOrError)
+      return makeGetObservable(url, false).map(this::mapRespBodyOrError)
             .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
    }
 
@@ -102,7 +102,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Observable<DriveItem> stat(Cid id, String path) {
       HttpUrl url = buildUrl(URL_STAT, encode(id), path).build();
-      return makeGetObservable(url)
+      return makeGetObservable(url, false)
          .map(this::mapStringOrError)
          .map(str -> getGson().fromJson(str, DriveItemStatDTO.class))
          .map(DriveItemStatDTO::getItem)
@@ -112,7 +112,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
    @Override
    public Observable<List<DriveItem>> ls(Cid id, String path) {
       HttpUrl url = buildUrl(URL_LS, encode(id), path).build();
-      return makeGetObservable(url)
+      return makeGetObservable(url, false)
          .map(this::mapStringOrError)
          .map(str -> getGson().fromJson(str, DriveItemListDTO.class))
          .flatMapIterable(DriveItemListDTO::getItems)

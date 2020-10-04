@@ -34,7 +34,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -45,6 +44,7 @@ class HttpRepositoryTest {
    private static final String URL = "http://1.2.3.4:2345/";
 
    private OkHttpClient client;
+   private OkHttpClient longPollingClient;
 
    @BeforeEach
    void before() {
@@ -54,7 +54,7 @@ class HttpRepositoryTest {
    @Test
    void testConstructor() throws MalformedURLException {
       StorageApi api = new StorageApi(new URL(URL));
-      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.empty(), client, longPollingClient);
       // check initialized fields
       assertEquals(URL, repo.getApiUrl().toString());
       assertEquals(api, repo.getApi());
@@ -67,14 +67,14 @@ class HttpRepositoryTest {
    void testURLNoPathNoSlash() throws MalformedURLException {
       final String API_URL = "http://1.2.3.4:2345";
       StorageApi api = new StorageApi(new URL(API_URL));
-      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.empty(), client, longPollingClient);
       assertEquals(API_URL + "/", repo.getApiUrl().toString());
    }
 
    @Test
    void testURLNoPathSlash() throws MalformedURLException {
       StorageApi api = new StorageApi(new URL(URL));
-      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.empty(), client, longPollingClient);
       assertEquals(URL, repo.getApiUrl().toString());
    }
 
@@ -82,15 +82,16 @@ class HttpRepositoryTest {
    void testURLWithPath() throws MalformedURLException {
       final String API_URL = "http://1.2.3.4:2345";
       StorageApi api = new StorageApi(new URL(API_URL));
-      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.of("api/v1"), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.of("api/v1"), client, longPollingClient);
       assertEquals(API_URL + "/api/v1", repo.getApiUrl().toString());
    }
 
    @Test
    void testURLWithAbsolutePath() throws MalformedURLException {
       final String API_URL = "http://1.2.3.4:2345";
+      final Optional<String> API_PATH = Optional.of("/api/v1");
       StorageApi api = new StorageApi(new URL(API_URL));
-      assertThrows(IllegalArgumentException.class, () -> new HttpRepository<>(api, Optional.of("/api/v1"), client));
+      assertThrows(IllegalArgumentException.class, () -> new HttpRepository<>(api, API_PATH, client, longPollingClient));
    }
 
    @Test
@@ -115,7 +116,7 @@ class HttpRepositoryTest {
       final String arg2 = "arg 2";
       // create repo
       StorageApi api = new StorageApi(new URL(urlBase));
-      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.of(urlPath), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(api, Optional.of(urlPath), client, longPollingClient);
 
       assertEquals("http://1.2.3.4:1234/api/v4/drive/remove?arg=arg1&arg=arg%202",
             repo.buildUrl(urlCommand, arg1, arg2).toString());
@@ -146,7 +147,7 @@ class HttpRepositoryTest {
       Request request = new Request.Builder().url("http://localhost").build();
       Response response = new Response.Builder().request(request).protocol(Protocol.HTTP_2).code(200).message("hello")
             .body(ResponseBody.create(MediaType.get("text/plain"), "this is the body")).build();
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
 
       String body = repo.mapStringOrError(response);
       assertEquals("this is the body", body);
@@ -157,7 +158,7 @@ class HttpRepositoryTest {
       Request request = new Request.Builder().url("http://localhost").build();
       Response response = new Response.Builder().request(request).protocol(Protocol.HTTP_2).code(199).message("hello")
             .body(ResponseBody.create(MediaType.get("text/plain"), "this is the body")).build();
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
 
       assertThrows(DFMSRuntimeException.class, () -> repo.mapRespBodyOrError(response));
    }
@@ -167,7 +168,7 @@ class HttpRepositoryTest {
       Request request = new Request.Builder().url("http://localhost").build();
       Response response = new Response.Builder().request(request).protocol(Protocol.HTTP_2).code(300).message("hello")
             .body(ResponseBody.create(MediaType.get("text/plain"), "this is the body")).build();
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
 
       assertThrows(DFMSRuntimeException.class, () -> repo.mapRespBodyOrError(response));
    }
@@ -179,7 +180,7 @@ class HttpRepositoryTest {
             .request(request).protocol(Protocol.HTTP_2).code(150).message("hello").body(ResponseBody
                   .create(MediaType.get("text/plain"), "{\"Message\"=\"msg\", \"Code\"=\"2\", \"Type\"=\"tp\"}"))
             .build();
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
 
       assertThrows(DFMSResponseException.class, () -> repo.mapRespBodyOrError(response));
    }
@@ -190,7 +191,7 @@ class HttpRepositoryTest {
       Call call = Mockito.mock(Call.class);
       Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
       // prepare repo
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
       // make the request
       final HttpUrl url = repo.getApiUrl();
       Completable postCompletion = repo.makePostCompletable(url);
@@ -211,7 +212,7 @@ class HttpRepositoryTest {
       Call call = Mockito.mock(Call.class);
       Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
       // prepare repo
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
       // make the request
       final HttpUrl url = repo.getApiUrl();
       Completable getCompletion = repo.makeGetCompletable(url);
@@ -232,10 +233,10 @@ class HttpRepositoryTest {
       Call call = Mockito.mock(Call.class);
       Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
       // prepare repo
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
       // make the request
       final HttpUrl url = repo.getApiUrl();
-      Observable<Response> postObs = repo.makePostObservable(url);
+      Observable<Response> postObs = repo.makePostObservable(url, false);
       // test
       assertNotNull(postObs);
       // capture the request
@@ -253,10 +254,10 @@ class HttpRepositoryTest {
       Call call = Mockito.mock(Call.class);
       Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
       // prepare repo
-      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client);
+      HttpRepository<StorageApi> repo = new HttpRepository<>(new StorageApi(new URL(URL)), Optional.empty(), client, longPollingClient);
       // make the request
       final HttpUrl url = repo.getApiUrl();
-      Observable<Response> getObs = repo.makeGetObservable(url);
+      Observable<Response> getObs = repo.makeGetObservable(url, false);
       // test
       assertNotNull(getObs);
       // capture the request
