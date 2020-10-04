@@ -202,6 +202,8 @@ public class HttpRepository<T extends ServiceNode> {
             while ((line = reader.readLine()) != null) {
                emitter.onNext(line);
             }
+         } catch (IOException | RuntimeException err) {
+            emitter.onError(err);
          }
       });
    }
