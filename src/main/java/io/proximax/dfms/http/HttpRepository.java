@@ -198,11 +198,15 @@ public class HttpRepository<T extends ServiceNode> {
    protected static Observable<String> longPollingObserver(ResponseBody respBody) {
       return Observable.create(emitter -> {
          try (BufferedReader reader = new BufferedReader(respBody.charStream())) {
+            // read lines while available
             String line;
             while ((line = reader.readLine()) != null) {
                emitter.onNext(line);
             }
+            // emit the complete event to indicate we are done
+            emitter.onComplete();
          } catch (IOException | RuntimeException err) {
+            // emit any error that might have occurred
             emitter.onError(err);
          }
       });
