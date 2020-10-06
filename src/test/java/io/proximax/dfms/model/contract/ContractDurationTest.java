@@ -25,7 +25,7 @@ class ContractDurationTest {
       assertEquals(duration, ContractDuration.of(3, ChronoUnit.DAYS));
       assertEquals(duration, ContractDuration.of(3*24, ChronoUnit.HOURS));
       assertEquals(duration, ContractDuration.of(3*24*3600, ChronoUnit.SECONDS));
-      assertEquals(Long.toString(3*24*3600)+"000000000", duration.encode());
+      assertEquals(Long.toString(3*24*3600)+"s", duration.encode());
    }
    
    @SuppressWarnings("unlikely-arg-type")
