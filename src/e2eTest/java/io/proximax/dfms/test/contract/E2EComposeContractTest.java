@@ -67,6 +67,7 @@ class E2EComposeContractTest {
       // retrieve internal docker address where DFMS client is running
       Multiaddr addr = netClient.getAddresses()
          .flatMapIterable(lst -> lst)
+         .filter(multiAddr -> multiAddr != null)
          .filter(multiAddr -> multiAddr.getStringComponent(Protocol.IP4).startsWith("10.10."))
          .blockingFirst();
       assertNotNull(addr);

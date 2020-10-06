@@ -15,6 +15,7 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -53,6 +54,7 @@ class RaceIssueTest {
    }
 
    @Test
+   @Disabled("this will sometimes break the server")
    void killServer() throws IOException {
       DriveContent addContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();

@@ -6,6 +6,7 @@
 package io.proximax.dfms.test.contract;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,8 +40,7 @@ class E2EContractHttpTest {
       ContractRepository contracts = api.createContractRepository();
       // list contracts on the api node
       List<Cid> listedCids = contracts.list().timeout(30, TimeUnit.SECONDS).blockingFirst();
-      assertEquals(1, listedCids.size());
-      assertEquals(CONTRACT, listedCids.get(0));
+      assertTrue(listedCids.contains(CONTRACT));
    }
 
    @Test

@@ -5,7 +5,6 @@
  */
 package io.proximax.dfms.test.network;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
@@ -36,7 +35,5 @@ class E2ENetworkHttpTest {
       // list contracts on the api node
       PeerId id = repo.getId().blockingFirst();
       assertNotNull(id);
-      assertEquals("12D3L7AV8AxKhLz5DzMfN91TBwJBMXLXuiTTfw5R9V3FLyWCfqdo", id.toBase58());
-      assertEquals("00240804122092d3b9df67c08333716c880be295d64dcecbed0ce1a725faf4e8be6dc45e2e29", id.toHex());
    }
 }
