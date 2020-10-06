@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.DriveRepository;
-import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
@@ -34,7 +34,7 @@ import okhttp3.RequestBody;
 /**
  * Drive repository implementation using HTTP protocol
  */
-public class DriveHttp extends HttpRepository<StorageApi> implements DriveRepository {
+public class DriveHttp extends HttpRepository<ServiceBase> implements DriveRepository {
 
    private static final String URL_ADD = "drive/add";
    private static final String URL_GET = "drive/get";
@@ -53,7 +53,7 @@ public class DriveHttp extends HttpRepository<StorageApi> implements DriveReposi
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to be used to execute requests
     */
-   public DriveHttp(StorageApi api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+   public DriveHttp(ServiceBase api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
       super(api, Optional.of(apiPath), client, longPollingClient);
    }
 

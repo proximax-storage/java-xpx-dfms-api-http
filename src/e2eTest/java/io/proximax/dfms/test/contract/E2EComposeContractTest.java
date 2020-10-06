@@ -25,8 +25,10 @@ import io.libp2p.core.multiformats.Multiaddr;
 import io.libp2p.core.multiformats.Protocol;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.dfms.ContractRepository;
+import io.proximax.dfms.DFMSClient;
+import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.NetworkRepository;
-import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.ReplicatorRepository;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.ContractDuration;
@@ -42,17 +44,17 @@ class E2EComposeContractTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EComposeContractTest.class);
 
-   private StorageApi client;
-   private StorageApi replicator1;
-   private StorageApi replicator2;
-   private StorageApi replicator3;
+   private DFMSClient client;
+   private DFMSReplicator replicator1;
+   private DFMSReplicator replicator2;
+   private DFMSReplicator replicator3;
    
    @BeforeAll
    void init() throws MalformedURLException {
-      client = new StorageApi(new URL("http://localhost:6366"));;
-      replicator1 = new StorageApi(new URL("http://localhost:6400"));
-      replicator2 = new StorageApi(new URL("http://localhost:6401"));
-      replicator3 = new StorageApi(new URL("http://localhost:6402"));
+      client = new DFMSClient(new URL("http://localhost:6366"));
+      replicator1 = new DFMSReplicator(new URL("http://localhost:6400"));
+      replicator2 = new DFMSReplicator(new URL("http://localhost:6401"));
+      replicator3 = new DFMSReplicator(new URL("http://localhost:6402"));
    }
 
    @Test
@@ -93,8 +95,8 @@ class E2EComposeContractTest {
       acceptContracts(replicator3);
    }
    
-   private static void acceptContracts(final StorageApi replicator) {
-      ContractRepository conRep = replicator.createContractRepository();
+   private static void acceptContracts(final DFMSReplicator replicator) {
+      ReplicatorRepository conRep = replicator.createReplicatorRepository();
       conRep.invites().subscribe(invite -> {
          logger.info("Got invite {}", invite);
          conRep.accept(Cid.decode(invite.getDrive())).blockingAwait();

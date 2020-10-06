@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
+import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.NetworkRepository;
-import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.AddressListDTO;
 import io.proximax.dfms.http.dtos.PeerIdDTO;
@@ -28,7 +28,7 @@ import okhttp3.Request;
 /**
  * TODO add proper description
  */
-public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRepository {
+public class NetworkHttp extends HttpRepository<ServiceBase> implements NetworkRepository {
 
    private static final String URL_CONNECT = "net/connect";
    private static final String URL_DISCONNECT = "net/disconnect";
@@ -41,7 +41,7 @@ public class NetworkHttp extends HttpRepository<StorageApi> implements NetworkRe
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to be used to execute requests
     */
-   public NetworkHttp(StorageApi api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+   public NetworkHttp(ServiceBase api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
       super(api, Optional.of(apiPath), client, longPollingClient);
    }
 

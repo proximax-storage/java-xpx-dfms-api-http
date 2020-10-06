@@ -12,37 +12,28 @@ import java.util.List;
 import java.util.Optional;
 
 import io.proximax.dfms.ContractRepository;
-import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.CidListDTO;
 import io.proximax.dfms.http.dtos.ContractWapperDTO;
-import io.proximax.dfms.http.dtos.InviteDTO;
-import io.proximax.dfms.http.dtos.InviteWrapperDTO;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.ContractDuration;
 import io.proximax.dfms.model.contract.ContractOptions;
 import io.proximax.dfms.model.contract.UpdatesSubscription;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 /**
  * Contract repository implementation using HTTP protocol
  */
-public class ContractHttp extends HttpRepository<StorageApi> implements ContractRepository {
+public class ContractHttp extends HttpRepository<ServiceBase> implements ContractRepository {
 
    private static final String URL_COMPOSE = "contract/compose";
    private static final String URL_LS = "contract/ls";
    private static final String URL_GET = "contract/get";
    private static final String URL_AMENDS = "contract/amends";
    
-   // TODO separate this out to separate repository as it is specific to replicators
-   private static final String URL_INVITES = "contract/invites";
-   private static final String URL_ACCEPT = "contract/accept";
-   
-
    /**
     * create new instance
     * 
@@ -50,7 +41,7 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to be used to execute requests
     */
-   public ContractHttp(StorageApi api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+   public ContractHttp(ServiceBase api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
       super(api, Optional.of(apiPath), client, longPollingClient);
    }
 
@@ -90,25 +81,4 @@ public class ContractHttp extends HttpRepository<StorageApi> implements Contract
             .map(str -> getGson().fromJson(str, UpdatesSubscription.class));
    }
 
-   @Override
-   public Observable<InviteDTO> invites() {
-      HttpUrl url = buildUrl(URL_INVITES).build();
-      // make the request
-      return makeGetObservable(url, true)
-            .map(this::mapRespBodyOrError)
-            .observeOn(Schedulers.io())
-            .flatMap(ContractHttp::longPollingObserver)
-            // map the line to invite wrapper dto
-            .map(str -> getGson().fromJson(str, InviteWrapperDTO.class))
-            // map the wrapper to wrapped invite
-            .map(InviteWrapperDTO::getInvite);
-   }
-   
-   @Override
-   public Completable accept(Cid id) {
-      HttpUrl url = buildUrl(URL_ACCEPT, encode(id)).build();
-      // make the request
-      return makePostCompletable(url);
-
-   }
 }

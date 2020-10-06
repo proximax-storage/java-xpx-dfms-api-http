@@ -9,12 +9,10 @@ import java.math.BigInteger;
 import java.util.List;
 
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.http.dtos.InviteDTO;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.ContractDuration;
 import io.proximax.dfms.model.contract.ContractOptions;
 import io.proximax.dfms.model.contract.UpdatesSubscription;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -75,16 +73,5 @@ public interface ContractRepository {
     * @return TODO stream of contracts??
     */
    Observable<UpdatesSubscription> amendments(Cid id);
-
-   /**
-    * @return
-    */
-   Observable<InviteDTO> invites();
-
-   /**
-    * @param id
-    * @return
-    */
-   Completable accept(Cid id);
 
 }

@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.dfms.ContractRepository;
-import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
 
@@ -27,11 +27,11 @@ import io.proximax.dfms.model.contract.Contract;
 class E2EContractHttpTest {
    private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
 
-   StorageApi api;
+   DFMSClient api;
 
    @BeforeEach
    void init() throws MalformedURLException {
-      api = new StorageApi(new URL("http://localhost:6366"));
+      api = new DFMSClient(new URL("http://localhost:6366"));
    }
 
    @Test

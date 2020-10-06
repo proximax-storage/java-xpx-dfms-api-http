@@ -19,21 +19,21 @@ import io.proximax.dfms.http.repos.NetworkHttp;
 /**
  * TODO add proper description
  */
-class StorageApiTest {
+class DFMSClientTest {
    private static final String REPLICATOR_URL = "http://1.2.3.4:5678";
    
    @Test
    void testUrl() throws MalformedURLException {
-      StorageApi api = new StorageApi(new URL(REPLICATOR_URL));
+      DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL));
       
       assertEquals(REPLICATOR_URL, api.getUrl().toExternalForm());
-      assertEquals(StorageApi.API_PATH, api.getApiPath());
+      assertEquals(DFMSClient.API_PATH, api.getApiPath());
    }
 
    @Test
    void testCustomApiPath() throws MalformedURLException {
       final String apiPath = "test/v7";
-      StorageApi api = new StorageApi(new URL(REPLICATOR_URL), apiPath);
+      DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
       assertEquals(REPLICATOR_URL, api.getUrl().toExternalForm());
       assertEquals(apiPath, api.getApiPath());
@@ -43,7 +43,7 @@ class StorageApiTest {
    @Test
    void testContractRepo() throws MalformedURLException {
       final String apiPath = "test/v7";
-      StorageApi api = new StorageApi(new URL(REPLICATOR_URL), apiPath);
+      DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
       ContractHttp contractRepo = ((ContractHttp)api.createContractRepository());
       assertEquals("http://1.2.3.4:5678/test/v7", contractRepo.getApiUrl().toString());
@@ -54,7 +54,7 @@ class StorageApiTest {
    @Test
    void testDriveRepo() throws MalformedURLException {
       final String apiPath = "test/v7";
-      StorageApi api = new StorageApi(new URL(REPLICATOR_URL), apiPath);
+      DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
       DriveHttp driveRepo = ((DriveHttp)api.createDriveRepository());
       assertEquals("http://1.2.3.4:5678/test/v7", driveRepo.getApiUrl().toString());
@@ -65,7 +65,7 @@ class StorageApiTest {
    @Test
    void testNetworkRepo() throws MalformedURLException {
       final String apiPath = "test/v7";
-      StorageApi api = new StorageApi(new URL(REPLICATOR_URL), apiPath);
+      DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
       NetworkHttp netRepo = ((NetworkHttp)api.createNetworkRepository());
       assertEquals("http://1.2.3.4:5678/test/v7", netRepo.getApiUrl().toString());

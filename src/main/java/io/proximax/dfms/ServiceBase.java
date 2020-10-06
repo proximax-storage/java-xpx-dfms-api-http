@@ -8,17 +8,14 @@ package io.proximax.dfms;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import io.proximax.dfms.http.repos.ContractHttp;
-import io.proximax.dfms.http.repos.DriveHttp;
-import io.proximax.dfms.http.repos.NetworkHttp;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 
 /**
- * Central access point to the storage API. Provides factories for DFMS service repositories
+ * Base of DFMS services
  */
-public class StorageApi implements ServiceNode {
+public abstract class ServiceBase implements ServiceNode {
 
    /** default API path */
    public static final String API_PATH = "api/v1";
@@ -40,7 +37,7 @@ public class StorageApi implements ServiceNode {
     * @param client
     * @param longPollingClient
     */
-   public StorageApi(URL nodeUrl, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
+   public ServiceBase(URL nodeUrl, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
       this.nodeUrl = nodeUrl;
       this.apiPath = apiPath;
       this.client = client;
@@ -53,7 +50,7 @@ public class StorageApi implements ServiceNode {
     * @param nodeUrl the URL of the node
     * @param apiPath the path to the API
     */
-   public StorageApi(URL nodeUrl, String apiPath) {
+   public ServiceBase(URL nodeUrl, String apiPath) {
       this(nodeUrl, apiPath, createClient(30), createClient(0));
    }
 
@@ -77,30 +74,8 @@ public class StorageApi implements ServiceNode {
     * 
     * @param nodeUrl the URL of the node
     */
-   public StorageApi(URL nodeUrl) {
+   public ServiceBase(URL nodeUrl) {
       this(nodeUrl, API_PATH);
-   }
-
-   /**
-    * create drive repository
-    * 
-    * @return new instance
-    */
-   public DriveRepository createDriveRepository() {
-      return new DriveHttp(this, apiPath, client, longPollingClient);
-   }
-
-   /**
-    * create contract repository
-    * 
-    * @return new instance
-    */
-   public ContractRepository createContractRepository() {
-      return new ContractHttp(this, apiPath, client, longPollingClient);
-   }
-
-   public NetworkRepository createNetworkRepository() {
-      return new NetworkHttp(this, apiPath, client, longPollingClient);
    }
 
    @Override
@@ -114,4 +89,20 @@ public class StorageApi implements ServiceNode {
    public String getApiPath() {
       return apiPath;
    }
+
+   /**
+    * @return the client
+    */
+   protected OkHttpClient getClient() {
+      return client;
+   }
+
+   /**
+    * @return the longPollingClient
+    */
+   protected OkHttpClient getLongPollingClient() {
+      return longPollingClient;
+   }
+   
+   
 }
