@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import io.libp2p.core.multiformats.Multiaddr;
 import io.libp2p.core.multiformats.Protocol;
-import io.proximax.core.crypto.PrivateKey;
 import io.proximax.dfms.ContractClientServices;
 import io.proximax.dfms.ContractReplicatorServices;
 import io.proximax.dfms.DFMSClient;
@@ -108,14 +107,9 @@ class E2EComposeContractTest {
       // create repositories
       ContractClientServices clientContract = client.createContractClientServices();
       // prepare contract attributes
-      int replicas = 3;
-      int minReplicators = 3;
       BigInteger space = BigInteger.valueOf(1000000l);
       ContractDuration duration = ContractDuration.ofDays(5);
-      PrivateKey privateKey = PrivateKey
-            .fromHexString("2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C");
-      ContractOptions options = new ContractOptions.Builder().replicas(replicas).minReplicators(minReplicators)
-            .subscriptionPriceBySpace(space).privateKey(privateKey).build();
+      ContractOptions options = ContractOptions.empty();
       // compose contract
       Contract contract = clientContract.compose(space, duration, options).blockingFirst();
       logger.info("got contract {}", contract);
