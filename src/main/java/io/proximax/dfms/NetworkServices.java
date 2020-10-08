@@ -16,7 +16,7 @@ import io.reactivex.Observable;
 /**
  * TODO add proper description
  */
-public interface NetworkRepository {
+public interface NetworkServices {
    Completable connect(Multiaddr ... addresses);
    
    Completable disconnect(Multiaddr ... addresses);

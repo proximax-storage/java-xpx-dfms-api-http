@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import io.proximax.dfms.ServiceBase;
-import io.proximax.dfms.DriveRepository;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
@@ -34,7 +34,7 @@ import okhttp3.RequestBody;
 /**
  * Drive repository implementation using HTTP protocol
  */
-public class DriveHttp extends HttpRepository<ServiceBase> implements DriveRepository {
+public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServices {
 
    private static final String URL_ADD = "drive/add";
    private static final String URL_GET = "drive/get";

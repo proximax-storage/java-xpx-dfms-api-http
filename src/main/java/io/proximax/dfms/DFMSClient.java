@@ -13,7 +13,7 @@ import io.proximax.dfms.http.repos.NetworkHttp;
 import okhttp3.OkHttpClient;
 
 /**
- * Central access point to the storage API. Provides factories for DFMS service repositories
+ * Central access point to the services provided by an DFMS Client node
  */
 public class DFMSClient extends ServiceBase {
 
@@ -43,24 +43,29 @@ public class DFMSClient extends ServiceBase {
    }
 
    /**
-    * create contract repository
+    * create service instance allowing access to the node's contract client end-points
     * 
     * @return new instance
     */
-   public ContractRepository createContractRepository() {
+   public ContractClientServices createContractClientServices() {
       return new ContractHttp(this, getApiPath(), getClient(), getLongPollingClient());
    }
 
-   public NetworkRepository createNetworkRepository() {
-      return new NetworkHttp(this, getApiPath(), getClient(), getLongPollingClient());
-   }
-   
    /**
-    * create drive repository
+    * create service instance allowing access to the node's drive end-points
     * 
     * @return new instance
     */
-   public DriveRepository createDriveRepository() {
+   public DriveServices createDriveServices() {
       return new DriveHttp(this, getApiPath(), getClient(), getLongPollingClient());
+   }
+
+   /**
+    * create service instance allowing access to the node's network end-points
+    * 
+    * @return new instance
+    */
+   public NetworkServices createNetworkServices() {
+      return new NetworkHttp(this, getApiPath(), getClient(), getLongPollingClient());
    }
 }

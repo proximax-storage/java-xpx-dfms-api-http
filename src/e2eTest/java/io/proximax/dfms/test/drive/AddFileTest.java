@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.proximax.dfms.DriveRepository;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
@@ -44,12 +44,12 @@ class AddFileTest {
    private final String path = "hello" + System.currentTimeMillis();// Long.toString(new Random().nextLong());
 
    private DFMSClient api;
-   private DriveRepository drive;
+   private DriveServices drive;
 
    @BeforeAll
    void init() throws MalformedURLException, FileSystemException {
       api = new DFMSClient(new URL("http://localhost:6366"));
-      drive = api.createDriveRepository();
+      drive = api.createDriveServices();
    }
 
    @Test

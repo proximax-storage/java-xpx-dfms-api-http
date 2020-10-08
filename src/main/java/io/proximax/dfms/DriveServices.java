@@ -25,7 +25,7 @@ import io.reactivex.Observable;
  * cleared from DFMS node disk after uploading to members. To upload local Drive state to members use Flush.
  * </p>
  */
-public interface DriveRepository {
+public interface DriveServices {
 
    /**
     * adds the content to a specific Drive and to a given path.

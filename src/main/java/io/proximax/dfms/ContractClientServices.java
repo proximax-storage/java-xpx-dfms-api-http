@@ -9,15 +9,17 @@ import java.math.BigInteger;
 import java.util.List;
 
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.model.contract.Amendment;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.ContractDuration;
 import io.proximax.dfms.model.contract.ContractOptions;
-import io.proximax.dfms.model.contract.UpdatesSubscription;
+import io.proximax.dfms.model.contract.VerificationError;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
  * <p>
- * ContractRepository defines DFMS's Contract API
+ * ContractClientServices defines DFMS's Contract API
  * </p>
  * <p>
  * Drive contracts are contracts between network peers for physical disk space. The API allows to create, join, invite,
@@ -28,20 +30,20 @@ import io.reactivex.Observable;
  * NOTE: Currently creates Drive contracts with DFMS(R) identity as owner.
  * </p>
  */
-public interface ContractRepository {
+public interface ContractClientServices {
 
    /**
     * <p>
     * constructs new Drive contract from specific parameters.
     * </p>
     * <p>
-    * It announces invitation on the network and waits till minimum(2) amount of nodes Join the invitation. Compose does
-    * not guarantee successful completion and may error if minimum(2) amount of nodes have not found through timeout.
+    * It announces invitation on the network and waits till minimum amount of nodes Join the invitation. Compose does
+    * not guarantee successful completion and may error if minimum amount of nodes have not found through timeout.
     * </p>
     * <p>
     * Compose synchronously announces invites to the Network with current node as an owner and tries to find members
     * which agrees on specified parameters and options. It does not guarantee success on resolving members. On success
-    * persists contract locally and gives ability to use DriveFS.
+    * persists contract locally and gives ability to use DriveServices.
     * </p>
     * 
     * @param space total space reserved by Drive contract on member nodes. TODO in bytes?
@@ -72,6 +74,22 @@ public interface ContractRepository {
     * @param id CID of the Drive contract
     * @return TODO stream of contracts??
     */
-   Observable<UpdatesSubscription> amendments(Cid id);
+   Observable<Amendment> amendments(Cid id);
+   
+   /**
+    * Initiate verification round between replicators.
+    * 
+    * @param id CID of the Drive contract
+    * @return observable list of replicators which failed verification and were excluded from contract immediately
+    */
+   Observable<List<VerificationError>> verify(Cid id);
+   
+   /**
+    * Finish contract.
+    * 
+    * @param id CID of the Drive contract
+    * @return observable completion
+    */
+   Completable finish(Cid id);
 
 }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import io.libp2p.core.PeerId;
 import io.proximax.dfms.DFMSClient;
-import io.proximax.dfms.NetworkRepository;
+import io.proximax.dfms.NetworkServices;
 
 /**
  * TODO add proper description
@@ -31,7 +31,7 @@ class E2ENetworkHttpTest {
 
    @Test
    void getId() {
-      NetworkRepository repo = api.createNetworkRepository();
+      NetworkServices repo = api.createNetworkServices();
       // list contracts on the api node
       PeerId id = repo.getId().blockingFirst();
       assertNotNull(id);

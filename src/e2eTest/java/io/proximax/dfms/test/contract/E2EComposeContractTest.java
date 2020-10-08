@@ -24,12 +24,11 @@ import org.slf4j.LoggerFactory;
 import io.libp2p.core.multiformats.Multiaddr;
 import io.libp2p.core.multiformats.Protocol;
 import io.proximax.core.crypto.PrivateKey;
-import io.proximax.dfms.ContractRepository;
+import io.proximax.dfms.ContractClientServices;
+import io.proximax.dfms.ContractReplicatorServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.DFMSReplicator;
-import io.proximax.dfms.NetworkRepository;
-import io.proximax.dfms.ReplicatorRepository;
-import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.NetworkServices;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.ContractDuration;
 import io.proximax.dfms.model.contract.ContractOptions;
@@ -60,10 +59,10 @@ class E2EComposeContractTest {
    @Test
    void step01ConnectReplicators() {
       // prepare network repositories
-      NetworkRepository netClient = client.createNetworkRepository();
-      NetworkRepository netRep1 = replicator1.createNetworkRepository();
-      NetworkRepository netRep2 = replicator2.createNetworkRepository();
-      NetworkRepository netRep3 = replicator3.createNetworkRepository();
+      NetworkServices netClient = client.createNetworkServices();
+      NetworkServices netRep1 = replicator1.createNetworkServices();
+      NetworkServices netRep2 = replicator2.createNetworkServices();
+      NetworkServices netRep3 = replicator3.createNetworkServices();
       // retrieve internal docker address where DFMS client is running
       Multiaddr addr = netClient.getAddresses()
          .flatMapIterable(lst -> lst)
@@ -97,17 +96,17 @@ class E2EComposeContractTest {
    }
    
    private static void acceptContracts(final DFMSReplicator replicator) {
-      ReplicatorRepository conRep = replicator.createReplicatorRepository();
+      ContractReplicatorServices conRep = replicator.createContractReplicatorServices();
       conRep.invites().subscribe(invite -> {
          logger.info("Got invite {}", invite);
-         conRep.accept(Cid.decode(invite.getDrive())).blockingAwait();
+         conRep.accept(invite.getDrive()).blockingAwait();
          });
    }
    
    @Test
    void step03ComposeContract() throws MalformedURLException {
       // create repositories
-      ContractRepository clientContract = client.createContractRepository();
+      ContractClientServices clientContract = client.createContractClientServices();
       // prepare contract attributes
       int replicas = 3;
       int minReplicators = 3;

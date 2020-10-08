@@ -45,7 +45,7 @@ class DFMSClientTest {
       final String apiPath = "test/v7";
       DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
-      ContractHttp contractRepo = ((ContractHttp)api.createContractRepository());
+      ContractHttp contractRepo = ((ContractHttp)api.createContractClientServices());
       assertEquals("http://1.2.3.4:5678/test/v7", contractRepo.getApiUrl().toString());
       assertEquals(api, contractRepo.getApi());
    }
@@ -56,7 +56,7 @@ class DFMSClientTest {
       final String apiPath = "test/v7";
       DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
-      DriveHttp driveRepo = ((DriveHttp)api.createDriveRepository());
+      DriveHttp driveRepo = ((DriveHttp)api.createDriveServices());
       assertEquals("http://1.2.3.4:5678/test/v7", driveRepo.getApiUrl().toString());
       assertEquals(api, driveRepo.getApi());
    }
@@ -67,7 +67,7 @@ class DFMSClientTest {
       final String apiPath = "test/v7";
       DFMSClient api = new DFMSClient(new URL(REPLICATOR_URL), apiPath);
       
-      NetworkHttp netRepo = ((NetworkHttp)api.createNetworkRepository());
+      NetworkHttp netRepo = ((NetworkHttp)api.createNetworkServices());
       assertEquals("http://1.2.3.4:5678/test/v7", netRepo.getApiUrl().toString());
       assertEquals(api, netRepo.getApi());
    }

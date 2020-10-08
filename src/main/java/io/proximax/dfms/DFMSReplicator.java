@@ -14,7 +14,7 @@ import io.proximax.dfms.http.repos.ReplicatorHttp;
 import okhttp3.OkHttpClient;
 
 /**
- * Replicator node provides access to {@link ReplicatorRepository}, {@link ContractRepository} and {@link NetworkRepository}
+ * Central access point to the services provided by an DFMS Replicator node
  */
 public class DFMSReplicator extends ServiceBase {
 
@@ -43,20 +43,39 @@ public class DFMSReplicator extends ServiceBase {
       super(nodeUrl);
    }
 
-   public ReplicatorRepository createReplicatorRepository() {
-      return new ReplicatorHttp(this, getApiPath(), getClient(), getLongPollingClient());
-   }
-
-   public DriveRepository createDriveRepository() {
-      return new DriveHttp(this, getApiPath(), getClient(), getLongPollingClient());
-   }
-
-   public ContractRepository createContractRepository() {
+   /**
+    * create service instance allowing access to the node's contract client end-points
+    * 
+    * @return new instance
+    */
+   public ContractClientServices createContractClientServices() {
       return new ContractHttp(this, getApiPath(), getClient(), getLongPollingClient());
    }
 
-   public NetworkRepository createNetworkRepository() {
+   /**
+    * create service instance allowing access to the node's drive end-points
+    * 
+    * @return new instance
+    */
+   public DriveServices createDriveServices() {
+      return new DriveHttp(this, getApiPath(), getClient(), getLongPollingClient());
+   }
+
+   /**
+    * create service instance allowing access to the node's network end-points
+    * 
+    * @return new instance
+    */
+   public NetworkServices createNetworkServices() {
       return new NetworkHttp(this, getApiPath(), getClient(), getLongPollingClient());
    }
 
+   /**
+    * create service instance allowing access to the node's contract replicator end-points
+    * 
+    * @return new instance
+    */
+   public ContractReplicatorServices createContractReplicatorServices() {
+      return new ReplicatorHttp(this, getApiPath(), getClient(), getLongPollingClient());
+   }
 }

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
 import io.proximax.dfms.ServiceBase;
-import io.proximax.dfms.NetworkRepository;
+import io.proximax.dfms.NetworkServices;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.AddressListDTO;
 import io.proximax.dfms.http.dtos.PeerIdDTO;
@@ -28,7 +28,7 @@ import okhttp3.Request;
 /**
  * TODO add proper description
  */
-public class NetworkHttp extends HttpRepository<ServiceBase> implements NetworkRepository {
+public class NetworkHttp extends HttpRepository<ServiceBase> implements NetworkServices {
 
    private static final String URL_CONNECT = "net/connect";
    private static final String URL_DISCONNECT = "net/disconnect";

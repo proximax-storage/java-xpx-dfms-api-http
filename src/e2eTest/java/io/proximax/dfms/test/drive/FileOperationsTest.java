@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import io.proximax.dfms.DriveRepository;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
@@ -48,13 +48,13 @@ class FileOperationsTest {
    private final String path = "hello" + System.currentTimeMillis();// Long.toString(new Random().nextLong());
 
    private DFMSClient api;
-   private DriveRepository drive;
+   private DriveServices drive;
    private DefaultFileSystemManager fsManager;
 
    @BeforeAll
    void init() throws MalformedURLException, FileSystemException {
       api = new DFMSClient(new URL("http://localhost:6366"));
-      drive = api.createDriveRepository();
+      drive = api.createDriveServices();
       // file system manager for access to retrieved tar-balls
       fsManager = DriveContentUtils.createFSManager();
    }

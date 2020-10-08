@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.proximax.dfms.ContractRepository;
+import io.proximax.dfms.ContractClientServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Contract;
@@ -37,7 +37,7 @@ class E2EContractHttpTest {
 
    @Test
    void listContracts() {
-      ContractRepository contracts = api.createContractRepository();
+      ContractClientServices contracts = api.createContractClientServices();
       // list contracts on the api node
       List<Cid> listedCids = contracts.list().timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertTrue(listedCids.contains(CONTRACT));
@@ -45,7 +45,7 @@ class E2EContractHttpTest {
 
    @Test
    void getContract() throws IOException {
-      ContractRepository contracts = api.createContractRepository();
+      ContractClientServices contracts = api.createContractClientServices();
       // retrieve info by contract id
       Contract contr = contracts.get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(CONTRACT, contr.getId());

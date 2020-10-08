@@ -11,28 +11,34 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.dfms.ContractRepository;
+import io.proximax.dfms.ContractClientServices;
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.CidListDTO;
 import io.proximax.dfms.http.dtos.ContractWapperDTO;
+import io.proximax.dfms.http.dtos.VerifyResultDTO;
+import io.proximax.dfms.model.contract.Amendment;
 import io.proximax.dfms.model.contract.Contract;
 import io.proximax.dfms.model.contract.ContractDuration;
 import io.proximax.dfms.model.contract.ContractOptions;
-import io.proximax.dfms.model.contract.UpdatesSubscription;
+import io.proximax.dfms.model.contract.VerificationError;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 /**
- * Contract repository implementation using HTTP protocol
+ * Contract client services implementation using HTTP protocol
  */
-public class ContractHttp extends HttpRepository<ServiceBase> implements ContractRepository {
+public class ContractHttp extends HttpRepository<ServiceBase> implements ContractClientServices {
 
    private static final String URL_COMPOSE = "contract/compose";
    private static final String URL_LS = "contract/ls";
    private static final String URL_GET = "contract/get";
    private static final String URL_AMENDS = "contract/amends";
+   private static final String URL_VERIFY = "/contract/verify";
+   private static final String URL_FINISH = "/contract/finish";
    
    /**
     * create new instance
@@ -74,11 +80,31 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
    }
 
    @Override
-   public Observable<UpdatesSubscription> amendments(Cid id) {
+   public Observable<Amendment> amendments(Cid id) {
       HttpUrl url = buildUrl(URL_AMENDS, encode(id)).build();
       // make the request
-      return makePostObservable(url, false).map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, UpdatesSubscription.class));
+      return makePostObservable(url, true)
+            .map(this::mapRespBodyOrError)
+            .observeOn(Schedulers.io())
+            .flatMap(HttpRepository::longPollingObserver)
+            .map(str -> getGson().fromJson(str, Amendment.class));
+   }
+
+   @Override
+   public Observable<List<VerificationError>> verify(Cid id) {
+      HttpUrl url = buildUrl(URL_VERIFY, encode(id)).build();
+      // make the request
+      return makePostObservable(url, true)
+            .map(this::mapStringOrError)
+            .map(str -> getGson().fromJson(str, VerifyResultDTO.class))
+            .map(VerificationError::fromDto)
+            .toList().toObservable();
+   }
+
+   @Override
+   public Completable finish(Cid id) {
+      HttpUrl url = buildUrl(URL_FINISH, encode(id)).build();
+      return makePostCompletable(url);
    }
 
 }
