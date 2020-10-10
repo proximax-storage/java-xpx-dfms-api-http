@@ -22,8 +22,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.DFMSClient;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
@@ -58,6 +58,10 @@ class AddDirectoryTest {
       assertNotNull(cid);
       // check the resulting structure
       assertSimpleContent(path);
+//      // remove the content - this kills the server...
+//      drive.remove(CONTRACT, path).blockingAwait();
+//      final Observable<DriveContent> removedContent = drive.get(CONTRACT, path);
+//      assertThrows(DFMSResponseException.class, () -> removedContent.blockingFirst());
    }
 
    @Test

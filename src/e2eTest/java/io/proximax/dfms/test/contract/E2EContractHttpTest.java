@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.dfms.ContractClientServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.model.contract.Contract;
+import io.proximax.dfms.model.contract.DriveContract;
 
 /**
  * integration tests for contract end-points
@@ -47,7 +47,7 @@ class E2EContractHttpTest {
    void getContract() throws IOException {
       ContractClientServices contracts = api.createContractClientServices();
       // retrieve info by contract id
-      Contract contr = contracts.get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      DriveContract contr = contracts.get(CONTRACT).timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(CONTRACT, contr.getId());
    }
 

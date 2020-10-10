@@ -21,11 +21,11 @@ class ContractOptionsTest {
    @Test
    void testAddOptionWhenNotNull() {
       Map<String, String> opts = new HashMap<>();
-      ContractOptions.addOptionWhenNotNull(opts, "test1", Optional.of("val1"));
+      DriveContractOptions.addOptionWhenNotNull(opts, "test1", Optional.of("val1"));
       assertEquals("val1", opts.get("test1"));
-      ContractOptions.addOptionWhenNotNull(opts, "test2", Optional.of(1));
+      DriveContractOptions.addOptionWhenNotNull(opts, "test2", Optional.of(1));
       assertEquals("1", opts.get("test2"));
-      ContractOptions.addOptionWhenNotNull(opts, "test3", Optional.empty());
+      DriveContractOptions.addOptionWhenNotNull(opts, "test3", Optional.empty());
       assertFalse(opts.containsKey("test3"));
    }
 

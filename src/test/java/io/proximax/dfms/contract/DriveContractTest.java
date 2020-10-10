@@ -16,11 +16,11 @@ import io.proximax.dfms.gen.model.ContractDTO;
 /**
  * TODO add proper description
  */
-class ContractTest {
+class DriveContractTest {
 
    @Test
    void test() {
-      ContractDTO dto = new Gson().fromJson("{\"Contract\": {}}", ContractDTO.class);
+      ContractDTO dto = new Gson().fromJson("{\"DriveContract\": {}}", ContractDTO.class);
       assertNotNull(dto);
    }
 

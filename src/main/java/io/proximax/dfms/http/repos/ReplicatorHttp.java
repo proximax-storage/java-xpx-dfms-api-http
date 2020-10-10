@@ -13,9 +13,9 @@ import io.proximax.dfms.ContractReplicatorServices;
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.AcceptationDTO;
+import io.proximax.dfms.http.dtos.ContractWapperDTO;
 import io.proximax.dfms.http.dtos.InviteWrapperDTO;
-import io.proximax.dfms.model.contract.Acceptation;
+import io.proximax.dfms.model.contract.DriveContract;
 import io.proximax.dfms.model.contract.Invite;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 /**
- * Contract repository implementation using HTTP protocol
+ * DriveContract repository implementation using HTTP protocol
  */
 public class ReplicatorHttp extends HttpRepository<ServiceBase> implements ContractReplicatorServices {
 
@@ -66,16 +66,18 @@ public class ReplicatorHttp extends HttpRepository<ServiceBase> implements Contr
    }
 
    @Override
-   public Observable<Acceptation> accepted() {
+   public Observable<DriveContract> accepted() {
       HttpUrl url = buildUrl(URL_ACCEPTED).build();
       // make the request
       return makePostObservable(url, true)
             .map(this::mapRespBodyOrError)
             .observeOn(Schedulers.io())
             .flatMap(HttpRepository::longPollingObserver)
+            .doOnNext(evt -> System.out.println(evt))
             // map the line to invite wrapper dto
-            .map(str -> getGson().fromJson(str, AcceptationDTO.class))
+            .map(str -> getGson().fromJson(str, ContractWapperDTO.class))
+            .map(ContractWapperDTO::getContract)
             // map the wrapper to wrapped invite
-            .map(Acceptation::fromDto);
+            .map(DriveContract::fromDto);
    }
 }

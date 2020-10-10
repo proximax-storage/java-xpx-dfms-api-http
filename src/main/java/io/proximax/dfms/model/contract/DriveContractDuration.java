@@ -11,16 +11,16 @@ import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
 /**
- * Contract duration definition
+ * DriveContract duration definition
  */
-public class ContractDuration {
+public class DriveContractDuration {
 
    private final Duration duration;
    
    /**
     * create new instance
     */
-   private ContractDuration(Duration duration) {
+   private DriveContractDuration(Duration duration) {
       Validate.notNull(duration);
       this.duration = duration;
    }
@@ -48,8 +48,8 @@ public class ContractDuration {
     * @param days number of days of the contract duration
     * @return the contract duration
     */
-   public static ContractDuration ofDays(int days) {
-      return new ContractDuration(Duration.ofDays(days));
+   public static DriveContractDuration ofDays(int days) {
+      return new DriveContractDuration(Duration.ofDays(days));
    }
 
    /**
@@ -59,8 +59,8 @@ public class ContractDuration {
     * @param unit unit of time (see {@link ChronoUnit}
     * @return the contract duration
     */
-   public static ContractDuration of(long amount, TemporalUnit unit) {
-      return new ContractDuration(Duration.of(amount, unit));
+   public static DriveContractDuration of(long amount, TemporalUnit unit) {
+      return new DriveContractDuration(Duration.of(amount, unit));
    }
 
 
@@ -78,7 +78,7 @@ public class ContractDuration {
          return false;
       if (getClass() != obj.getClass())
          return false;
-      ContractDuration other = (ContractDuration) obj;
+      DriveContractDuration other = (DriveContractDuration) obj;
       return Objects.equals(duration, other.duration);
    }
 

@@ -10,9 +10,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.Validate;
 
 /**
- * Contract options
+ * DriveContract options
  */
-public class ContractOptions {
+public class DriveContractOptions {
    private static final String OPT_REPLICAS = "replicas";
    private static final String OPT_MIN_REPLICATORS = "min-replicators";
    private static final String OPT_SUBS_PRICE = "subscription-price";
@@ -33,7 +33,7 @@ public class ContractOptions {
     * @param percentApprovers
     * @param privateKey
     */
-   public ContractOptions(Optional<Integer> replicas, Optional<Integer> minReplicators, Optional<Long> subscriptionPrice, Optional<Integer> subscriptionPeriodsCount,
+   public DriveContractOptions(Optional<Integer> replicas, Optional<Integer> minReplicators, Optional<Long> subscriptionPrice, Optional<Integer> subscriptionPeriodsCount,
          Optional<Integer> percentApprovers) {
       // validations
       Validate.notNull(replicas);
@@ -69,7 +69,7 @@ public class ContractOptions {
     * 
     * @return empty options
     */
-   public static ContractOptions empty() {
+   public static DriveContractOptions empty() {
       return new Builder().build();
    }
    
@@ -121,7 +121,7 @@ public class ContractOptions {
    }
 
    /**
-    * Builder providing convenience and defaults when constructing the Contract composition options
+    * Builder providing convenience and defaults when constructing the DriveContract composition options
     */
    public static class Builder {
 
@@ -136,8 +136,8 @@ public class ContractOptions {
        * 
        * @return new instance of contract options
        */
-      public ContractOptions build() {
-         return new ContractOptions(replicas, minReplicators, subscriptionPrice, subscriptionPeriodsCount,
+      public DriveContractOptions build() {
+         return new DriveContractOptions(replicas, minReplicators, subscriptionPrice, subscriptionPeriodsCount,
                percentApprovers);
       }
 

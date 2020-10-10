@@ -14,10 +14,10 @@ import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.ContractDTO;
 
 /**
- * Representation of drive contract. Contract is an agreement between client and replicator peers on some amount of disk
+ * Representation of drive contract. DriveContract is an agreement between client and replicator peers on some amount of disk
  * Space
  */
-public class Contract {
+public class DriveContract {
    private final Cid id;
    private final PublicKey owner;
    private final List<PublicKey> replicators;
@@ -27,15 +27,15 @@ public class Contract {
    private final BigInteger space;
 
    /**
-    * @param id CID identifier of Contract's Drive
-    * @param owner owner of the Contract. Has write access on the Contract's Drive and can control it's state.
+    * @param id CID identifier of DriveContract's Drive
+    * @param owner owner of the DriveContract. Has write access on the DriveContract's Drive and can control it's state.
     * @param replicators nodes which are responsible for replication of DriveFS
     * @param duration duration for which the contract is valid TODO blocks or millis
-    * @param created block height when the Contract was started.
+    * @param created block height when the DriveContract was started.
     * @param root CID of Drive's top-level directory. It is used as an entry point to access DriveFS
     * @param space total physical Space used by Drive on replicator nodes.
     */
-   public Contract(Cid id, PublicKey owner, List<PublicKey> replicators, BigInteger duration, BigInteger created,
+   public DriveContract(Cid id, PublicKey owner, List<PublicKey> replicators, BigInteger duration, BigInteger created,
          Cid root, BigInteger space) {
       this.id = id;
       this.owner = owner;
@@ -101,7 +101,7 @@ public class Contract {
     * @param dto DTO retrieved form the REST API
     * @return contract instance
     */
-   public static Contract fromDto(ContractDTO dto) {
+   public static DriveContract fromDto(ContractDTO dto) {
       // map the data
       Cid id = Cid.decode(dto.getDrive());
       PublicKey owner = PublicKey.fromHexString(dto.getOwner());
@@ -109,7 +109,7 @@ public class Contract {
             .collect(Collectors.toList());
       Cid root = Cid.decode(dto.getRoot());
       // create the instance
-      return new Contract(id, owner, replicators, BigInteger.valueOf(dto.getDuration()),
+      return new DriveContract(id, owner, replicators, BigInteger.valueOf(dto.getDuration()),
             BigInteger.valueOf(dto.getCreated()), root, BigInteger.valueOf(dto.getSpace()));
    }
 }

@@ -28,9 +28,9 @@ import io.proximax.dfms.ContractReplicatorServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.NetworkServices;
-import io.proximax.dfms.model.contract.Contract;
-import io.proximax.dfms.model.contract.ContractDuration;
-import io.proximax.dfms.model.contract.ContractOptions;
+import io.proximax.dfms.model.contract.DriveContract;
+import io.proximax.dfms.model.contract.DriveContractDuration;
+import io.proximax.dfms.model.contract.DriveContractOptions;
 import io.reactivex.Observable;
 
 /**
@@ -94,7 +94,7 @@ class E2EComposeContractTest {
       acceptContracts(replicator3);
    }
    
-   private static void acceptContracts(final DFMSReplicator replicator) {
+   private void acceptContracts(final DFMSReplicator replicator) {
       ContractReplicatorServices conRep = replicator.createContractReplicatorServices();
       conRep.invites().subscribe(invite -> {
          logger.info("Got invite {}", invite);
@@ -108,10 +108,10 @@ class E2EComposeContractTest {
       ContractClientServices clientContract = client.createContractClientServices();
       // prepare contract attributes
       BigInteger space = BigInteger.valueOf(1000000l);
-      ContractDuration duration = ContractDuration.ofDays(5);
-      ContractOptions options = ContractOptions.empty();
+      DriveContractDuration duration = DriveContractDuration.ofDays(5);
+      DriveContractOptions options = DriveContractOptions.empty();
       // compose contract
-      Contract contract = clientContract.compose(space, duration, options).blockingFirst();
+      DriveContract contract = clientContract.compose(space, duration, options).blockingFirst();
       logger.info("got contract {}", contract);
       assertEquals(space, contract.getSpace());
    }

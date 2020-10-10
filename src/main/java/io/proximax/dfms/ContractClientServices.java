@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 ProximaX Limited. All rights reserved.
+ * Copyright 2020 ProximaX Limited. All rights reserved.
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
@@ -10,16 +10,16 @@ import java.util.List;
 
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.Amendment;
-import io.proximax.dfms.model.contract.Contract;
-import io.proximax.dfms.model.contract.ContractDuration;
-import io.proximax.dfms.model.contract.ContractOptions;
+import io.proximax.dfms.model.contract.DriveContract;
+import io.proximax.dfms.model.contract.DriveContractDuration;
+import io.proximax.dfms.model.contract.DriveContractOptions;
 import io.proximax.dfms.model.contract.VerificationError;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
  * <p>
- * ContractClientServices defines DFMS's Contract API
+ * ContractClientServices defines DFMS's DriveContract API
  * </p>
  * <p>
  * Drive contracts are contracts between network peers for physical disk space. The API allows to create, join, invite,
@@ -51,7 +51,7 @@ public interface ContractClientServices {
     * @param options the contract options
     * @return the contract created based on the request
     */
-   Observable<Contract> compose(BigInteger space, ContractDuration duration, ContractOptions options);
+   Observable<DriveContract> compose(BigInteger space, DriveContractDuration duration, DriveContractOptions options);
 
    /**
     * Searches for Drive contract information in local storage and/or in blockchain.
@@ -59,7 +59,7 @@ public interface ContractClientServices {
     * @param id CID of the Drive contract
     * @return the contract information
     */
-   Observable<Contract> get(Cid id);
+   Observable<DriveContract> get(Cid id);
 
    /**
     * Lists all the contracts in which Node participates as an owner or member
