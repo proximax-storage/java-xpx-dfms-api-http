@@ -46,6 +46,7 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
     * @param api the storage API
     * @param apiPath the path to the API on the node
     * @param client the HTTP client to be used to execute requests
+    * @param longPollingClient the HTTP client to be used to execute long polling requests
     */
    public ContractHttp(ServiceBase api, String apiPath, OkHttpClient client, OkHttpClient longPollingClient) {
       super(api, Optional.of(apiPath), client, longPollingClient);

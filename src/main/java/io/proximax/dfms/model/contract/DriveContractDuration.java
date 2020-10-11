@@ -11,12 +11,13 @@ import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
 /**
- * DriveContract duration definition
+ * DriveContract duration definition. Duration of one Drive subscription (billing) period duration in blocks. Avg block
+ * time - 15 seconds. Can be s (second), m (minute), h (hour)
  */
 public class DriveContractDuration {
 
    private final Duration duration;
-   
+
    /**
     * create new instance
     */
@@ -24,7 +25,6 @@ public class DriveContractDuration {
       Validate.notNull(duration);
       this.duration = duration;
    }
-
 
    /**
     * @return the duration
@@ -39,9 +39,9 @@ public class DriveContractDuration {
     * @return string representing number of seconds of the duration with "s" as suffix to indicate unit
     */
    public String encode() {
-      return Long.toString(duration.toMillis()/1000) + "s";
+      return Long.toString(duration.toMillis() / 1000) + "s";
    }
-   
+
    /**
     * create new instance based on number of days
     * 
@@ -63,12 +63,10 @@ public class DriveContractDuration {
       return new DriveContractDuration(Duration.of(amount, unit));
    }
 
-
    @Override
    public int hashCode() {
       return Objects.hash(duration);
    }
-
 
    @Override
    public boolean equals(Object obj) {
@@ -81,6 +79,5 @@ public class DriveContractDuration {
       DriveContractDuration other = (DriveContractDuration) obj;
       return Objects.equals(duration, other.duration);
    }
-
 
 }

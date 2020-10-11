@@ -39,14 +39,24 @@ public interface DriveServices {
    Observable<Cid> add(Cid contract, String path, DriveContent content) throws IOException;
 
    /**
-    * retrieves content for a specific contract at a given path. The content is represented as an input stream
-    * of a tar file containing the directory
+    * retrieves content for a specific contract at a given path. The content is represented as an input stream of a tar
+    * file containing the directory
     * 
     * @param contract CID of the contract
     * @param path the path for given contract
     * @return content instance
     */
    Observable<DriveContent> get(Cid contract, String path);
+
+   /**
+    * Returns a file from remote nodes or local store by CID. The content is represented as an input stream of a tar
+    * file containing the directory
+    * 
+    * @param contract CID of the contract
+    * @param file CID of the file
+    * @return content instance
+    */
+   Observable<DriveContent> file(Cid contract, Cid file);
 
    /**
     * removes reference of the file at a given path from a specific Drive.
@@ -68,8 +78,13 @@ public interface DriveServices {
    Completable move(Cid contract, String sourcePath, String destinationPath);
 
    /**
-    * <p>copies file in a specific Drive from one path to another.</p> 
-    * <p>NOTE: Does not do actual copy, only copies reference(a.k.a SymLink). That way file is not duplicated on a disk, but accessible from different paths.</p>
+    * <p>
+    * Copies a file/directory from a source path to a destination path
+    * </p>
+    * <p>
+    * NOTE: Does not do actual copy, only copies reference(a.k.a SymLink). That way file is not duplicated on a disk,
+    * but accessible from different paths.
+    * </p>
     * 
     * @param contract CID of the contract
     * @param sourcePath path to copy form
@@ -97,8 +112,8 @@ public interface DriveServices {
    Observable<DriveItem> stat(Cid contract, String path);
 
    /**
-    *  lists all the files and directories of a specific Drive and information about them at a given path.
-    *  
+    * lists all the files and directories of a specific Drive and information about them at a given path.
+    * 
     * @param contract CID of the contract
     * @param path path to the item
     * @return observable list of drive items

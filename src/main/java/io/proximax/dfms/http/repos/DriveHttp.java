@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.DriveServices;
+import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
@@ -38,6 +38,7 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
 
    private static final String URL_ADD = "drive/add";
    private static final String URL_GET = "drive/get";
+   private static final String URL_FILE = "drive/file";
    private static final String URL_REMOVE = "drive/rm";
    private static final String URL_MOVE = "drive/mv";
    private static final String URL_COPY = "drive/cp";
@@ -69,6 +70,14 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
    @Override
    public Observable<DriveContent> get(Cid id, String path) {
       HttpUrl url = buildUrl(URL_GET, encode(id), path).build();
+      // caller is responsible to call close on the input stream
+      return makeGetObservable(url, false).map(this::mapRespBodyOrError)
+            .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
+   }
+
+   @Override
+   public Observable<DriveContent> file(Cid id, Cid file) {
+      HttpUrl url = buildUrl(URL_FILE, encode(id), encode(file)).build();
       // caller is responsible to call close on the input stream
       return makeGetObservable(url, false).map(this::mapRespBodyOrError)
             .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));

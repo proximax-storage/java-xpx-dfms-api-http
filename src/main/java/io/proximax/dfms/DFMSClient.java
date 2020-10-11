@@ -10,6 +10,7 @@ import java.net.URL;
 import io.proximax.dfms.http.repos.ContractHttp;
 import io.proximax.dfms.http.repos.DriveHttp;
 import io.proximax.dfms.http.repos.NetworkHttp;
+import io.proximax.dfms.http.repos.SuperContractHttp;
 import okhttp3.OkHttpClient;
 
 /**
@@ -67,5 +68,14 @@ public class DFMSClient extends ServiceBase {
     */
    public NetworkServices createNetworkServices() {
       return new NetworkHttp(this, getApiPath(), getClient(), getLongPollingClient());
+   }
+   
+   /**
+    * create service instance allowing access to the node's super contract end-points
+    * 
+    * @return new instance
+    */
+   public SuperContractServices createSuperContractServices() {
+      return new SuperContractHttp(this, getApiPath(), getClient(), getLongPollingClient());
    }
 }
