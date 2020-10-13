@@ -6,9 +6,7 @@
 package io.proximax.dfms.test.drive;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,14 +21,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.DFMSClient;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.DriveItemType;
 import io.proximax.dfms.model.drive.content.ByteArrayContent;
-import io.proximax.dfms.model.drive.content.FileSystemContent;
 import io.proximax.dfms.model.drive.content.InputStreamContent;
 
 /**
@@ -50,25 +47,6 @@ class AddFileTest {
    void init() throws MalformedURLException, FileSystemException {
       api = new DFMSClient(new URL("http://localhost:6366"));
       drive = api.createDriveServices();
-   }
-
-   @Test
-   void addFile() throws IOException, InterruptedException {
-      DriveContent addContent = new FileSystemContent(
-            new File("src/e2eTest/resources/simple/subdir/test_image_file.png").toPath());
-      Cid cid = drive.add(CONTRACT, path + ".png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      assertNotNull(cid);
-      assertFile("", path + ".png");
-   }
-
-   @Test
-   void addFileToNewDir() throws IOException, InterruptedException {
-      DriveContent addContent = new FileSystemContent(
-            new File("src/e2eTest/resources/simple/subdir/test_image_file.png").toPath());
-      drive.makeDir(CONTRACT, path + "subdir").timeout(30, TimeUnit.SECONDS).blockingAwait();
-      Cid cid = drive.add(CONTRACT, path + "subdir/file.png", addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();
-      assertNotNull(cid);
-      assertFile(path + "subdir", "file.png");
    }
 
    @Test

@@ -72,6 +72,9 @@ testSets {
     e2eTest
 }
 
+// load cucumber support - needs to go after initialization of test sets
+apply from: "$rootDir/gradle/cucumber.gradle"
+
 // Make all tests use JUnit 5
 tasks.withType(Test) {
     useJUnitPlatform()
@@ -125,4 +128,9 @@ dependencies {
     }
     // without this VFS2 can not open TARs
     e2eTestImplementation 'org.apache.commons:commons-compress:1.20'
+    // cucumber to drive e2e tests
+    e2eTestImplementation 'io.cucumber:cucumber-java:6.7.0'
+    // DI to allow injection of test context instances
+    e2eTestImplementation 'io.cucumber:cucumber-picocontainer:6.7.0'
+    
 }

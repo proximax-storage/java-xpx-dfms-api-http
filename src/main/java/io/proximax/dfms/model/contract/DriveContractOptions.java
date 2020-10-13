@@ -31,7 +31,6 @@ public class DriveContractOptions {
     * @param subscriptionPrice
     * @param subscriptionPeriodsCount
     * @param percentApprovers
-    * @param privateKey
     */
    public DriveContractOptions(Optional<Integer> replicas, Optional<Integer> minReplicators, Optional<Long> subscriptionPrice, Optional<Integer> subscriptionPeriodsCount,
          Optional<Integer> percentApprovers) {

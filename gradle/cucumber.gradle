@@ -1,0 +1,12 @@
+// requires compile dependency on 'io.cucumber:cucumber-java:6.7.0'
+
+task cucumber() {
+    dependsOn assemble, e2eTestClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.e2eTestRuntimeClasspath + sourceSets.main.output + sourceSets.e2eTest.output
+            args = ['--plugin', 'pretty', '--glue', 'io.proximax.dfms.cucumber', 'src/e2eTest/resources']
+        }
+    }
+}
