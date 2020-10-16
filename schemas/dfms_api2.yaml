@@ -777,6 +777,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
+
   parameters:
     driveIdParam:
       in: query
@@ -906,6 +907,7 @@ components:
         $ref: '#/components/schemas/cid'
     contract:
       type: object
+      description: Drive contract
       properties:
         drive:
           $ref: '#/components/schemas/cid'
@@ -918,15 +920,8 @@ components:
           description: Hex encoded public keys.
           items:
             $ref: '#/components/schemas/cid'
-            example:
-              [
-                0804122068f50e10e5b8be2b7e9ddb687a667d6e94dd55fe02b4aed8195f51f9a242558b,
-                0804122073472a2e9dcea5c2a36eb7f6a34a634010391ec89e883d67360db16f28b9443c,
-                08041220d03918e35573c66578b5a0eed723fe2a46208783e13498751d9315115ca06d4b
-              ]
         root:
           $ref: '#/components/schemas/cid'
-          example: QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn
         created:
           type: integer
           format: int64
@@ -987,7 +982,7 @@ components:
         faultyBlocks:
           type: array
           items:
-            $ref: '#/components/parameters/driveIdParam'
+            $ref: '#/components/schemas/cid'
     error:
       type: object
       properties:
