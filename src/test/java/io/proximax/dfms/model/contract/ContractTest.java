@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.gen.model.ContractDTO;
+import io.proximax.dfms.gen.model.Contract;
 
 /**
  * {@link DriveContract} tests
@@ -44,7 +44,7 @@ class ContractTest {
       PublicKey owner = PublicKey.fromHexString("08011220201b155bf3ebe4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b");
       List<PublicKey> replicators = Arrays.asList(PublicKey.fromHexString("08011220201b155bf3ebb4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b"));
       
-      ContractDTO dto = new ContractDTO();
+      Contract dto = new Contract();
       dto.setDrive("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
       dto.setOwner("08011220201b155bf3ebe4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b");
       dto.setReplicators(Arrays.asList("08011220201b155bf3ebb4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b"));

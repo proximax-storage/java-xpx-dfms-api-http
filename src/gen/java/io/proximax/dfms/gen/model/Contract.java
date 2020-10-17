@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -27,10 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ContractDTO
+ * Drive contract
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
-public class ContractDTO {
+@ApiModel(description = "Drive contract")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T01:21:04.340+02:00[Europe/Prague]")
+public class Contract {
   public static final String SERIALIZED_NAME_DRIVE = "drive";
   @SerializedName(SERIALIZED_NAME_DRIVE)
   private String drive;
@@ -63,6 +64,10 @@ public class ContractDTO {
   @SerializedName(SERIALIZED_NAME_REPLICAS)
   private Integer replicas;
 
+  public static final String SERIALIZED_NAME_MIN_REPLICATORS = "minReplicators";
+  @SerializedName(SERIALIZED_NAME_MIN_REPLICATORS)
+  private Integer minReplicators;
+
   public static final String SERIALIZED_NAME_PERCENT_APPROVERS = "percentApprovers";
   @SerializedName(SERIALIZED_NAME_PERCENT_APPROVERS)
   private Integer percentApprovers;
@@ -73,10 +78,10 @@ public class ContractDTO {
 
   public static final String SERIALIZED_NAME_BILLING_PERIOD = "billingPeriod";
   @SerializedName(SERIALIZED_NAME_BILLING_PERIOD)
-  private Integer billingPeriod;
+  private Long billingPeriod;
 
 
-  public ContractDTO drive(String drive) {
+  public Contract drive(String drive) {
     
     this.drive = drive;
     return this;
@@ -87,7 +92,7 @@ public class ContractDTO {
    * @return drive
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
+  @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
 
   public String getDrive() {
     return drive;
@@ -99,7 +104,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO owner(String owner) {
+  public Contract owner(String owner) {
     
     this.owner = owner;
     return this;
@@ -110,7 +115,7 @@ public class ContractDTO {
    * @return owner
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Hex encoded public key.")
+  @ApiModelProperty(example = "080412200eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2", value = "Hex encoded public key.")
 
   public String getOwner() {
     return owner;
@@ -122,13 +127,13 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO replicators(List<String> replicators) {
+  public Contract replicators(List<String> replicators) {
     
     this.replicators = replicators;
     return this;
   }
 
-  public ContractDTO addReplicatorsItem(String replicatorsItem) {
+  public Contract addReplicatorsItem(String replicatorsItem) {
     if (this.replicators == null) {
       this.replicators = new ArrayList<>();
     }
@@ -153,18 +158,18 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO root(String root) {
+  public Contract root(String root) {
     
     this.root = root;
     return this;
   }
 
    /**
-   * Get root
+   * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
    * @return root
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
 
   public String getRoot() {
     return root;
@@ -176,7 +181,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO created(Long created) {
+  public Contract created(Long created) {
     
     this.created = created;
     return this;
@@ -187,7 +192,7 @@ public class ContractDTO {
    * @return created
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Block height when the Contract was started.")
+  @ApiModelProperty(example = "741", value = "Block height when the Contract was started.")
 
   public Long getCreated() {
     return created;
@@ -199,7 +204,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO duration(Long duration) {
+  public Contract duration(Long duration) {
     
     this.duration = duration;
     return this;
@@ -210,7 +215,7 @@ public class ContractDTO {
    * @return duration
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "12", value = "")
 
   public Long getDuration() {
     return duration;
@@ -222,7 +227,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO space(Long space) {
+  public Contract space(Long space) {
     
     this.space = space;
     return this;
@@ -233,7 +238,7 @@ public class ContractDTO {
    * @return space
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "1000", value = "")
 
   public Long getSpace() {
     return space;
@@ -245,7 +250,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO replicas(Integer replicas) {
+  public Contract replicas(Integer replicas) {
     
     this.replicas = replicas;
     return this;
@@ -256,7 +261,7 @@ public class ContractDTO {
    * @return replicas
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "5", value = "")
 
   public Integer getReplicas() {
     return replicas;
@@ -268,7 +273,30 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO percentApprovers(Integer percentApprovers) {
+  public Contract minReplicators(Integer minReplicators) {
+    
+    this.minReplicators = minReplicators;
+    return this;
+  }
+
+   /**
+   * Get minReplicators
+   * @return minReplicators
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "3", value = "")
+
+  public Integer getMinReplicators() {
+    return minReplicators;
+  }
+
+
+  public void setMinReplicators(Integer minReplicators) {
+    this.minReplicators = minReplicators;
+  }
+
+
+  public Contract percentApprovers(Integer percentApprovers) {
     
     this.percentApprovers = percentApprovers;
     return this;
@@ -279,7 +307,7 @@ public class ContractDTO {
    * @return percentApprovers
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "100", value = "")
 
   public Integer getPercentApprovers() {
     return percentApprovers;
@@ -291,7 +319,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO billingPrice(Long billingPrice) {
+  public Contract billingPrice(Long billingPrice) {
     
     this.billingPrice = billingPrice;
     return this;
@@ -302,7 +330,7 @@ public class ContractDTO {
    * @return billingPrice
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "5000", value = "")
 
   public Long getBillingPrice() {
     return billingPrice;
@@ -314,7 +342,7 @@ public class ContractDTO {
   }
 
 
-  public ContractDTO billingPeriod(Integer billingPeriod) {
+  public Contract billingPeriod(Long billingPeriod) {
     
     this.billingPeriod = billingPeriod;
     return this;
@@ -325,14 +353,14 @@ public class ContractDTO {
    * @return billingPeriod
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "1", value = "")
 
-  public Integer getBillingPeriod() {
+  public Long getBillingPeriod() {
     return billingPeriod;
   }
 
 
-  public void setBillingPeriod(Integer billingPeriod) {
+  public void setBillingPeriod(Long billingPeriod) {
     this.billingPeriod = billingPeriod;
   }
 
@@ -345,30 +373,31 @@ public class ContractDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ContractDTO contractDTO = (ContractDTO) o;
-    return Objects.equals(this.drive, contractDTO.drive) &&
-        Objects.equals(this.owner, contractDTO.owner) &&
-        Objects.equals(this.replicators, contractDTO.replicators) &&
-        Objects.equals(this.root, contractDTO.root) &&
-        Objects.equals(this.created, contractDTO.created) &&
-        Objects.equals(this.duration, contractDTO.duration) &&
-        Objects.equals(this.space, contractDTO.space) &&
-        Objects.equals(this.replicas, contractDTO.replicas) &&
-        Objects.equals(this.percentApprovers, contractDTO.percentApprovers) &&
-        Objects.equals(this.billingPrice, contractDTO.billingPrice) &&
-        Objects.equals(this.billingPeriod, contractDTO.billingPeriod);
+    Contract contract = (Contract) o;
+    return Objects.equals(this.drive, contract.drive) &&
+        Objects.equals(this.owner, contract.owner) &&
+        Objects.equals(this.replicators, contract.replicators) &&
+        Objects.equals(this.root, contract.root) &&
+        Objects.equals(this.created, contract.created) &&
+        Objects.equals(this.duration, contract.duration) &&
+        Objects.equals(this.space, contract.space) &&
+        Objects.equals(this.replicas, contract.replicas) &&
+        Objects.equals(this.minReplicators, contract.minReplicators) &&
+        Objects.equals(this.percentApprovers, contract.percentApprovers) &&
+        Objects.equals(this.billingPrice, contract.billingPrice) &&
+        Objects.equals(this.billingPeriod, contract.billingPeriod);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(drive, owner, replicators, root, created, duration, space, replicas, percentApprovers, billingPrice, billingPeriod);
+    return Objects.hash(drive, owner, replicators, root, created, duration, space, replicas, minReplicators, percentApprovers, billingPrice, billingPeriod);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ContractDTO {\n");
+    sb.append("class Contract {\n");
     sb.append("    drive: ").append(toIndentedString(drive)).append("\n");
     sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
     sb.append("    replicators: ").append(toIndentedString(replicators)).append("\n");
@@ -377,6 +406,7 @@ public class ContractDTO {
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    space: ").append(toIndentedString(space)).append("\n");
     sb.append("    replicas: ").append(toIndentedString(replicas)).append("\n");
+    sb.append("    minReplicators: ").append(toIndentedString(minReplicators)).append("\n");
     sb.append("    percentApprovers: ").append(toIndentedString(percentApprovers)).append("\n");
     sb.append("    billingPrice: ").append(toIndentedString(billingPrice)).append("\n");
     sb.append("    billingPeriod: ").append(toIndentedString(billingPeriod)).append("\n");

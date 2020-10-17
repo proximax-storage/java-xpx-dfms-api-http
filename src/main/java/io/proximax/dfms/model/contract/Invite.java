@@ -5,7 +5,7 @@ package io.proximax.dfms.model.contract;
 
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.http.dtos.InviteDTO;
+import io.proximax.dfms.gen.model.Contract;
 
 /**
  * @author tono
@@ -44,7 +44,7 @@ public class Invite {
     * @param dto source DTO
     * @return new instance
     */
-   public static Invite fromDto(InviteDTO dto) {
+   public static Invite fromDto(Contract dto) {
       return new Invite(Cid.decode(dto.getDrive()), PublicKey.fromHexString(dto.getOwner()));
    }
 

@@ -38,7 +38,7 @@ public class ContractsSteps extends BaseSteps {
 
    @Given("replicators are connected")
    public void replicators_are_connected() {
-
+      connectReplicators();
    }
 
    @Given("replicators accept contracts")

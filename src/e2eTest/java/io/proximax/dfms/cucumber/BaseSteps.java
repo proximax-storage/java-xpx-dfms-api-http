@@ -44,7 +44,10 @@ public abstract class BaseSteps {
       NetworkServices netRep3 = replicator3.createNetworkServices();
       // retrieve internal docker address where DFMS client is running
       Multiaddr addr = netClient.getAddresses().flatMapIterable(lst -> lst).filter(multiAddr -> multiAddr != null)
-            .filter(multiAddr -> multiAddr.getStringComponent(Protocol.IP4).startsWith("10.10.")).blockingFirst();
+            .filter(multiAddr -> {
+               String cmp = multiAddr.getStringComponent(Protocol.IP4);
+               return cmp!=null && cmp.startsWith("10.10.");
+             }).blockingFirst();
       assertNotNull(addr);
       assertTrue(addr.toString().contains("/ip4/10.10."));
       // connect all replicators to the DFMS node

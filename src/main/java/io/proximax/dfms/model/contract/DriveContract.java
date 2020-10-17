@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.gen.model.ContractDTO;
+import io.proximax.dfms.gen.model.Contract;
 
 /**
  * Representation of drive contract. DriveContract is an agreement between client and replicator peers on some amount of disk
@@ -101,7 +101,7 @@ public class DriveContract {
     * @param dto DTO retrieved form the REST API
     * @return contract instance
     */
-   public static DriveContract fromDto(ContractDTO dto) {
+   public static DriveContract fromDto(Contract dto) {
       // map the data
       Cid id = Cid.decode(dto.getDrive());
       PublicKey owner = PublicKey.fromHexString(dto.getOwner());

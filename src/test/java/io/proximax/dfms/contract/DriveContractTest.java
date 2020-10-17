@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
 
-import io.proximax.dfms.gen.model.ContractDTO;
+import io.proximax.dfms.gen.model.Contract;
 
 /**
  * TODO add proper description
@@ -20,7 +20,7 @@ class DriveContractTest {
 
    @Test
    void test() {
-      ContractDTO dto = new Gson().fromJson("{\"DriveContract\": {}}", ContractDTO.class);
+      Contract dto = new Gson().fromJson("{\"DriveContract\": {}}", Contract.class);
       assertNotNull(dto);
    }
 

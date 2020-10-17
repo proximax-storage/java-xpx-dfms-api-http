@@ -12,9 +12,9 @@ import java.util.Optional;
 import io.proximax.dfms.ContractReplicatorServices;
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.gen.model.ContractWrap;
+import io.proximax.dfms.gen.model.InviteWrap;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.ContractWapperDTO;
-import io.proximax.dfms.http.dtos.InviteWrapperDTO;
 import io.proximax.dfms.model.contract.DriveContract;
 import io.proximax.dfms.model.contract.Invite;
 import io.reactivex.Completable;
@@ -51,9 +51,9 @@ public class ReplicatorHttp extends HttpRepository<ServiceBase> implements Contr
             .observeOn(Schedulers.io())
             .flatMap(HttpRepository::longPollingObserver)
             // map the line to invite wrapper dto
-            .map(str -> getGson().fromJson(str, InviteWrapperDTO.class))
+            .map(str -> getGson().fromJson(str, InviteWrap.class))
             // map the wrapper to wrapped invite
-            .map(InviteWrapperDTO::getInvite)
+            .map(InviteWrap::getInvite)
             .map(Invite::fromDto);
    }
    
@@ -73,11 +73,9 @@ public class ReplicatorHttp extends HttpRepository<ServiceBase> implements Contr
             .map(this::mapRespBodyOrError)
             .observeOn(Schedulers.io())
             .flatMap(HttpRepository::longPollingObserver)
-            .doOnNext(evt -> System.out.println(evt))
             // map the line to invite wrapper dto
-            .map(str -> getGson().fromJson(str, ContractWapperDTO.class))
-            .map(ContractWapperDTO::getContract)
-            // map the wrapper to wrapped invite
+            .map(str -> getGson().fromJson(str, ContractWrap.class))
+            .map(ContractWrap::getContract)
             .map(DriveContract::fromDto);
    }
 }

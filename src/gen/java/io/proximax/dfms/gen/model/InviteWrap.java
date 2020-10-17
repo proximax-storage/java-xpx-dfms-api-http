@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -20,40 +20,42 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.proximax.dfms.gen.model.Contract;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * InlineResponse200
+ * Wrapper for single drive contract as part of invite polling
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
-public class InlineResponse200 {
-  public static final String SERIALIZED_NAME_CID = "cid";
-  @SerializedName(SERIALIZED_NAME_CID)
-  private String cid;
+@ApiModel(description = "Wrapper for single drive contract as part of invite polling")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T01:21:04.340+02:00[Europe/Prague]")
+public class InviteWrap {
+  public static final String SERIALIZED_NAME_INVITE = "Invite";
+  @SerializedName(SERIALIZED_NAME_INVITE)
+  private Contract invite;
 
 
-  public InlineResponse200 cid(String cid) {
+  public InviteWrap invite(Contract invite) {
     
-    this.cid = cid;
+    this.invite = invite;
     return this;
   }
 
    /**
-   * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
-   * @return cid
+   * Get invite
+   * @return invite
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
+  @ApiModelProperty(value = "")
 
-  public String getCid() {
-    return cid;
+  public Contract getInvite() {
+    return invite;
   }
 
 
-  public void setCid(String cid) {
-    this.cid = cid;
+  public void setInvite(Contract invite) {
+    this.invite = invite;
   }
 
 
@@ -65,21 +67,21 @@ public class InlineResponse200 {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InlineResponse200 inlineResponse200 = (InlineResponse200) o;
-    return Objects.equals(this.cid, inlineResponse200.cid);
+    InviteWrap inviteWrap = (InviteWrap) o;
+    return Objects.equals(this.invite, inviteWrap.invite);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cid);
+    return Objects.hash(invite);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InlineResponse200 {\n");
-    sb.append("    cid: ").append(toIndentedString(cid)).append("\n");
+    sb.append("class InviteWrap {\n");
+    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
     sb.append("}");
     return sb.toString();
   }

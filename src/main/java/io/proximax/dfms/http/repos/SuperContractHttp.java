@@ -15,9 +15,9 @@ import com.google.gson.reflect.TypeToken;
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.SuperContractServices;
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.gen.model.CidListWrap;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.CidDTO;
-import io.proximax.dfms.http.dtos.CidListDTO;
 import io.proximax.dfms.http.dtos.ResultListDTO;
 import io.proximax.dfms.http.dtos.SuperContractDTO;
 import io.proximax.dfms.http.dtos.SuperContractWrapperDTO;
@@ -130,8 +130,8 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidListDTO.class))
-            .map(CidListDTO::getIds)
+            .map(str -> getGson().fromJson(str, CidListWrap.class))
+            .map(CidListWrap::getIds)
             .flatMapIterable(list -> list)
             .map(Cid::decode)
             .toList().toObservable();

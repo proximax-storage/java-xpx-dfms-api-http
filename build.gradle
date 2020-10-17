@@ -32,7 +32,7 @@ plugins {
     // prepare fat jar with all dependencies included
     id "com.github.johnrengelman.shadow" version "5.1.0"
     // generator for the DTOs
-    id "org.openapi.generator" version "4.2.2"
+    id "org.openapi.generator" version "4.3.1"
 }
 
 // define contents of the build

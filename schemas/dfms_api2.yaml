@@ -37,11 +37,7 @@ paths:
         - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/contract'
+          $ref: '#/components/responses/contractResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /contract/compose:
@@ -131,11 +127,7 @@ paths:
             format: PrivKey
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/contract'
+          $ref: '#/components/responses/contractResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /contract/ls:
@@ -149,16 +141,7 @@ paths:
       operationId: ls
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Ids:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/cidListResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /contract/ammends:
@@ -174,18 +157,7 @@ paths:
         - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
-          description: |
-            Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
-          headers: 
-            -X-Stream-Output:
-              schema:
-                type: integer
-                enum:
-                 - 1
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/contract'
+          $ref: '#/components/responses/contractPollResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /contract/verify:
@@ -201,20 +173,7 @@ paths:
         - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
-          description: |
-            Start a drive verification
-          headers: 
-            -X-Stream-Output:
-              schema:
-                type: integer
-                enum:
-                 - 1
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/verifyResult'
+          $ref: '#/components/responses/contractVerifyResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /contract/finish:
@@ -258,20 +217,7 @@ paths:
       operationId: accepted
       responses:
         '200':
-          description: drive list
-          headers: 
-            -X-Stream-Output:
-              schema:
-                type: integer
-                enum:
-                 - 1
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    Contract:
-                      $ref: '#/components/schemas/contract'
+          $ref: '#/components/responses/contractPollResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /contract/invites:
@@ -284,21 +230,7 @@ paths:
       operationId: invites
       responses:
         '200':
-          description: |
-            Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
-          headers: 
-            -X-Stream-Output:
-              schema:
-                type: integer
-                enum:
-                 - 1
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Invite:
-                    $ref: '#/components/schemas/contract'
+          $ref: '#/components/responses/invitePollResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /drive/add:
@@ -550,12 +482,7 @@ paths:
       operationId: getid
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/id'
-
+          $ref: '#/components/responses/netIdResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /net/peers:
@@ -567,16 +494,7 @@ paths:
       operationId: peers
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Peers:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/peer'
+          $ref: '#/components/responses/peersResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /net/addrs:
@@ -588,16 +506,7 @@ paths:
       operationId: addresses
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Addrs:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/addr'
+          $ref: '#/components/responses/netAddrsResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/deploy:
@@ -777,6 +686,76 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/error'
+    contractResp:
+      description: Single contract
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contractWrap'
+    contractPollResp:
+      description: |
+        Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
+      headers: 
+        -X-Stream-Output:
+          schema:
+            type: integer
+            enum:
+             - 1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contractWrap'
+    invitePollResp:
+      description: |
+        Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
+      headers: 
+        -X-Stream-Output:
+          schema:
+            type: integer
+            enum:
+             - 1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inviteWrap'
+    contractVerifyResp:
+      description: Start a drive verification
+      headers: 
+        -X-Stream-Output:
+          schema:
+            type: integer
+            enum:
+             - 1
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verifyResult'
+    cidListResp:
+      description: List of Cids
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cidListWrap'
+    peersResp:
+      description: List of peers
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/peerListWrap'
+    netIdResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/peerIdWrap'
+    netAddrsResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/addrListWrap'
 
   parameters:
     driveIdParam:
@@ -855,24 +834,38 @@ components:
         type: boolean
         default: false
   schemas:
-    id:
+    peerIdWrap:
       type: object
       properties:
         ID: 
-          type: string
-          example: 12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
-          description: network ID of a node
+          $ref: '#/components/schemas/peerId'
+    peerId:
+      type: string
+      example: 12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
+      description: network ID of a node
+    peerListWrap:
+      type: object
+      properties:
+        Peers:
+          type: array
+          items:
+            $ref: '#/components/schemas/peer'
     peer:
       type: object
       properties:
         Addrs: 
-          type: string
-          example: /ip4/127.0.0.1/tcp/63666
-          description: address of a node
+          $ref: '#/components/schemas/addrList'
         ID: 
-          type: string
-          example: 12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
-          description: network ID of a node
+          $ref: '#/components/schemas/peerId'
+    addrListWrap:
+      type: object
+      properties:
+        Addrs:
+          $ref: '#/components/schemas/addrList'
+    addrList:
+      type: array
+      items:
+        $ref: '#/components/schemas/addr'
     addr:
       type: string
       example: /ip4/127.0.0.1/tcp/63666/p2p/12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
@@ -901,10 +894,28 @@ components:
       example: baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5
       description: |
         [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+    cidListWrap:
+      type: object
+      description: Wrapper for array of Cids
+      properties:
+        Ids:
+          $ref: '#/components/schemas/cidList'    
     cidList:
       type: array
       items:
         $ref: '#/components/schemas/cid'
+    contractWrap:
+      type: object
+      description: Wrapper for single drive contract
+      properties:
+        Contract:
+          $ref: '#/components/schemas/contract'    
+    inviteWrap:
+      type: object
+      description: Wrapper for single drive contract as part of invite polling
+      properties:
+        Invite:
+          $ref: '#/components/schemas/contract'    
     contract:
       type: object
       description: Drive contract

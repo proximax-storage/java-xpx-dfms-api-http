@@ -1,6 +1,6 @@
 /*
  * DFMS API
- * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons. 
+ * DFMS node HTTP API. [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http) [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)  API does not tries to follow idiomatic REST or other API patterns for reasons.  
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -20,6 +20,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.proximax.dfms.gen.model.StatCid;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
@@ -28,8 +29,8 @@ import java.io.IOException;
  * File statistics
  */
 @ApiModel(description = "File statistics")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-03-15T23:31:24.265377+01:00[Europe/Prague]")
-public class StatDTO {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T01:21:04.340+02:00[Europe/Prague]")
+public class Stat {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)
   private String name;
@@ -89,8 +90,12 @@ public class StatDTO {
   @SerializedName(SERIALIZED_NAME_TYPE)
   private TypeEnum type;
 
+  public static final String SERIALIZED_NAME_CID = "Cid";
+  @SerializedName(SERIALIZED_NAME_CID)
+  private StatCid cid;
 
-  public StatDTO name(String name) {
+
+  public Stat name(String name) {
     
     this.name = name;
     return this;
@@ -113,7 +118,7 @@ public class StatDTO {
   }
 
 
-  public StatDTO size(Integer size) {
+  public Stat size(Integer size) {
     
     this.size = size;
     return this;
@@ -136,7 +141,7 @@ public class StatDTO {
   }
 
 
-  public StatDTO type(TypeEnum type) {
+  public Stat type(TypeEnum type) {
     
     this.type = type;
     return this;
@@ -159,6 +164,29 @@ public class StatDTO {
   }
 
 
+  public Stat cid(StatCid cid) {
+    
+    this.cid = cid;
+    return this;
+  }
+
+   /**
+   * Get cid
+   * @return cid
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public StatCid getCid() {
+    return cid;
+  }
+
+
+  public void setCid(StatCid cid) {
+    this.cid = cid;
+  }
+
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -167,25 +195,27 @@ public class StatDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StatDTO statDTO = (StatDTO) o;
-    return Objects.equals(this.name, statDTO.name) &&
-        Objects.equals(this.size, statDTO.size) &&
-        Objects.equals(this.type, statDTO.type);
+    Stat stat = (Stat) o;
+    return Objects.equals(this.name, stat.name) &&
+        Objects.equals(this.size, stat.size) &&
+        Objects.equals(this.type, stat.type) &&
+        Objects.equals(this.cid, stat.cid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, size, type);
+    return Objects.hash(name, size, type, cid);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StatDTO {\n");
+    sb.append("class Stat {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    cid: ").append(toIndentedString(cid)).append("\n");
     sb.append("}");
     return sb.toString();
   }

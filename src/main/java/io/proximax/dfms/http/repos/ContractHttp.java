@@ -14,9 +14,9 @@ import java.util.Optional;
 import io.proximax.dfms.ContractClientServices;
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.gen.model.CidListWrap;
+import io.proximax.dfms.gen.model.ContractWrap;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.CidListDTO;
-import io.proximax.dfms.http.dtos.ContractWapperDTO;
 import io.proximax.dfms.http.dtos.VerifyResultDTO;
 import io.proximax.dfms.model.contract.Amendment;
 import io.proximax.dfms.model.contract.DriveContract;
@@ -58,8 +58,8 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
       // make the request
       return makePostObservable(url, true)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, ContractWapperDTO.class))
-            .map(ContractWapperDTO::getContract)
+            .map(str -> getGson().fromJson(str, ContractWrap.class))
+            .map(ContractWrap::getContract)
             .map(DriveContract::fromDto);
    }
 
@@ -67,8 +67,10 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
    public Observable<DriveContract> get(Cid id) {
       HttpUrl url = buildUrl(URL_GET, encode(id)).build();
       // make the request
-      return makePostObservable(url, false).map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, ContractWapperDTO.class)).map(ContractWapperDTO::getContract)
+      return makePostObservable(url, false)
+            .map(this::mapStringOrError)
+            .map(str -> getGson().fromJson(str, ContractWrap.class))
+            .map(ContractWrap::getContract)
             .map(DriveContract::fromDto);
    }
 
@@ -76,8 +78,13 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
    public Observable<List<Cid>> list() {
       HttpUrl url = buildUrl(URL_LS).build();
       // make the request
-      return makePostObservable(url, false).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidListDTO.class))
-            .map(CidListDTO::getIds).flatMapIterable(list -> list).map(Cid::decode).toList().toObservable();
+      return makePostObservable(url, false)
+            .map(this::mapStringOrError)
+            .map(str -> getGson().fromJson(str, CidListWrap.class))
+            .map(CidListWrap::getIds)
+            .flatMapIterable(list -> list)
+            .map(Cid::decode)
+            .toList().toObservable();
    }
 
    @Override

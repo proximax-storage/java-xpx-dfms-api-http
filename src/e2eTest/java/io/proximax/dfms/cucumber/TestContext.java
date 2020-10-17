@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import io.libp2p.core.PeerId;
+import io.libp2p.core.multiformats.Multiaddr;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.DriveContract;
 
@@ -21,6 +23,37 @@ public class TestContext {
    private List<Cid> cidList;
    private String prefix;
    
+   private PeerId clientId;
+   private List<Multiaddr> clientAddresses;
+   
+   /**
+    * @return the clientId
+    */
+   public PeerId getClientId() {
+      return clientId;
+   }
+
+   /**
+    * @param clientId the clientId to set
+    */
+   public void setClientId(PeerId clientId) {
+      this.clientId = clientId;
+   }
+
+   /**
+    * @return the clientAddresses
+    */
+   public List<Multiaddr> getClientAddresses() {
+      return clientAddresses;
+   }
+
+   /**
+    * @param clientAddresses the clientAddresses to set
+    */
+   public void setClientAddresses(List<Multiaddr> clientAddresses) {
+      this.clientAddresses = clientAddresses;
+   }
+
    private Map<String, Object> values;
 
    public Object getObject(String key) {

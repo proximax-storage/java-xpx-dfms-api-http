@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
-import io.proximax.dfms.http.dtos.PeerInfoDTO;
+import io.proximax.dfms.gen.model.Peer;
 
 /**
  * AddrInfo is used to pass around a peer with a set of addresses (and later, keys?).
@@ -39,12 +39,12 @@ public class PeerInfo {
       return addresses;
    }
    
-   public static PeerInfo fromDto(PeerInfoDTO dto) {
-      List<Multiaddr> addresses = dto.getAddresses().stream().map(Multiaddr::new).collect(Collectors.toList());
-      return new PeerInfo(PeerId.fromBase58(dto.getId()), addresses);
+   public static PeerInfo fromDto(Peer dto) {
+      List<Multiaddr> addresses = dto.getAddrs().stream().map(Multiaddr::new).collect(Collectors.toList());
+      return new PeerInfo(PeerId.fromBase58(dto.getID()), addresses);
    }
    
-   public static List<PeerInfo> fromDtos(List<PeerInfoDTO> dtos) {
+   public static List<PeerInfo> fromDtos(List<Peer> dtos) {
       return dtos.stream().map(PeerInfo::fromDto).collect(Collectors.toList());
 
    }
