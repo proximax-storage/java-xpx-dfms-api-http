@@ -44,7 +44,7 @@ public class DriveSteps extends BaseSteps {
 
    @When("I upload file {string} as prefixed {string}")
    public void i_upload_file_as_prefixed(String sourceFile, String targetName) throws IOException {
-      DriveServices drive = client.createDriveServices();
+      DriveServices drive = ctx.getClient().createDriveServices();
       DriveContent addContent = new FileSystemContent(new File(sourceFile).toPath());
       Cid cid = drive.add(ctx.getContract().getId(), ctx.getPrefix() + targetName, addContent).timeout(30, TimeUnit.SECONDS)
             .blockingFirst();
@@ -53,7 +53,7 @@ public class DriveSteps extends BaseSteps {
 
    @Then("prefixed file {string} has size {long} and cid {string}")
    public void prefixed_file_has_size_and_cid(String driveFile, Long size, String cid) {
-      DriveServices drive = client.createDriveServices();
+      DriveServices drive = ctx.getClient().createDriveServices();
       DriveItem item = drive.stat(ctx.getContract().getId(), ctx.getPrefix() + driveFile).blockingFirst();
       assertEquals(DriveItemType.FILE, item.getType());
       assertEquals(size, item.getSize());
@@ -63,7 +63,7 @@ public class DriveSteps extends BaseSteps {
    
    @When("I create prefixed directory {string}")
    public void i_create_prefixed_directory(String dirName) {
-      DriveServices drive = client.createDriveServices();
+      DriveServices drive = ctx.getClient().createDriveServices();
       drive.makeDir(ctx.getContract().getId(), ctx.getPrefix()+dirName).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
 }

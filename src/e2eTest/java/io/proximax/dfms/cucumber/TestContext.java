@@ -3,12 +3,15 @@
  */
 package io.proximax.dfms.cucumber;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
+import io.proximax.dfms.DFMSClient;
+import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.contract.DriveContract;
 
@@ -26,6 +29,35 @@ public class TestContext {
    private PeerId clientId;
    private List<Multiaddr> clientAddresses;
    
+   private DFMSClient client;
+   private Map<String, DFMSReplicator> replicators = new LinkedHashMap<>();
+   
+   public DFMSReplicator getReplicator(String name) {
+      return replicators.get(name);
+   }
+   
+   public DFMSReplicator addReplicator(String name, DFMSReplicator replicator) {
+      return replicators.put(name, replicator);
+   }
+   
+   public Map<String, DFMSReplicator> getReplicators() {
+      return replicators;
+   }
+   
+   /**
+    * @return the client
+    */
+   public DFMSClient getClient() {
+      return client;
+   }
+
+   /**
+    * @param client the client to set
+    */
+   public void setClient(DFMSClient client) {
+      this.client = client;
+   }
+
    /**
     * @return the clientId
     */
