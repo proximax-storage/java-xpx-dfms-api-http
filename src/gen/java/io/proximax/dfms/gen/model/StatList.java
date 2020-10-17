@@ -15,49 +15,15 @@ package io.proximax.dfms.gen.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.proximax.dfms.gen.model.Contract;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+import io.proximax.dfms.gen.model.Stat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Wrapper for single drive contract as part of invite polling
+ * StatList
  */
-@ApiModel(description = "Wrapper for single drive contract as part of invite polling")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
-public class InviteWrap {
-  public static final String SERIALIZED_NAME_INVITE = "Invite";
-  @SerializedName(SERIALIZED_NAME_INVITE)
-  private Contract invite;
-
-
-  public InviteWrap invite(Contract invite) {
-    
-    this.invite = invite;
-    return this;
-  }
-
-   /**
-   * Get invite
-   * @return invite
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public Contract getInvite() {
-    return invite;
-  }
-
-
-  public void setInvite(Contract invite) {
-    this.invite = invite;
-  }
-
+public class StatList extends ArrayList<Stat> {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -67,21 +33,20 @@ public class InviteWrap {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InviteWrap inviteWrap = (InviteWrap) o;
-    return Objects.equals(this.invite, inviteWrap.invite);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(invite);
+    return Objects.hash(super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InviteWrap {\n");
-    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
+    sb.append("class StatList {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
   }

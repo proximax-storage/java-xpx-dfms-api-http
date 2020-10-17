@@ -46,7 +46,7 @@ paths:
           example: 1000
           schema:
             type: integer
-            format: uint64
+            format: int64
         - in: query
           name: arg (duration)
           description: |
@@ -256,14 +256,7 @@ paths:
               description: Multipart might be dynamic and have many subdirectories. Format is taken from [ipfs files](https://github.com/ipfs/go-ipfs-files)
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                 cid:
-                  $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/driveAddResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /drive/get:
@@ -405,11 +398,7 @@ paths:
         - $ref: '#/components/parameters/srcParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cidList'
+          $ref: '#/components/responses/driveLsResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /drive/stat:
@@ -424,11 +413,7 @@ paths:
         - $ref: '#/components/parameters/srcParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/stat'
+          $ref: '#/components/responses/driveStatResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /drive/flush:
@@ -760,7 +745,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/addrListWrap'
-
+    driveAddResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cidWrap'
+    driveStatResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/statWrap'
+    driveLsResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/statListWrap'
+                
   parameters:
     driveIdParam:
       in: query
@@ -874,16 +877,30 @@ components:
       type: string
       example: /ip4/127.0.0.1/tcp/63666/p2p/12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
       description: full address of a node
+    statListWrap:
+      type: object
+      properties:
+        List:
+          $ref: '#/components/schemas/statList'
+    statList:
+      type: array
+      items:
+        $ref: '#/components/schemas/stat'
+    statWrap:
+      type: object
+      properties:
+        Stat:
+          $ref: '#/components/schemas/stat'
     stat:
       type: object
       description: File statistics
       properties:
-        name:
+        Name:
           type: string
-        size:
+        Size:
           type: integer
-          format: uint64
-        type:
+          format: int64
+        Type:
           type: string
           enum:
             - "file"
@@ -897,6 +914,11 @@ components:
       type: string
       example: 080412200eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2
       description: Hex encoded public key.
+    cidWrap:
+      type: object
+      properties:
+        Id:
+          $ref: '#/components/schemas/cid'
     cid:
       type: string
       example: baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5

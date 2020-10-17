@@ -20,42 +20,41 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.dfms.gen.model.Contract;
+import io.proximax.dfms.gen.model.Stat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Wrapper for single drive contract as part of invite polling
+ * StatWrap
  */
-@ApiModel(description = "Wrapper for single drive contract as part of invite polling")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
-public class InviteWrap {
-  public static final String SERIALIZED_NAME_INVITE = "Invite";
-  @SerializedName(SERIALIZED_NAME_INVITE)
-  private Contract invite;
+public class StatWrap {
+  public static final String SERIALIZED_NAME_STAT = "Stat";
+  @SerializedName(SERIALIZED_NAME_STAT)
+  private Stat stat;
 
 
-  public InviteWrap invite(Contract invite) {
+  public StatWrap stat(Stat stat) {
     
-    this.invite = invite;
+    this.stat = stat;
     return this;
   }
 
    /**
-   * Get invite
-   * @return invite
+   * Get stat
+   * @return stat
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public Contract getInvite() {
-    return invite;
+  public Stat getStat() {
+    return stat;
   }
 
 
-  public void setInvite(Contract invite) {
-    this.invite = invite;
+  public void setStat(Stat stat) {
+    this.stat = stat;
   }
 
 
@@ -67,21 +66,21 @@ public class InviteWrap {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InviteWrap inviteWrap = (InviteWrap) o;
-    return Objects.equals(this.invite, inviteWrap.invite);
+    StatWrap statWrap = (StatWrap) o;
+    return Objects.equals(this.stat, statWrap.stat);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(invite);
+    return Objects.hash(stat);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InviteWrap {\n");
-    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
+    sb.append("class StatWrap {\n");
+    sb.append("    stat: ").append(toIndentedString(stat)).append("\n");
     sb.append("}");
     return sb.toString();
   }

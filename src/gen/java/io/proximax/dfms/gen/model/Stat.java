@@ -29,15 +29,15 @@ import java.io.IOException;
  * File statistics
  */
 @ApiModel(description = "File statistics")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T12:21:37.505+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
 public class Stat {
-  public static final String SERIALIZED_NAME_NAME = "name";
+  public static final String SERIALIZED_NAME_NAME = "Name";
   @SerializedName(SERIALIZED_NAME_NAME)
   private String name;
 
-  public static final String SERIALIZED_NAME_SIZE = "size";
+  public static final String SERIALIZED_NAME_SIZE = "Size";
   @SerializedName(SERIALIZED_NAME_SIZE)
-  private Integer size;
+  private Long size;
 
   /**
    * Gets or Sets type
@@ -86,7 +86,7 @@ public class Stat {
     }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
+  public static final String SERIALIZED_NAME_TYPE = "Type";
   @SerializedName(SERIALIZED_NAME_TYPE)
   private TypeEnum type;
 
@@ -118,7 +118,7 @@ public class Stat {
   }
 
 
-  public Stat size(Integer size) {
+  public Stat size(Long size) {
     
     this.size = size;
     return this;
@@ -131,12 +131,12 @@ public class Stat {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public Integer getSize() {
+  public Long getSize() {
     return size;
   }
 
 
-  public void setSize(Integer size) {
+  public void setSize(Long size) {
     this.size = size;
   }
 

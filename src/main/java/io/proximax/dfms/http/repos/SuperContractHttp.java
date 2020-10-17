@@ -16,8 +16,8 @@ import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.SuperContractServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.CidListWrap;
+import io.proximax.dfms.gen.model.CidWrap;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.CidDTO;
 import io.proximax.dfms.http.dtos.ResultListDTO;
 import io.proximax.dfms.http.dtos.SuperContractDTO;
 import io.proximax.dfms.http.dtos.SuperContractWrapperDTO;
@@ -61,8 +61,8 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidDTO.class))
-            .map(CidDTO::getId)
+            .map(str -> getGson().fromJson(str, CidWrap.class))
+            .map(CidWrap::getId)
             .map(Cid::decode);
    }
 
@@ -76,8 +76,8 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidDTO.class))
-            .map(CidDTO::getId)
+            .map(str -> getGson().fromJson(str, CidWrap.class))
+            .map(CidWrap::getId)
             .map(Cid::decode);
    }
 

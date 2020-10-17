@@ -8,7 +8,7 @@ package io.proximax.dfms.model.drive;
 import org.apache.commons.lang3.Validate;
 
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.http.dtos.DriveItemDTO;
+import io.proximax.dfms.gen.model.Stat;
 
 /**
  * representation of information about an item on the drive
@@ -113,8 +113,10 @@ public class DriveItem {
     * @param dto response representation
     * @return instance of drive item
     */
-   public static DriveItem fromDto(DriveItemDTO dto) {
-      return new DriveItem(dto.getName(), DriveItemType.getByCode(dto.getType()), dto.getSize(),
-            Cid.decode(dto.getCid()));
+   public static DriveItem fromDto(Stat dto) {
+      return new DriveItem(dto.getName(), 
+            DriveItemType.getByCode(dto.getType().getValue()), 
+            dto.getSize(),
+            Cid.decode(dto.getCid().getU()));
    }
 }

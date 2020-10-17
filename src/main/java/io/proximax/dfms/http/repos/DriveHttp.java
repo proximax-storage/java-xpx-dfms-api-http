@@ -14,12 +14,12 @@ import java.util.Optional;
 import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.gen.model.CidWrap;
+import io.proximax.dfms.gen.model.StatListWrap;
+import io.proximax.dfms.gen.model.StatWrap;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.MultipartRequestContent;
 import io.proximax.dfms.http.RawMultipartRequestContent;
-import io.proximax.dfms.http.dtos.CidDTO;
-import io.proximax.dfms.http.dtos.DriveItemListDTO;
-import io.proximax.dfms.http.dtos.DriveItemStatDTO;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.content.InputStreamContent;
@@ -63,8 +63,10 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
       HttpUrl url = buildUrl(URL_ADD, encode(id), path).build();
       Request request = new Request.Builder().url(url).post(createRequestBody(content)).build();
       // make the request
-      return makeRequest(request, false).map(this::mapStringOrError).map(str -> getGson().fromJson(str, CidDTO.class))
-            .map(CidDTO::getId).map(Cid::decode);
+      return makeRequest(request, false).map(this::mapStringOrError)
+            .doOnNext(item -> System.out.println(item))
+            .map(str -> getGson().fromJson(str, CidWrap.class))
+            .map(CidWrap::getId).map(Cid::decode);
    }
 
    @Override
@@ -113,8 +115,8 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
       HttpUrl url = buildUrl(URL_STAT, encode(id), path).build();
       return makeGetObservable(url, false)
          .map(this::mapStringOrError)
-         .map(str -> getGson().fromJson(str, DriveItemStatDTO.class))
-         .map(DriveItemStatDTO::getItem)
+         .map(str -> getGson().fromJson(str, StatWrap.class))
+         .map(StatWrap::getStat)
          .map(DriveItem::fromDto);
    }
 
@@ -123,8 +125,9 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
       HttpUrl url = buildUrl(URL_LS, encode(id), path).build();
       return makeGetObservable(url, false)
          .map(this::mapStringOrError)
-         .map(str -> getGson().fromJson(str, DriveItemListDTO.class))
-         .flatMapIterable(DriveItemListDTO::getItems)
+         .doOnNext(item -> System.out.println(item))
+         .map(str -> getGson().fromJson(str, StatListWrap.class))
+         .flatMapIterable(StatListWrap::getList)
          .map(DriveItem::fromDto)
          .toList().toObservable();
    }

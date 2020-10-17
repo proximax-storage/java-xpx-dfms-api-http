@@ -14,48 +14,41 @@
 package io.proximax.dfms.gen.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.proximax.dfms.gen.model.Contract;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
- * Wrapper for single drive contract as part of invite polling
+ * StatListWrap
  */
-@ApiModel(description = "Wrapper for single drive contract as part of invite polling")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
-public class InviteWrap {
-  public static final String SERIALIZED_NAME_INVITE = "Invite";
-  @SerializedName(SERIALIZED_NAME_INVITE)
-  private Contract invite;
+public class StatListWrap {
+  public static final String SERIALIZED_NAME_LIST = "List";
+  @SerializedName(SERIALIZED_NAME_LIST)
+  private StatList list = new StatList();
 
 
-  public InviteWrap invite(Contract invite) {
+  public StatListWrap list(StatList list) {
     
-    this.invite = invite;
+    this.list = list;
     return this;
   }
 
    /**
-   * Get invite
-   * @return invite
+   * Get list
+   * @return list
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public Contract getInvite() {
-    return invite;
+  public StatList getList() {
+    return list;
   }
 
 
-  public void setInvite(Contract invite) {
-    this.invite = invite;
+  public void setList(StatList list) {
+    this.list = list;
   }
 
 
@@ -67,21 +60,21 @@ public class InviteWrap {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InviteWrap inviteWrap = (InviteWrap) o;
-    return Objects.equals(this.invite, inviteWrap.invite);
+    StatListWrap statListWrap = (StatListWrap) o;
+    return Objects.equals(this.list, statListWrap.list);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(invite);
+    return Objects.hash(list);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InviteWrap {\n");
-    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
+    sb.append("class StatListWrap {\n");
+    sb.append("    list: ").append(toIndentedString(list)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -20,42 +20,40 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.dfms.gen.model.Contract;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Wrapper for single drive contract as part of invite polling
+ * CidWrap
  */
-@ApiModel(description = "Wrapper for single drive contract as part of invite polling")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
-public class InviteWrap {
-  public static final String SERIALIZED_NAME_INVITE = "Invite";
-  @SerializedName(SERIALIZED_NAME_INVITE)
-  private Contract invite;
+public class CidWrap {
+  public static final String SERIALIZED_NAME_ID = "Id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private String id;
 
 
-  public InviteWrap invite(Contract invite) {
+  public CidWrap id(String id) {
     
-    this.invite = invite;
+    this.id = id;
     return this;
   }
 
    /**
-   * Get invite
-   * @return invite
+   * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
+   * @return id
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
 
-  public Contract getInvite() {
-    return invite;
+  public String getId() {
+    return id;
   }
 
 
-  public void setInvite(Contract invite) {
-    this.invite = invite;
+  public void setId(String id) {
+    this.id = id;
   }
 
 
@@ -67,21 +65,21 @@ public class InviteWrap {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InviteWrap inviteWrap = (InviteWrap) o;
-    return Objects.equals(this.invite, inviteWrap.invite);
+    CidWrap cidWrap = (CidWrap) o;
+    return Objects.equals(this.id, cidWrap.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(invite);
+    return Objects.hash(id);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InviteWrap {\n");
-    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
+    sb.append("class CidWrap {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
