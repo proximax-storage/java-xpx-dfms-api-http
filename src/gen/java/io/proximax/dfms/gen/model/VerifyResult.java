@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * VerifyResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T01:21:04.340+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T12:21:37.505+02:00[Europe/Prague]")
 public class VerifyResult {
   public static final String SERIALIZED_NAME_REPLICATOR = "replicator";
   @SerializedName(SERIALIZED_NAME_REPLICATOR)
@@ -47,11 +47,11 @@ public class VerifyResult {
   }
 
    /**
-   * Hex encoded public keys.
+   * Hex encoded public key.
    * @return replicator
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "0804122068f50e10e5b8be2b7e9ddb687a667d6e94dd55fe02b4aed8195f51f9a242558b", value = "Hex encoded public keys.")
+  @ApiModelProperty(example = "080412200eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2", value = "Hex encoded public key.")
 
   public String getReplicator() {
     return replicator;

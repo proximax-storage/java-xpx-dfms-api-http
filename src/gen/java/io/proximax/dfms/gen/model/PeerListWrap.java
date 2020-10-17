@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * PeerListWrap
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T01:21:04.340+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T12:21:37.505+02:00[Europe/Prague]")
 public class PeerListWrap {
   public static final String SERIALIZED_NAME_PEERS = "Peers";
   @SerializedName(SERIALIZED_NAME_PEERS)

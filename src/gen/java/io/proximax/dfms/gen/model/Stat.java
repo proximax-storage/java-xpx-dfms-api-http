@@ -29,7 +29,7 @@ import java.io.IOException;
  * File statistics
  */
 @ApiModel(description = "File statistics")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T01:21:04.340+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T12:21:37.505+02:00[Europe/Prague]")
 public class Stat {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)

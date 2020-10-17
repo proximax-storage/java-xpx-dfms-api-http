@@ -19,7 +19,7 @@ also weird types need to be manually replaced by Object class
 
 openApiGenerate {
     generatorName = "java"
-    inputSpec = "$rootDir/schemas/dfms_api2.yaml".toString()
+    inputSpec = "$rootDir/schemas/dfms_api.yaml".toString()
     outputDir = "$buildDir/generated".toString()
     apiPackage = "io.proximax.dfms.gen.api"
     invokerPackage = "io.proximax.dfms.gen.invoker"

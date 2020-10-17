@@ -6,8 +6,8 @@ info:
     DFMS node HTTP API.
     [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http)
     [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)
-
-    API does not tries to follow idiomatic REST or other API patterns for reasons.
+    
+    API does not tries to follow idiomatic REST or other API patterns for reasons. 
   version: "1.0.0"
   title: DFMS API
   license:
@@ -16,166 +16,237 @@ info:
 tags:
   - name: ContractClient
     description: Client operations with Drive contracts.
+  - name: ContractReplicator
+    description: Replicator operations with Drive contracts.
   - name: DriveFS
-    description: Remote access to drive disk.
+    description: Remote access to drive.
+  - name: Network
+    description: Comunication between peers.
+  - name: SuperContract
+    description: Interaction with SuperContracts on a drive.
 paths:
-  /contract/get:
-    post:
-      tags:
-        - ContractClient
-      summary: Get Drive contract infromation
-      description: Searches for Drive Contract information over the network.
-      operationId: getContract
-      parameters:
-        - $ref: '#/components/parameters/cidParam'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/contractDTO'
-        '400':
-          $ref: '#/components/responses/errorResp'
   /contract/compose:
     post:
-      tags:
+      tags: 
       - ContractClient
+      - ContractReplicator
       summary: Creates new Drive contract
       description: |
-        Compose synchronously announces invites to the Network with current node as an
+        Compose synchronously announces invites to the Network with current node as an 
         owner and tries to find members which agrees on specified parameters and options.
         It does not guarantee success on resolving members. On success persists contract
         locally and gives ability to use DriveFS.
       operationId: compose
       parameters:
         - in: query
-          name: arg1
-          description: |
-            Total Drive space in MB. NOTE - Actual parameter name is 'arg'
+          name: arg (space)
+          description: | 
+            Total Drive space in MB.
           required: true
+          example: 1000
           schema:
             type: integer
             format: uint64
         - in: query
-          name: arg2
+          name: arg (duration)
           description: |
-            Total Drive duration in blocks. Avg block time - 15 seconds. NOTE - Actual parameter name is 'arg'
+            Duration of one Drive subscription (billing) period duration in blocks. Avg block time - 15 seconds. Can be s (second), m (minute), h (hour)
           required: true
           schema:
-            type: integer
-            format: uint64
+            type: string
+            format: string
+          example: 1000h
         - in: query
           name: replicas
           description: |
-            Desired amount of full data replicas for a new Drive. Defaults to 3.
+            Desired amount of full data replicas for a new Drive.
           required: false
           schema:
             type: integer
-            format: uint64
+            format: uint16
+            default: 3
         - in: query
-          name: min-replicas
+          name: min-replicators
           description: |
-            Minimum amount of requires full data replicas for a new Drive. Defaults to 3.
+            Minimum amount of requires full data replicas for a new Drive.
           required: false
           schema:
             type: integer
-            format: uint64
+            format: uint16
+            default: 3
         - in: query
-          name: billing-price
+          name: subscription-price
           description: |
-            Payment amount for one billing period. Defaults to required space * replicas
+            Payment amount for one subscription (billing) period.
           required: false
           schema:
             type: integer
-            format: uint64
+            format: int64
+            default: space * replicas
         - in: query
-          name: billing-period
+          name: number-subscription-periods
           description: |
-            Period of time after which replicators receieve payment. Defaults to 172800 ~ 1 month.
-            Example - if duration is one year and billing period is one month, then replicators will receive payouts 12 times every month.
+            Number of subscription periods Period of time after which replicators receieve payment.
+            Example - if duration is one year and subscription period is one month, then replicators will receive payouts 12 times every month.
           required: false
           schema:
             type: integer
-            format: uint64
+            format: int64
+            default: 518400 blocks = 60 days ~ 3 month
         - in: query
           name: percent-approvers
           description: |
-            Amount of replicators needed in percents to approve Drive Contract multisignature transactions. Defaults to 66.
+            Amount of replicators needed in percents to approve Drive Contract multisignature transactions.
           required: false
           schema:
             type: integer
-            format: uint64
+            format: uint8
+            default: 66
+        - in: query
+          name: private-key
+          description: |
+            User can generate own private key and pass it.
+          required: false
+          schema:
+            type: string
+            format: PrivKey
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/contractDTO'
-        '400':
+          $ref: '#/components/responses/contractResp'
+        '400': 
           $ref: '#/components/responses/errorResp'
   /contract/ls:
     post:
-      tags:
+      tags: 
       - ContractClient
+      - ContractReplicator
       summary: List Drive contracts node aware of
       description: |
         Lists all the contracts in which Node participates as an owner or a member
       operationId: ls
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                 $ref: '#/components/schemas/contractDTO'
-        '400':
+          $ref: '#/components/responses/cidListResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /contract/get:
+    post:
+      tags:
+        - ContractClient
+        - ContractReplicator
+      summary: Get Drive contract infromation
+      description: Searches for Drive Contract information over the network.
+      operationId: getContract
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/contractResp'
+        '400': 
           $ref: '#/components/responses/errorResp'
   /contract/ammends:
     post:
       tags:
       - ContractClient
-      summary: Ammendments subscriptio
+      - ContractReplicator
+      summary: Ammendments subscription
       description: |
         Creates subscription for Drive Contract updates/corrections of any contract from the network by ID.
       operationId: ammends
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
-          description: |
-            Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
-          headers:
-            -X-Stream-Output:
-              schema:
-                type: integer
-                enum:
-                 - 1
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                 $ref: '#/components/schemas/contractDTO'
-        '400':
+          $ref: '#/components/responses/contractPollResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /contract/verify:
+    post:
+      tags:
+      - ContractClient
+      - ContractReplicator
+      summary: Contract verify
+      description: |
+        Initiates verification round between replicators.
+      operationId: verify
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/contractVerifyResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /contract/finish:
+    post:
+      tags:
+      - ContractClient
+      - ContractReplicator
+      summary: Finish contract
+      description: |
+        Finish contract.
+      operationId: finish
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+      responses:
+        '200':
+          description: Success
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /contract/accept:
+    post:
+      tags:
+      - ContractReplicator
+      summary: Accept joins contract
+      description: |
+        Accept joins contract by it's id. Can join only contracts awaiting new members.
+      operationId: accept
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+      responses:
+        '200':
+          description: Success
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /contract/accepted:
+    post:
+      tags:
+      - ContractReplicator
+      summary: Show accepted contracts
+      description: |
+        Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
+      operationId: accepted
+      responses:
+        '200':
+          $ref: '#/components/responses/contractPollResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /contract/invites:
+    post:
+      tags:
+      - ContractReplicator
+      summary: Subscribe to new contracts
+      description: |
+        Creates subscription for new contract invitations. Main use case is to have external contract acceptance logic.
+      operationId: invites
+      responses:
+        '200':
+          $ref: '#/components/responses/invitePollResp'
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/add:
     post:
       tags:
       - DriveFS
-      summary: Add file
+      summary: Add a file/directory
       description: |
-        Sends file or directory to remote node which adds it to the path of the contract
+        Adds to drive a new file/directory and sends it to remote nodes which
       operationId: driveAdd
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/dstParam'
         - $ref: '#/components/parameters/flushParam'
       requestBody:
-        description: File or directory to be added
+        description: file/directory to be added
         required: true
         content:
            multipart/form-data:
@@ -192,21 +263,20 @@ paths:
                 type: object
                 properties:
                  cid:
-                  $ref: '#/components/schemas/cidDTO'
-        '400':
+                  $ref: '#/components/schemas/cid'
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/get:
     post:
       tags:
       - DriveFS
-      summary: Get file
+      summary: Get a file or dir by a path
       description: |
-        Sends file or directory to remote node which adds it to the path of the contract
+        Return a file/directory from remote nodes or local store by a path
       operationId: driveGet
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
-        - $ref: '#/components/parameters/flushParam'
       responses:
         '200':
           description: Success
@@ -220,31 +290,54 @@ paths:
             text/plain:
               schema:
                 type: string
-                description: Tar encoded file or directory.
+                description: Tar encoded file/directory.
                 format: tar
-        '400':
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /drive/file:
+    post:
+      tags:
+      - DriveFS
+      summary: Get file by CID
+      description: |
+        Returns a file from remote nodes or local store by CID
+      operationId: driveFile
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+        - $ref: '#/components/parameters/fileCIDParam'
+      responses:
+        '200':
+          description: Success
+          headers:
+            -X-Stream-Output:
+                schema:
+                  type: integer
+                  enum:
+                   - 1
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Tar encoded file/directory.
+                format: tar
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/rm:
     post:
       tags:
       - DriveFS
       summary: Remove file
-      description: Remove removes the file or directory from the path
+      description: Removes a file/directory by a path
       operationId: driveRm
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
         - $ref: '#/components/parameters/flushParam'
-        - in: query
-          name: local
-          description: Delete file from local disk only, but keep reference on it remotely
-          schema:
-            type: boolean
-            default: false
+        - $ref: '#/components/parameters/localParam'
       responses:
         '200':
           description: Success
-        '400':
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/mv:
     post:
@@ -252,18 +345,18 @@ paths:
       - DriveFS
       summary: Move file
       description: |
-         Move moves file or directory from the givens source path to the given destination path
-         Use also to rename file or directory
+         Moves a file/directory from a source path to a destination path
+         Use also to rename a file/directory
       operationId: driveMv
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
         - $ref: '#/components/parameters/dstParam'
         - $ref: '#/components/parameters/flushParam'
       responses:
         '200':
           description: Success
-        '400':
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/cp:
     post:
@@ -271,44 +364,44 @@ paths:
       - DriveFS
       summary: Copy file
       description: |
-         Copy copies file or directory from the givens source path to the given destination path
-         It does not makes the full copy of the file or directory, it just copies the reference
+         Copies a file/directory from a source path to a destination path
+         It does not make the full copy of the file/directory, it just copies the reference
       operationId: driveCp
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
         - $ref: '#/components/parameters/dstParam'
         - $ref: '#/components/parameters/flushParam'
       responses:
         '200':
           description: Success
-        '400':
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/mkdir:
     post:
       tags:
       - DriveFS
       summary: Make directory
-      description: MakeDir creates new directory on the given path
+      description: Creates a new directory by a given path
       operationId: driveMkdir
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
         - $ref: '#/components/parameters/flushParam'
       responses:
         '200':
           description: Success
-        '400':
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/ls:
     post:
       tags:
       - DriveFS
       summary: List files
-      description: Ls returns information about the files and directories under the given path
+      description: Returns information about a file/directory by a given path
       operationId: driveLs
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
       responses:
         '200':
@@ -316,20 +409,18 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/statDTO'
-        '400':
+                $ref: '#/components/schemas/cidList'
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/stat:
     post:
       tags:
       - DriveFS
       summary: File information
-      description: Stat returns information about the file or directory under the given path
+      description: Returns information about a file/directory by a given path
       operationId: driveStat
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
         - $ref: '#/components/parameters/srcParam'
       responses:
         '200':
@@ -337,8 +428,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/statDTO'
-        '400':
+                $ref: '#/components/schemas/stat'
+        '400': 
           $ref: '#/components/responses/errorResp'
   /drive/flush:
     post:
@@ -348,11 +439,248 @@ paths:
       description: Flush pushes state of the local Drive to all replicators
       operationId: driveFlush
       parameters:
-        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
           description: Success
-        '400':
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /net/connect:
+    post:
+      tags:
+      - Network
+      summary: Connect to a node
+      description: Connect to a node by it address.
+      operationId: connect
+      parameters:
+        - $ref: '#/components/parameters/addrParam'
+      responses:
+        '200':
+          description: Success
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /net/disconnect:
+    post:
+      tags:
+      - Network
+      summary: Disconnect from a node
+      description: Disconnect from a node by its address.
+      operationId: disconnect
+      parameters:
+        - $ref: '#/components/parameters/addrParam'
+      responses:
+        '200':
+          description: Success
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /net/id:
+    post:
+      tags:
+      - Network
+      summary: Get ID
+      description: Get ID of a node
+      operationId: getid
+      responses:
+        '200':
+          $ref: '#/components/responses/netIdResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /net/peers:
+    post:
+      tags:
+      - Network
+      summary: Connected peers
+      description: Get all connected peers.
+      operationId: peers
+      responses:
+        '200':
+          $ref: '#/components/responses/peersResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /net/addrs:
+    post:
+      tags:
+      - Network
+      summary: Node addresses
+      description: Get all addresses of a node.
+      operationId: addresses
+      responses:
+        '200':
+          $ref: '#/components/responses/netAddrsResp'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/deploy:
+    post:
+      tags:
+      - SuperContract
+      summary: Deploy a SuperContract
+      description: Deploy a new SuperContract by a file path. Return the SuperContract ID.
+      operationId: deploy
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+        - $ref: '#/components/parameters/srcParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Result:
+                    $ref: '#/components/schemas/cid'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/exec:
+    post:
+      tags:
+      - SuperContract
+      summary: Execute a SuperContract
+      description: Start execution of a SuperContract. Return the Transaction ID.
+      operationId: execute
+      parameters:
+        - $ref: '#/components/parameters/scIdParam'
+        - in: query
+          name: arg
+          schema:
+            type: integer
+          required: true
+          description: A count of gas for execution.
+          example: 10000000
+        - in: query
+          name: arg
+          schema:
+            type: string
+          required: true
+          description: Function name.
+          example: save
+        - in: query
+          name: arg
+          schema:
+            type: array
+            items:
+              type: string
+              example: 43
+          required: false
+          description: Function parameters, only numbers.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ScId:
+                    description: SuperContract ID is [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+                    type: string
+                    example: baegqajaiaqjcak6kujbwwdsx3ytcv5wvyrf7fwcij7yvb527laruzjgwch5jxqlm
+                  TxHash:
+                    $ref: '#/components/schemas/cid'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/get:
+    post:
+      tags:
+      - SuperContract
+      summary: Get a SuperContract
+      description: Get a SuperContract by ID.
+      operationId: getSC
+      parameters:
+        - $ref: '#/components/parameters/scIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  SuperContract:
+                    $ref: '#/components/schemas/SuperContract'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/ls:
+    post:
+      tags:
+      - SuperContract
+      summary: Get SuperContracts IDs
+      description: Get all SuperContract on a drive.
+      operationId: lsSC
+      parameters:
+        - $ref: '#/components/parameters/driveIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Ids:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/cid'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/results:
+    post:
+      tags:
+      - SuperContract
+      summary: Results of a SuperContract execution
+      description: Get results of a SuperContract execution by its TxID.
+      operationId: results
+      parameters:
+        - $ref: '#/components/parameters/txIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Results:
+                    type: array
+                    items:
+                      type: string
+                      example: /SuperContracts/result.txt baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/executions:
+    post:
+      tags:
+      - SuperContract
+      summary: Execution results
+      description: Get all execution results started by a node. Returns Transaction IDs.
+      operationId: executions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Ids:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/cid'
+        '400': 
+          $ref: '#/components/responses/errorResp'
+  /sc/deactivate:
+    post:
+      tags:
+      - SuperContract
+      summary: Deactivate a SuperContract
+      description: Deactivate a SuperContract by its ID.
+      operationId: deactivate
+      parameters:
+        - $ref: '#/components/parameters/scIdParam'
+      responses:
+        '200':
+          description: Success
+        '400': 
           $ref: '#/components/responses/errorResp'
 components:
   responses:
@@ -361,40 +689,192 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/errorDTO'
-  parameters:
-    cidParam:
-      in: query
-      name: arg1
+            $ref: '#/components/schemas/error'
+    contractResp:
+      description: Single contract
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contractWrap'
+    contractPollResp:
       description: |
-        [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represents either data or Drive.
+        Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
+      headers: 
+        -X-Stream-Output:
+          schema:
+            type: integer
+            enum:
+             - 1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contractWrap'
+    invitePollResp:
+      description: |
+        Establishes persitent connection and sends json value through it to the requester as long as new updates appear.
+      headers: 
+        -X-Stream-Output:
+          schema:
+            type: integer
+            enum:
+             - 1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inviteWrap'
+    contractVerifyResp:
+      description: Start a drive verification
+      headers: 
+        -X-Stream-Output:
+          schema:
+            type: integer
+            enum:
+             - 1
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verifyResult'
+    cidListResp:
+      description: List of Cids
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cidListWrap'
+    peersResp:
+      description: List of peers
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/peerListWrap'
+    netIdResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/peerIdWrap'
+    netAddrsResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/addrListWrap'
+
+  parameters:
+    driveIdParam:
+      in: query
+      name: arg
+      description: | 
+        Drive ID is [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
       required: true
       schema:
         type: string
+      example: baegaajaiaqjcaqpoddqh7qnejrdnymgerzcrenfpymlzw4pacyju7adxhdsnekp2
+    scIdParam:
+      in: query
+      name: arg
+      description: | 
+        SuperContract ID is [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+      required: true
+      schema:
+        type: string
+      example: baegqajaiaqjcak6kujbwwdsx3ytcv5wvyrf7fwcij7yvb527laruzjgwch5jxqlm
+    txIdParam:
+      in: query
+      name: arg
+      description: | 
+        Transacrion ID is [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+      required: true
+      schema:
+        type: string
+      example: bafybeihnpekq72dk75zpkhlgoh6lsjlxcygu4vrtclaqartyxqqqys5c7m
+    fileCIDParam:
+      in: query
+      name: arg
+      description: | 
+        [Cid](https://github.com/multiformats/cid) (version 1) of a file on a Drive.
+      required: true
+      schema:
+        type: string
+      example: bafybeihwmbino5nj545eir2epawhi4xpjdwlsbcnoi7jio5mn6j6peim5a
+    addrParam:
+      in: query
+      name: arg
+      description: | 
+        Address of some node.
+      required: true
+      schema:
+        type: string
+      example: /ip4/127.0.0.1/tcp/63666/p2p/12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
     srcParam:
       in: query
-      name: arg2
-      description: The source path of the file in Drive.
+      name: arg
+      description: A source path of a file on Drive.
       required: true
       schema:
         type: string
+        example: "/example"
     dstParam:
       in: query
-      name: arg3
-      description: The destination path.
+      name: arg
+      description: A destination path.
       required: true
       schema:
         type: string
-        default: "/"
+        default: "/destination"
     flushParam:
       in: query
       name: flush
-      description: To immediately send data to replicators
+      description: To send data to replicators immediately
+      schema:
+        type: boolean
+        default: false
+    localParam:
+      in: query
+      name: local
+      description: Delete file from local drive only, but keep a reference on remote one
       schema:
         type: boolean
         default: false
   schemas:
-    statDTO:
+    peerIdWrap:
+      type: object
+      properties:
+        ID: 
+          $ref: '#/components/schemas/peerId'
+    peerId:
+      type: string
+      example: 12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
+      description: network ID of a node
+    peerListWrap:
+      type: object
+      properties:
+        Peers:
+          type: array
+          items:
+            $ref: '#/components/schemas/peer'
+    peer:
+      type: object
+      properties:
+        Addrs: 
+          $ref: '#/components/schemas/addrList'
+        ID: 
+          $ref: '#/components/schemas/peerId'
+    addrListWrap:
+      type: object
+      properties:
+        Addrs:
+          $ref: '#/components/schemas/addrList'
+    addrList:
+      type: array
+      items:
+        $ref: '#/components/schemas/addr'
+    addr:
+      type: string
+      example: /ip4/127.0.0.1/tcp/63666/p2p/12D3L7AUwnPXj7odaWGzWcWwWD1mGrB5d5yr6zLrimHcyiZLVWcH
+      description: full address of a node
+    stat:
       type: object
       description: File statistics
       properties:
@@ -408,48 +888,117 @@ components:
           enum:
             - "file"
             - "dir"
-    cidDTO:
+        Cid:
+          type: object
+          properties:
+            /:
+              $ref: '#/components/schemas/cid'
+    pubKey:
       type: string
+      example: 080412200eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2
+      description: Hex encoded public key.
+    cid:
+      type: string
+      example: baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5
       description: |
         [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
-    contractDTO:
+    cidListWrap:
       type: object
+      description: Wrapper for array of Cids
+      properties:
+        Ids:
+          $ref: '#/components/schemas/cidList'    
+    cidList:
+      type: array
+      items:
+        $ref: '#/components/schemas/cid'
+    contractWrap:
+      type: object
+      description: Wrapper for single drive contract
+      properties:
+        Contract:
+          $ref: '#/components/schemas/contract'    
+    inviteWrap:
+      type: object
+      description: Wrapper for single drive contract as part of invite polling
+      properties:
+        Invite:
+          $ref: '#/components/schemas/contract'    
+    contract:
+      type: object
+      description: Drive contract
       properties:
         drive:
-          $ref: '#/components/schemas/cidDTO'
+          $ref: '#/components/schemas/cid'
         owner:
-          type: string
-          description: Hex encoded public key.
+          $ref: '#/components/schemas/pubKey'
         replicators:
           type: array
           description: Hex encoded public keys.
           items:
-            type: string
+            $ref: '#/components/schemas/pubKey'
         root:
-          type: string
+          $ref: '#/components/schemas/cid'
         created:
           type: integer
           format: int64
+          example: 741
           description: Block height when the Contract was started.
         duration:
           type: integer
+          example: 12
           format: int64
         space:
           type: integer
+          example: 1000
           format: int64
         replicas:
           type: integer
+          example: 5
+          format: uint16
+        minReplicators:
+          type: integer
+          example: 3
           format: uint16
         percentApprovers:
           type: integer
-          format: uint16
+          example: 100
+          format: uint8
         billingPrice:
           type: integer
+          example: 5000
           format: int64
         billingPeriod:
           type: integer
-          format: int
-    errorDTO:
+          example: 1
+          format: int64
+    SuperContract:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/cid'
+        drive:
+          $ref: '#/components/schemas/contract'
+        file:
+          $ref: '#/components/schemas/cid'
+        vmversion:
+          type: integer
+          example: 1
+        functions:
+          type: array
+          items:
+            type: string
+            example: func1
+    verifyResult:
+      type: object
+      properties:
+        replicator:
+          $ref: '#/components/schemas/pubKey'
+        faultyBlocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/cid'
+    error:
       type: object
       properties:
         message:
@@ -457,7 +1006,7 @@ components:
           description: Error message
         code:
           type: integer
-          enum:
+          enum: 
           - 0
           - 1
           - 2
@@ -470,5 +1019,5 @@ components:
                   perform the requested operation.
         type:
           type: string
-          enum:
+          enum: 
           - "error"
