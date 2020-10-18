@@ -1,12 +1,12 @@
 Feature: Drive Contract
-  I was to work with drive contracts
+  I want to work with drive contracts
 
   Scenario: Compose new contract
     Given standard infrastructure is available
-    And all replicators are connected
     And all replicators accept contracts
     When I compose new contract
     Then contract is created
+#    And contract was accepted by all replicators
   
   Scenario: List all contracts
     Given standard infrastructure is available

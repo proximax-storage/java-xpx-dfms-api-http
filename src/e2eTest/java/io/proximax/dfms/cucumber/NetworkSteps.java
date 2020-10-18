@@ -3,6 +3,7 @@
  */
 package io.proximax.dfms.cucumber;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
@@ -42,14 +43,24 @@ public class NetworkSteps extends BaseSteps {
    }
 
    @Then("DFMS client is present among {string} peers")
-   public void dfms_client_is_present_among_peers(String peerName) {
+   public void dfms_client_is_present_among_peers(String nodeName) {
+      assertTrue(isClientPresentAmongPeers(nodeName));
+   }
+
+   @Then("DFMS client is not present among {string} peers")
+   public void dfms_client_is_not_present_among_peers(String nodeName) {
+      assertFalse(isClientPresentAmongPeers(nodeName));
+
+   }
+
+   public boolean isClientPresentAmongPeers(String nodeName) {
       final PeerId clientId = ctx.getClientId();
       final List<Multiaddr> clientAddresses = ctx.getClientAddresses();
       // decide on replicator
-      DFMSBaseNode replicator = ctx.getReplicator(peerName);
+      DFMSBaseNode replicator = ctx.getReplicator(nodeName);
       List<PeerInfo> peers = replicator.createNetworkServices().getPeers().blockingFirst();
-      assertTrue(peers.stream()
-            .anyMatch(peer -> peer.getId().equals(clientId) && matchAddresses(clientAddresses, peer.getAddresses())));
+      return peers.stream()
+            .anyMatch(peer -> peer.getId().equals(clientId) && matchAddresses(clientAddresses, peer.getAddresses()));
    }
    
    protected static boolean matchAddresses(List<Multiaddr> clientAddrs, List<Multiaddr> peerAddrs) {
@@ -60,4 +71,5 @@ public class NetworkSteps extends BaseSteps {
       return addrs.stream().map(addr -> addr.getStringComponent(Protocol.IP4)).filter(addr -> addr != null)
             .collect(Collectors.toList());
    }
+   
 }

@@ -13,6 +13,7 @@ import io.libp2p.core.multiformats.Multiaddr;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.cucumber.config.TestConfig;
 import io.proximax.dfms.model.contract.DriveContract;
 
 /**
@@ -32,6 +33,22 @@ public class TestContext {
    private DFMSClient client;
    private Map<String, DFMSReplicator> replicators = new LinkedHashMap<>();
    
+   private TestConfig configuration;
+   
+   /**
+    * @return the configuration
+    */
+   public TestConfig getConfiguration() {
+      return configuration;
+   }
+
+   /**
+    * @param configuration the configuration to set
+    */
+   public void setConfiguration(TestConfig configuration) {
+      this.configuration = configuration;
+   }
+
    public DFMSReplicator getReplicator(String name) {
       return replicators.get(name);
    }
