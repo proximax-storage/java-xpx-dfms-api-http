@@ -6,7 +6,7 @@ task cucumber() {
         javaexec {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.e2eTestRuntimeClasspath + sourceSets.main.output + sourceSets.e2eTest.output
-            args = ['--plugin', 'pretty', '--glue', 'io.proximax.dfms.cucumber', 'src/e2eTest/resources']
+            args = ['--plugin', 'pretty', 'src/e2eTest/resources']
         }
     }
 }

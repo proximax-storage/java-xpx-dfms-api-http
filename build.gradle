@@ -130,6 +130,7 @@ dependencies {
     e2eTestImplementation 'org.apache.commons:commons-compress:1.20'
     // cucumber to drive e2e tests
     e2eTestImplementation 'io.cucumber:cucumber-java:6.7.0'
+    e2eTestImplementation 'io.cucumber:cucumber-junit-platform-engine:6.7.0'
     // DI to allow injection of test context instances
     e2eTestImplementation 'io.cucumber:cucumber-picocontainer:6.7.0'
     
