@@ -64,7 +64,6 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
       Request request = new Request.Builder().url(url).post(createRequestBody(content)).build();
       // make the request
       return makeRequest(request, false).map(this::mapStringOrError)
-            .doOnNext(item -> System.out.println(item))
             .map(str -> getGson().fromJson(str, CidWrap.class))
             .map(CidWrap::getId).map(Cid::decode);
    }
@@ -125,7 +124,6 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
       HttpUrl url = buildUrl(URL_LS, encode(id), path).build();
       return makeGetObservable(url, false)
          .map(this::mapStringOrError)
-         .doOnNext(item -> System.out.println(item))
          .map(str -> getGson().fromJson(str, StatListWrap.class))
          .flatMapIterable(StatListWrap::getList)
          .map(DriveItem::fromDto)
