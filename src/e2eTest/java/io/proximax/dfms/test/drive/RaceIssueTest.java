@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.proximax.dfms.DriveRepository;
-import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.DFMSClient;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.content.FileSystemContent;
@@ -36,14 +36,14 @@ class RaceIssueTest {
 
    private final String path = "hello" + System.currentTimeMillis();// Long.toString(new Random().nextLong());
 
-   private StorageApi api;
-   private DriveRepository drive;
+   private DFMSClient api;
+   private DriveServices drive;
    private DefaultFileSystemManager fsManager;
 
    @BeforeAll
    void init() throws MalformedURLException, FileSystemException {
-      api = new StorageApi(new URL("http://localhost:6366"));
-      drive = api.createDriveRepository();
+      api = new DFMSClient(new URL("http://localhost:6366"));
+      drive = api.createDriveServices();
       // file system manager for access to retrieved tar-balls
       fsManager = DriveContentUtils.createFSManager();
    }
@@ -54,7 +54,7 @@ class RaceIssueTest {
    }
 
    @Test
-   @Disabled("Disabled by default before server is fixed")
+   @Disabled("this will sometimes break the server")
    void killServer() throws IOException {
       DriveContent addContent = new FileSystemContent(new File("src/e2eTest/resources/simple").toPath());
       drive.add(CONTRACT, path, addContent).timeout(30, TimeUnit.SECONDS).blockingFirst();

@@ -1,0 +1,24 @@
+{
+	"nodes": [
+		{
+			"name": "client1",
+			"type": "client",
+			"url": "http://localhost:6366"
+		},
+		{
+			"name": "replicator1",
+			"type": "replicator",
+			"url": "http://localhost:6400"
+		},
+		{
+			"name": "replicator2",
+			"type": "replicator",
+			"url": "http://localhost:6401"
+		},
+		{
+			"name": "replicator3",
+			"type": "replicator",
+			"url": "http://localhost:6402"
+		}
+	]
+}

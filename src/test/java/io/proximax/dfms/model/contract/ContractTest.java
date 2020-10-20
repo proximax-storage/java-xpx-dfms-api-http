@@ -3,21 +3,20 @@
  */
 package io.proximax.dfms.model.contract;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.gen.model.ContractDTO;
+import io.proximax.dfms.gen.model.Contract;
 
 /**
- * {@link Contract} tests
+ * {@link DriveContract} tests
  */
 class ContractTest {
    
@@ -27,7 +26,7 @@ class ContractTest {
       Cid root = Cid.decode("baegbeibondkkrhxfprzwrlgxxltarqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
       PublicKey owner = PublicKey.fromHexString("08011220201b155bf3ebe4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b");
       List<PublicKey> replicators = Arrays.asList(PublicKey.fromHexString("08011220201b155bf3ebb4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b"));
-      Contract c = new Contract(id, owner, replicators, BigInteger.TEN, BigInteger.ONE, root, BigInteger.valueOf(3));
+      DriveContract c = new DriveContract(id, owner, replicators, BigInteger.TEN, BigInteger.ONE, root, BigInteger.valueOf(3));
       // make assertions for provided values
       assertEquals(id, c.getId());
       assertEquals(owner, c.getOwner());
@@ -45,7 +44,7 @@ class ContractTest {
       PublicKey owner = PublicKey.fromHexString("08011220201b155bf3ebe4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b");
       List<PublicKey> replicators = Arrays.asList(PublicKey.fromHexString("08011220201b155bf3ebb4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b"));
       
-      ContractDTO dto = new ContractDTO();
+      Contract dto = new Contract();
       dto.setDrive("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
       dto.setOwner("08011220201b155bf3ebe4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b");
       dto.setReplicators(Arrays.asList("08011220201b155bf3ebb4dcca522549a9835a21d010d07e6c354f0df30a0a0504b83f1b"));
@@ -54,7 +53,7 @@ class ContractTest {
       dto.setRoot("baegbeibondkkrhxfprzwrlgxxltarqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
       dto.setSpace(3l);
       
-      Contract c = Contract.fromDto(dto);
+      DriveContract c = DriveContract.fromDto(dto);
       // make assertions for provided values
       assertEquals(id, c.getId());
       assertEquals(owner, c.getOwner());

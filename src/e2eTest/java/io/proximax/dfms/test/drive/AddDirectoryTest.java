@@ -22,8 +22,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.proximax.dfms.DriveRepository;
-import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.DFMSClient;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
@@ -40,13 +40,13 @@ class AddDirectoryTest {
    private static final Cid CONTRACT = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
    private static final Random RANDOM = new Random(System.nanoTime());
 
-   private StorageApi api;
-   private DriveRepository drive;
+   private DFMSClient api;
+   private DriveServices drive;
 
    @BeforeAll
    void init() throws MalformedURLException, FileSystemException {
-      api = new StorageApi(new URL("http://localhost:6366"));
-      drive = api.createDriveRepository();
+      api = new DFMSClient(new URL("http://localhost:6366"));
+      drive = api.createDriveServices();
    }
 
    @Test
@@ -58,6 +58,10 @@ class AddDirectoryTest {
       assertNotNull(cid);
       // check the resulting structure
       assertSimpleContent(path);
+//      // remove the content - this kills the server...
+//      drive.remove(CONTRACT, path).blockingAwait();
+//      final Observable<DriveContent> removedContent = drive.get(CONTRACT, path);
+//      assertThrows(DFMSResponseException.class, () -> removedContent.blockingFirst());
    }
 
    @Test
