@@ -4,10 +4,14 @@
 package io.proximax.dfms.cucumber;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -18,6 +22,7 @@ import io.proximax.dfms.ContractReplicatorServices;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.NetworkServices;
+import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.cucumber.config.TestConfig;
 import io.proximax.dfms.cucumber.config.TestConfig.Node;
 
@@ -84,22 +89,32 @@ public class InfrastructureSteps extends BaseSteps {
     */
    @Given("all replicators accept contracts")
    public void replicators_accept_contracts() {
-      for (DFMSReplicator replicator : ctx.getReplicators().values()) {
-         ContractReplicatorServices conRep = replicator.createContractReplicatorServices();
+      // go over all replicators and accept contracts
+      for (Entry<String, DFMSReplicator> entry : ctx.getReplicators().entrySet()) {
+         final DFMSReplicator replicator = entry.getValue();
+         final String name = entry.getKey();
+         final ContractReplicatorServices conRep = replicator.createContractReplicatorServices();
          // automatically accept all contracts
          conRep.invites().subscribe(invite -> {
             conRep.accept(invite.getDrive()).blockingAwait();
+            ctx.addAcceptedInvite(name, invite.getDrive());
          });
-         // TODO keep track of contracts that were accepted
+         // note down notifications about accepted contracts
+         conRep.accepted().subscribe(contract -> {
+            ctx.addAcceptedContract(name, contract.getId());
+         });
       }
    }
 
    @Then("contract was accepted by all replicators")
    public void contract_was_accepted_by_all_replicators() {
-       // TODO make sure that we got notification on accepted endpoint for all replicators
-       throw new io.cucumber.java.PendingException();
+      Cid driveCid = ctx.getContract().getId();
+      Set<String> allReplicators = ctx.getReplicators().keySet();
+      Set<String> acceptingReplicators = ctx.getAcceptedContracts().entrySet().stream()
+            .filter(entry -> entry.getValue().contains(driveCid)).map(Entry::getKey).collect(Collectors.toSet());
+      assertTrue(acceptingReplicators.containsAll(allReplicators));
    }
-   
+
    /**
     * load configuration from "src/e2eTest/resources/test_config.json"
     * 

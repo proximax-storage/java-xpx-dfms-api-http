@@ -95,6 +95,12 @@ public class DriveContract {
       return space;
    }
 
+   @Override
+   public String toString() {
+      return "DriveContract [id=" + id + ", owner=" + owner + ", replicators=" + replicators + ", duration=" + duration
+            + ", created=" + created + ", root=" + root + ", space=" + space + "]";
+   }
+
    /**
     * build instance form the DTO object
     * 

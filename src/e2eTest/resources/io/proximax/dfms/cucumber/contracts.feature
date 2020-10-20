@@ -6,7 +6,7 @@ Feature: Drive Contract
     And all replicators accept contracts
     When I compose new contract
     Then contract is created
-#    And contract was accepted by all replicators
+    And contract was accepted by all replicators
   
   Scenario: List all contracts
     Given standard infrastructure is available

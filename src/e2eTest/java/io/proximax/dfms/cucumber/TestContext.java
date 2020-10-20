@@ -3,10 +3,13 @@
  */
 package io.proximax.dfms.cucumber;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import io.libp2p.core.PeerId;
 import io.libp2p.core.multiformats.Multiaddr;
@@ -27,6 +30,9 @@ public class TestContext {
    private List<Cid> cidList;
    private String prefix;
    
+   private Map<String, Set<Cid>> acceptedInvites = new HashMap<>();
+   private Map<String, Set<Cid>> acceptedContracts = new HashMap<>();
+   
    private PeerId clientId;
    private List<Multiaddr> clientAddresses;
    
@@ -34,6 +40,38 @@ public class TestContext {
    private Map<String, DFMSReplicator> replicators = new LinkedHashMap<>();
    
    private TestConfig configuration;
+   
+   /**
+    * @return the acceptedInvites
+    */
+   public Map<String, Set<Cid>> getAcceptedInvites() {
+      return acceptedInvites;
+   }
+
+   public void addAcceptedInvite(String replicator, Cid drive) {
+      addItem(getAcceptedInvites(), replicator, drive);
+   }
+   
+   /**
+    * @return the acceptedContracts
+    */
+   public Map<String, Set<Cid>> getAcceptedContracts() {
+      return acceptedContracts;
+   }
+
+   public void addAcceptedContract(String replicator, Cid drive) {
+      addItem(getAcceptedContracts(), replicator, drive);
+   }
+   
+   private static <K,V> void addItem(Map<K,Set<V>> target, K key, V value) {
+      Set<V> values = target.get(key);
+      if (values == null) {
+         values = new HashSet<>();
+         target.put(key, values);
+      }
+      values.add(value);
+
+   }
    
    /**
     * @return the configuration
