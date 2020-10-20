@@ -15,5 +15,7 @@ Feature: Drive Operations
     When I create prefixed directory "plain"
     And I upload file "src/e2eTest/resources/simple/subdir/test_image_file.png" as prefixed "plain/plainfile.png"
     Then prefixed file "plain/plainfile.png" has size 581312 and cid "zdj7Wge9XgaLSfDQx9w5WrsjCKCgt3rHpLTu2bgTzk43B9wtP"
-    
+    And file "plainfile.png" is listed in prefixed directory "plain"
+    And 1 file is listed in prefixed directory "plain"
+
     

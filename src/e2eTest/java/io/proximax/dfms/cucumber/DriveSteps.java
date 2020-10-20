@@ -5,10 +5,12 @@ package io.proximax.dfms.cucumber;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.cucumber.java.en.Given;
@@ -65,5 +67,21 @@ public class DriveSteps extends BaseSteps {
    public void i_create_prefixed_directory(String dirName) {
       DriveServices drive = ctx.getClient().createDriveServices();
       drive.makeDir(ctx.getContract().getId(), ctx.getPrefix()+dirName).timeout(30, TimeUnit.SECONDS).blockingAwait();
+   }
+
+   @Then("file {string} is listed in prefixed directory {string}")
+   public void file_is_listed_in_prefixed_directory(String fileName, String dirSuffix) {
+       DriveServices fs = ctx.getClient().createDriveServices();
+       String prefix = ctx.getPrefix();
+       List<DriveItem> items = fs.ls(ctx.getContract().getId(), prefix + dirSuffix).blockingFirst();
+       assertTrue(items.stream().map(DriveItem::getName).anyMatch(name -> name.equals(fileName)));
+   }
+
+   @Then("{int} file is listed in prefixed directory {string}")
+   public void file_is_listed_in_prefixed_directory(Integer count, String dirSuffix) {
+      DriveServices fs = ctx.getClient().createDriveServices();
+      String prefix = ctx.getPrefix();
+      List<DriveItem> items = fs.ls(ctx.getContract().getId(), prefix + dirSuffix).blockingFirst();
+      assertEquals(count, items.size());
    }
 }
