@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * VerifyResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T00:53:37.122+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
 public class VerifyResult {
   public static final String SERIALIZED_NAME_REPLICATOR = "replicator";
   @SerializedName(SERIALIZED_NAME_REPLICATOR)

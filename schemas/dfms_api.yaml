@@ -543,18 +543,7 @@ paths:
           description: Function parameters, only numbers.
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ScId:
-                    description: SuperContract ID is [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
-                    type: string
-                    example: baegqajaiaqjcak6kujbwwdsx3ytcv5wvyrf7fwcij7yvb527laruzjgwch5jxqlm
-                  TxHash:
-                    $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/scExecResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/get:
@@ -753,6 +742,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/cidResultWrap'
+    scExecResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/supercontractExec'
 
   parameters:
     driveIdParam:
@@ -900,6 +895,16 @@ components:
           properties:
             /:
               $ref: '#/components/schemas/cid'
+    supercontractExec:
+      type: object
+      properties:
+        ScId:
+          $ref: '#/components/schemas/cid'
+        TxHash:
+          type: object
+          properties:
+            /:
+              $ref: '#/components/schemas/cid'
     pubKey:
       type: string
       example: 080412200eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2
@@ -912,7 +917,7 @@ components:
     cidResultWrap:
       type: object
       properties:
-        Response:
+        Result:
           $ref: '#/components/schemas/cid'
     cid:
       type: string

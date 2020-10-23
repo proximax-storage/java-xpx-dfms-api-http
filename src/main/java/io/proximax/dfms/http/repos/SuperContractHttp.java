@@ -5,22 +5,18 @@ package io.proximax.dfms.http.repos;
 
 import static io.proximax.dfms.utils.HttpUtils.encode;
 
-import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-
-import com.google.gson.reflect.TypeToken;
 
 import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.SuperContractServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.CidListWrap;
 import io.proximax.dfms.gen.model.CidResultWrap;
-import io.proximax.dfms.gen.model.CidWrap;
+import io.proximax.dfms.gen.model.SupercontractExec;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.ResultListDTO;
-import io.proximax.dfms.http.dtos.SuperContractDTO;
 import io.proximax.dfms.http.dtos.SuperContractWrapperDTO;
 import io.proximax.dfms.model.sc.SuperContract;
 import io.reactivex.Completable;
@@ -42,8 +38,6 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
    private static final String URL_EXECUTIONS = "sc/executions";
    private static final String URL_DEACTIVATE = "sc/deactivate";
    
-   private static final Type TYPE_SC_LIST = new TypeToken<List<SuperContractDTO>>(){}.getType();
-
    /**
     * create new instance
     * 
@@ -63,7 +57,7 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, CidResultWrap.class))
-            .map(CidResultWrap::getResponse)
+            .map(CidResultWrap::getResult)
             .map(Cid::decode);
    }
 
@@ -71,14 +65,14 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
    public Observable<Cid> execute(Cid superContract, BigInteger gas, String functionName, String[] parameters) {
       if (parameters != null) {
          // TODO implement this. how does this get serialized?
-         throw new UnsupportedOperationException("parameters are not implemented");
+         throw new UnsupportedOperationException("parameters are not implemented use null");
       }
-      HttpUrl url = buildUrl(URL_EXECUTE, gas.toString(), functionName).build();
+      HttpUrl url = buildUrl(URL_EXECUTE, encode(superContract), gas.toString(), functionName).build();
       // make the request
-      return makePostObservable(url, false)
+      return makePostObservable(url, true)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidWrap.class))
-            .map(CidWrap::getId)
+            .map(str -> getGson().fromJson(str, SupercontractExec.class))
+            .map(SupercontractExec::getScId)
             .map(Cid::decode);
    }
 
@@ -104,16 +98,6 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
             .flatMapIterable(list -> list)
             .map(Cid::decode)
             .toList().toObservable();
-   }
-
-   /**
-    * parse list of super contract DTOs form JSON string
-    * 
-    * @param json JSON string
-    * @return list of items
-    */
-   private List<SuperContractDTO> toSuperContracts(String json) {
-      return getGson().fromJson(json, TYPE_SC_LIST);
    }
    
    @Override

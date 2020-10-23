@@ -29,7 +29,7 @@ import java.io.IOException;
  * Wrapper for single drive contract as part of invite polling
  */
 @ApiModel(description = "Wrapper for single drive contract as part of invite polling")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T00:53:37.122+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
 public class InviteWrap {
   public static final String SERIALIZED_NAME_INVITE = "Invite";
   @SerializedName(SERIALIZED_NAME_INVITE)

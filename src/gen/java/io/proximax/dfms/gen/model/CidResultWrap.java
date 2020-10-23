@@ -27,33 +27,33 @@ import java.io.IOException;
 /**
  * CidResultWrap
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T00:53:37.122+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
 public class CidResultWrap {
-  public static final String SERIALIZED_NAME_RESPONSE = "Response";
-  @SerializedName(SERIALIZED_NAME_RESPONSE)
-  private String response;
+  public static final String SERIALIZED_NAME_RESULT = "Result";
+  @SerializedName(SERIALIZED_NAME_RESULT)
+  private String result;
 
 
-  public CidResultWrap response(String response) {
+  public CidResultWrap result(String result) {
     
-    this.response = response;
+    this.result = result;
     return this;
   }
 
    /**
    * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
-   * @return response
+   * @return result
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
 
-  public String getResponse() {
-    return response;
+  public String getResult() {
+    return result;
   }
 
 
-  public void setResponse(String response) {
-    this.response = response;
+  public void setResult(String result) {
+    this.result = result;
   }
 
 
@@ -66,12 +66,12 @@ public class CidResultWrap {
       return false;
     }
     CidResultWrap cidResultWrap = (CidResultWrap) o;
-    return Objects.equals(this.response, cidResultWrap.response);
+    return Objects.equals(this.result, cidResultWrap.result);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(response);
+    return Objects.hash(result);
   }
 
 
@@ -79,7 +79,7 @@ public class CidResultWrap {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CidResultWrap {\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
+    sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("}");
     return sb.toString();
   }
