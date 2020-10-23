@@ -48,9 +48,9 @@ public interface SuperContractServices {
     * Get all super contracts on a drive
     * 
     * @param driveId CID of the drive/contract
-    * @return observable list of super contracts on a drive
+    * @return observable list of super contract CIDs on a drive
     */
-   Observable<List<SuperContract>> list(Cid driveId);
+   Observable<List<Cid>> ls(Cid driveId);
    
    /**
     * Get results of a SuperContract execution by its TxID

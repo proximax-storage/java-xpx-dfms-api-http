@@ -60,7 +60,6 @@ public class DriveSteps extends BaseSteps {
       assertEquals(DriveItemType.FILE, item.getType());
       assertEquals(size, item.getSize());
       assertEquals(Cid.decode(cid), item.getCid());
-
    }
    
    @When("I create prefixed directory {string}")
@@ -83,5 +82,12 @@ public class DriveSteps extends BaseSteps {
       String prefix = ctx.getPrefix();
       List<DriveItem> items = fs.ls(ctx.getContract().getId(), prefix + dirSuffix).blockingFirst();
       assertEquals(count, items.size());
+   }
+   
+   @Then("I flush the drive")
+   public void flush_the_drive() {
+      DriveServices drive = ctx.getClient().createDriveServices();
+      drive.flush(ctx.getContract().getId(), "/"+ctx.getPrefix()+"/helloworld.wat").blockingAwait();
+
    }
 }

@@ -16,6 +16,7 @@ import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.SuperContractServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.CidListWrap;
+import io.proximax.dfms.gen.model.CidResultWrap;
 import io.proximax.dfms.gen.model.CidWrap;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.ResultListDTO;
@@ -61,8 +62,8 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidWrap.class))
-            .map(CidWrap::getId)
+            .map(str -> getGson().fromJson(str, CidResultWrap.class))
+            .map(CidResultWrap::getResponse)
             .map(Cid::decode);
    }
 
@@ -93,14 +94,15 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
    }
 
    @Override
-   public Observable<List<SuperContract>> list(Cid driveId) {
-      HttpUrl url = buildUrl(URL_LS).build();
+   public Observable<List<Cid>> ls(Cid driveId) {
+      HttpUrl url = buildUrl(URL_LS, encode(driveId)).build();
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(this::toSuperContracts)
+            .map(str -> getGson().fromJson(str, CidListWrap.class))
+            .map(CidListWrap::getIds)
             .flatMapIterable(list -> list)
-            .map(SuperContract::fromDto)
+            .map(Cid::decode)
             .toList().toObservable();
    }
 

@@ -506,14 +506,7 @@ paths:
         - $ref: '#/components/parameters/srcParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Result:
-                    $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/scDeployResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/exec:
@@ -596,16 +589,7 @@ paths:
         - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Ids:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/cidListResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/results:
@@ -763,7 +747,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/statListWrap'
-                
+    scDeployResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cidResultWrap'
+
   parameters:
     driveIdParam:
       in: query
@@ -918,6 +908,11 @@ components:
       type: object
       properties:
         Id:
+          $ref: '#/components/schemas/cid'
+    cidResultWrap:
+      type: object
+      properties:
+        Response:
           $ref: '#/components/schemas/cid'
     cid:
       type: string

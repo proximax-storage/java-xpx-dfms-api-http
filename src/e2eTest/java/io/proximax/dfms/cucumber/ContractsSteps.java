@@ -45,6 +45,7 @@ public class ContractsSteps extends BaseSteps {
       // compose contract
       DriveContract composedContract = clientContract.compose(space, duration, options).blockingFirst();
       ctx.setContract(composedContract);
+      System.out.println("Created contract " + composedContract);
       // make rudimentary checks
       assertEquals(space, composedContract.getSpace());
    }

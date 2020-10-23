@@ -227,7 +227,7 @@ public class HttpRepository<T extends ServiceNode> {
             ErrorDTO err = getGson().fromJson(responseBody, ErrorDTO.class);
             return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode()), err.getMessage());
          } catch (JsonSyntaxException e) {
-            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody, e);
+            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody);
          }
       } catch (IOException e) {
          return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body", e);
