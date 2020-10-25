@@ -16,8 +16,8 @@ import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.CidListWrap;
 import io.proximax.dfms.gen.model.ContractWrap;
+import io.proximax.dfms.gen.model.VerifyResult;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.VerifyResultDTO;
 import io.proximax.dfms.model.contract.Amendment;
 import io.proximax.dfms.model.contract.DriveContract;
 import io.proximax.dfms.model.contract.DriveContractDuration;
@@ -107,7 +107,7 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
       // make the request
       return makePostObservable(url, true)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, VerifyResultDTO.class))
+            .map(str -> getGson().fromJson(str, VerifyResult.class))
             .map(VerificationError::fromDto)
             .toList()
             .toObservable();

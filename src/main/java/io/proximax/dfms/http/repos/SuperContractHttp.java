@@ -16,10 +16,10 @@ import io.proximax.dfms.gen.model.CidListWrap;
 import io.proximax.dfms.gen.model.CidResultWrap;
 import io.proximax.dfms.gen.model.CidWithPath;
 import io.proximax.dfms.gen.model.ExecutionsWrap;
+import io.proximax.dfms.gen.model.ResultsWrap;
 import io.proximax.dfms.gen.model.SuperContractWrap;
 import io.proximax.dfms.gen.model.SupercontractExec;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.ResultListDTO;
 import io.proximax.dfms.model.sc.SuperContract;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -27,8 +27,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
 /**
- * @author tono
- *
+ * HTTP implementation of supercontract services
  */
 public class SuperContractHttp extends HttpRepository<ServiceBase> implements SuperContractServices {
 
@@ -39,7 +38,7 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
    private static final String URL_RESULTS = "sc/results";
    private static final String URL_EXECUTIONS = "sc/executions";
    private static final String URL_DEACTIVATE = "sc/deactivate";
-   
+
    /**
     * create new instance
     * 
@@ -64,10 +63,10 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
    }
 
    @Override
-   public Observable<Cid> execute(Cid superContract, BigInteger gas, String functionName, String[] parameters) {
-      if (parameters != null) {
-         // TODO implement this. how does this get serialized?
-         throw new UnsupportedOperationException("parameters are not implemented use null");
+   public Observable<Cid> execute(Cid superContract, BigInteger gas, String functionName, String... parameters) {
+      if (parameters != null && parameters.length > 0) {
+         // parameters are not implemented on server yet according to dev team
+         throw new UnsupportedOperationException("parameters are not functional yet. do not specify them in the call!");
       }
       HttpUrl url = buildUrl(URL_EXECUTE, encode(superContract), gas.toString(), functionName).build();
       // make the request
@@ -99,17 +98,18 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
             .map(CidListWrap::getIds)
             .flatMapIterable(list -> list)
             .map(Cid::decode)
-            .toList().toObservable();
+            .toList()
+            .toObservable();
    }
-   
+
    @Override
    public Observable<List<String>> results(Cid transactionId) {
       HttpUrl url = buildUrl(URL_RESULTS, encode(transactionId)).build();
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, ResultListDTO.class))
-            .map(ResultListDTO::getIds);
+            .map(str -> getGson().fromJson(str, ResultsWrap.class))
+            .map(ResultsWrap::getResults);
    }
 
    @Override
@@ -123,7 +123,8 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
             .flatMapIterable(list -> list)
             .map(CidWithPath::getU)
             .map(Cid::decode)
-            .toList().toObservable();
+            .toList()
+            .toObservable();
    }
 
    @Override

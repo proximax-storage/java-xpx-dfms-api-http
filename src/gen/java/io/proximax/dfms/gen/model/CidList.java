@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * CidList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
 public class CidList extends ArrayList<String> {
 
   @Override

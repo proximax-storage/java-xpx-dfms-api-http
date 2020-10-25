@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Wrapper for array of Cids
  */
 @ApiModel(description = "Wrapper for array of Cids")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
 public class ExecutionsWrap {
   public static final String SERIALIZED_NAME_IDS = "Ids";
   @SerializedName(SERIALIZED_NAME_IDS)

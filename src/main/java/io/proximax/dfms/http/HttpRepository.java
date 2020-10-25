@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import io.proximax.dfms.ServiceNode;
-import io.proximax.dfms.http.dtos.ErrorDTO;
+import io.proximax.dfms.gen.model.ErrResult;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.model.exceptions.ResponseErrorType;
@@ -222,14 +222,29 @@ public class HttpRepository<T extends ServiceNode> {
       final String responseMessage = response.message();
       try {
          final String responseBody = response.body().string();
-         try {
-            ErrorDTO err = getGson().fromJson(responseBody, ErrorDTO.class);
-            return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode()), err.getMessage());
-         } catch (JsonSyntaxException e) {
-            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody);
-         }
+         return createExceptionFromResponseBody(responseBody);
       } catch (IOException e) {
-         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body", e);
+         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - missing response body", e);
+      }
+   }
+
+   /**
+    * process response body and create exception from the body content
+    * 
+    * @param responseBody response body text
+    * @return the exception that will be raised to observers
+    */
+   protected DFMSRuntimeException createExceptionFromResponseBody(String responseBody) {
+      try {
+         // parse the error DTO from the response
+         ErrResult err = getGson().fromJson(responseBody, ErrResult.class);
+         // throw error if response did not have code
+         if (err.getCode() == null) {
+            throw new DFMSRuntimeException("response is missing error code");
+         }
+         return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode().getValue()), err.getMessage());
+      } catch (JsonSyntaxException | DFMSRuntimeException e) {
+         return new DFMSRuntimeException("Failed to process response - " + responseBody, e);
       }
    }
 
