@@ -177,7 +177,7 @@ class HttpRepositoryTest {
       Request request = new Request.Builder().url("http://localhost").build();
       Response response = new Response.Builder()
             .request(request).protocol(Protocol.HTTP_2).code(150).message("hello").body(ResponseBody
-                  .create(MediaType.get("text/plain"), "{\"Message\"=\"msg\", \"Code\"=\"2\", \"Type\"=\"tp\"}"))
+                  .create(MediaType.get("text/plain"), "{\"Message\"=\"msg\", \"Code\"=\"2\", \"Type\"=\"error\"}"))
             .build();
       HttpRepository<DFMSClient> repo = new HttpRepository<>(new DFMSClient(new URL(URL)), Optional.empty(), client, longPollingClient);
 
