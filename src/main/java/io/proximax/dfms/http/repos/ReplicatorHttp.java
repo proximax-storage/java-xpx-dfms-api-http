@@ -61,8 +61,7 @@ public class ReplicatorHttp extends HttpRepository<ServiceBase> implements Contr
    public Completable accept(Cid id) {
       HttpUrl url = buildUrl(URL_ACCEPT, encode(id)).build();
       // make the request
-      return makePostCompletable(url);
-
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override

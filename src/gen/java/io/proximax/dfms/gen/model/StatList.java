@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * StatList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
 public class StatList extends ArrayList<Stat> {
 
   @Override

@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.dfms.cid.Cid;
+import io.proximax.dfms.gen.model.CidWithPath;
 import io.proximax.dfms.gen.model.Stat;
 import io.proximax.dfms.gen.model.Stat.TypeEnum;
-import io.proximax.dfms.gen.model.StatCid;
 
 class DriveItemTest {
 
@@ -33,7 +33,7 @@ class DriveItemTest {
       dto.setName(NAME);
       dto.setType(TypeEnum.fromValue(TYPE.getCode()));
       dto.setSize(SIZE);
-      StatCid cid = new StatCid();
+      CidWithPath cid = new CidWithPath();
       cid.setU(CID.toString());
       dto.setCid(cid);
       // resolve model object form the DTO

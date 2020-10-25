@@ -20,7 +20,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.dfms.gen.model.StatCid;
+import io.proximax.dfms.gen.model.CidWithPath;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.io.IOException;
 /**
  * SupercontractExec
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
 public class SupercontractExec {
   public static final String SERIALIZED_NAME_SC_ID = "ScId";
   @SerializedName(SERIALIZED_NAME_SC_ID)
@@ -36,7 +36,7 @@ public class SupercontractExec {
 
   public static final String SERIALIZED_NAME_TX_HASH = "TxHash";
   @SerializedName(SERIALIZED_NAME_TX_HASH)
-  private StatCid txHash;
+  private CidWithPath txHash;
 
 
   public SupercontractExec scId(String scId) {
@@ -62,7 +62,7 @@ public class SupercontractExec {
   }
 
 
-  public SupercontractExec txHash(StatCid txHash) {
+  public SupercontractExec txHash(CidWithPath txHash) {
     
     this.txHash = txHash;
     return this;
@@ -75,12 +75,12 @@ public class SupercontractExec {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public StatCid getTxHash() {
+  public CidWithPath getTxHash() {
     return txHash;
   }
 
 
-  public void setTxHash(StatCid txHash) {
+  public void setTxHash(CidWithPath txHash) {
     this.txHash = txHash;
   }
 

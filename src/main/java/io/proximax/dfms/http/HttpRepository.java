@@ -32,7 +32,6 @@ import io.proximax.dfms.http.dtos.ErrorDTO;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.model.exceptions.ResponseErrorType;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import okhttp3.Call;
@@ -232,31 +231,6 @@ public class HttpRepository<T extends ServiceNode> {
       } catch (IOException e) {
          return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body", e);
       }
-   }
-
-   /**
-    * POST request with empty request body
-    * 
-    * @param url we are making the POST request to
-    * @return completable for the action
-    */
-   protected Completable makePostCompletable(HttpUrl url) {
-      RequestBody body = RequestBody.create(new byte[0]);
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
-   }
-
-   /**
-    * GET request without expected response
-    * 
-    * @param url we are making the GET request to
-    * @return completable for the action
-    */
-   protected Completable makeGetCompletable(HttpUrl url) {
-      Request request = new Request.Builder().url(url).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
    }
 
    /**

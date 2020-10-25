@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * StatListWrap
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
 public class StatListWrap {
   public static final String SERIALIZED_NAME_LIST = "List";
   @SerializedName(SERIALIZED_NAME_LIST)

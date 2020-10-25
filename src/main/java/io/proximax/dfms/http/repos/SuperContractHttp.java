@@ -14,10 +14,12 @@ import io.proximax.dfms.SuperContractServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.CidListWrap;
 import io.proximax.dfms.gen.model.CidResultWrap;
+import io.proximax.dfms.gen.model.CidWithPath;
+import io.proximax.dfms.gen.model.ExecutionsWrap;
+import io.proximax.dfms.gen.model.SuperContractWrap;
 import io.proximax.dfms.gen.model.SupercontractExec;
 import io.proximax.dfms.http.HttpRepository;
 import io.proximax.dfms.http.dtos.ResultListDTO;
-import io.proximax.dfms.http.dtos.SuperContractWrapperDTO;
 import io.proximax.dfms.model.sc.SuperContract;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -82,8 +84,8 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, SuperContractWrapperDTO.class))
-            .map(SuperContractWrapperDTO::getSuperContract)
+            .map(str -> getGson().fromJson(str, SuperContractWrap.class))
+            .map(SuperContractWrap::getSuperContract)
             .map(SuperContract::fromDto);
    }
 
@@ -116,9 +118,10 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
       // make the request
       return makePostObservable(url, false)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, CidListWrap.class))
-            .map(CidListWrap::getIds)
+            .map(str -> getGson().fromJson(str, ExecutionsWrap.class))
+            .map(ExecutionsWrap::getIds)
             .flatMapIterable(list -> list)
+            .map(CidWithPath::getU)
             .map(Cid::decode)
             .toList().toObservable();
    }
@@ -126,7 +129,7 @@ public class SuperContractHttp extends HttpRepository<ServiceBase> implements Su
    @Override
    public Completable deactivate(Cid superContractId) {
       HttpUrl url = buildUrl(URL_DEACTIVATE, encode(superContractId)).build();
-      return makePostCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
 }

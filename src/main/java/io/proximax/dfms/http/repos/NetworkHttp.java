@@ -47,18 +47,24 @@ public class NetworkHttp extends HttpRepository<ServiceBase> implements NetworkS
 
    @Override
    public Completable connect(Multiaddr... addresses) {
-      String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList())
+      String[] args = Stream
+            .of(addresses)
+            .map(Multiaddr::toString)
+            .collect(Collectors.toList())
             .toArray(new String[addresses.length]);
       HttpUrl url = buildUrl(URL_CONNECT, args).build();
-      return makePostCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override
    public Completable disconnect(Multiaddr... addresses) {
-      String[] args = Stream.of(addresses).map(Multiaddr::toString).collect(Collectors.toList())
+      String[] args = Stream
+            .of(addresses)
+            .map(Multiaddr::toString)
+            .collect(Collectors.toList())
             .toArray(new String[addresses.length]);
       HttpUrl url = buildUrl(URL_DISCONNECT, args).build();
-      return makePostCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override
@@ -96,7 +102,8 @@ public class NetworkHttp extends HttpRepository<ServiceBase> implements NetworkS
             .map(AddrListWrap::getAddrs)
             .flatMapIterable(list -> list)
             .map(Multiaddr::new)
-            .toList().toObservable();
+            .toList()
+            .toObservable();
    }
 
 }

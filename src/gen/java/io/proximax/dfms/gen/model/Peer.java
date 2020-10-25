@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Peer
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
 public class Peer {
   public static final String SERIALIZED_NAME_ADDRS = "Addrs";
   @SerializedName(SERIALIZED_NAME_ADDRS)

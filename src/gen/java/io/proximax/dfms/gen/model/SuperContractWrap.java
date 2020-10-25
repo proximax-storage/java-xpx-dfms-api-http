@@ -20,40 +20,41 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.proximax.dfms.gen.model.SuperContract;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * StatCid
+ * SuperContractWrap
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-24T01:20:13.949+02:00[Europe/Prague]")
-public class StatCid {
-  public static final String SERIALIZED_NAME_U = "/";
-  @SerializedName(SERIALIZED_NAME_U)
-  private String u;
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T14:13:07.301+01:00[Europe/Prague]")
+public class SuperContractWrap {
+  public static final String SERIALIZED_NAME_SUPER_CONTRACT = "SuperContract";
+  @SerializedName(SERIALIZED_NAME_SUPER_CONTRACT)
+  private SuperContract superContract;
 
 
-  public StatCid u(String u) {
+  public SuperContractWrap superContract(SuperContract superContract) {
     
-    this.u = u;
+    this.superContract = superContract;
     return this;
   }
 
    /**
-   * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
-   * @return u
+   * Get superContract
+   * @return superContract
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
+  @ApiModelProperty(value = "")
 
-  public String getU() {
-    return u;
+  public SuperContract getSuperContract() {
+    return superContract;
   }
 
 
-  public void setU(String u) {
-    this.u = u;
+  public void setSuperContract(SuperContract superContract) {
+    this.superContract = superContract;
   }
 
 
@@ -65,21 +66,21 @@ public class StatCid {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StatCid statCid = (StatCid) o;
-    return Objects.equals(this.u, statCid.u);
+    SuperContractWrap superContractWrap = (SuperContractWrap) o;
+    return Objects.equals(this.superContract, superContractWrap.superContract);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(u);
+    return Objects.hash(superContract);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StatCid {\n");
-    sb.append("    u: ").append(toIndentedString(u)).append("\n");
+    sb.append("class SuperContractWrap {\n");
+    sb.append("    superContract: ").append(toIndentedString(superContract)).append("\n");
     sb.append("}");
     return sb.toString();
   }
