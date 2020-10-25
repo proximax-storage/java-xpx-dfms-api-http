@@ -16,8 +16,8 @@ import io.libp2p.core.multiformats.Multiaddr;
 import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.cucumber.config.TestConfig;
 import io.proximax.dfms.model.contract.DriveContract;
+import io.proximax.dfms.test.TestConfig;
 
 /**
  * new instance of context is created for every scenario. This context is used to share state across steps
@@ -29,6 +29,8 @@ public class TestContext {
    private DriveContract contract;
    private List<Cid> cidList;
    private String prefix;
+   private Cid supercontractCid;
+   private Cid transactionCid;
    
    private Map<String, Set<Cid>> acceptedInvites = new HashMap<>();
    private Map<String, Set<Cid>> acceptedContracts = new HashMap<>();
@@ -41,6 +43,38 @@ public class TestContext {
    
    private TestConfig configuration;
    
+   public String getPrefixedFile(String name) {
+      return getPrefix() + name;
+   }
+   
+   /**
+    * @return the transactionCid
+    */
+   public Cid getTransactionCid() {
+      return transactionCid;
+   }
+
+   /**
+    * @param transactionCid the transactionCid to set
+    */
+   public void setTransactionCid(Cid transactionCid) {
+      this.transactionCid = transactionCid;
+   }
+
+   /**
+    * @return the supercontractCid
+    */
+   public Cid getSupercontractCid() {
+      return supercontractCid;
+   }
+
+   /**
+    * @param supercontractCid the supercontractCid to set
+    */
+   public void setSupercontractCid(Cid supercontractCid) {
+      this.supercontractCid = supercontractCid;
+   }
+
    /**
     * @return the acceptedInvites
     */
