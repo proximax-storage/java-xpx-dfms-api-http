@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * AddrList
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
 public class AddrList extends ArrayList<String> {
 
   @Override

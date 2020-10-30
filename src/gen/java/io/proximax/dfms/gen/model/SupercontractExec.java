@@ -20,40 +20,68 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.proximax.dfms.gen.model.CidWithPath;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * StatCid
+ * SupercontractExec
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
-public class StatCid {
-  public static final String SERIALIZED_NAME_U = "/";
-  @SerializedName(SERIALIZED_NAME_U)
-  private String u;
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
+public class SupercontractExec {
+  public static final String SERIALIZED_NAME_SC_ID = "ScId";
+  @SerializedName(SERIALIZED_NAME_SC_ID)
+  private String scId;
+
+  public static final String SERIALIZED_NAME_TX_HASH = "TxHash";
+  @SerializedName(SERIALIZED_NAME_TX_HASH)
+  private CidWithPath txHash;
 
 
-  public StatCid u(String u) {
+  public SupercontractExec scId(String scId) {
     
-    this.u = u;
+    this.scId = scId;
     return this;
   }
 
    /**
    * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
-   * @return u
+   * @return scId
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
 
-  public String getU() {
-    return u;
+  public String getScId() {
+    return scId;
   }
 
 
-  public void setU(String u) {
-    this.u = u;
+  public void setScId(String scId) {
+    this.scId = scId;
+  }
+
+
+  public SupercontractExec txHash(CidWithPath txHash) {
+    
+    this.txHash = txHash;
+    return this;
+  }
+
+   /**
+   * Get txHash
+   * @return txHash
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public CidWithPath getTxHash() {
+    return txHash;
+  }
+
+
+  public void setTxHash(CidWithPath txHash) {
+    this.txHash = txHash;
   }
 
 
@@ -65,21 +93,23 @@ public class StatCid {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StatCid statCid = (StatCid) o;
-    return Objects.equals(this.u, statCid.u);
+    SupercontractExec supercontractExec = (SupercontractExec) o;
+    return Objects.equals(this.scId, supercontractExec.scId) &&
+        Objects.equals(this.txHash, supercontractExec.txHash);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(u);
+    return Objects.hash(scId, txHash);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StatCid {\n");
-    sb.append("    u: ").append(toIndentedString(u)).append("\n");
+    sb.append("class SupercontractExec {\n");
+    sb.append("    scId: ").append(toIndentedString(scId)).append("\n");
+    sb.append("    txHash: ").append(toIndentedString(txHash)).append("\n");
     sb.append("}");
     return sb.toString();
   }

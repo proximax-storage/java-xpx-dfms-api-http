@@ -12,7 +12,7 @@ import org.apache.commons.lang3.Validate;
  * Available Cid codecs
  */
 public enum CidCodec {
-   PROXIMA_X(0x0C), RAW(0x55), DAG_PROTOBUFF(0x70), DAG_CBOR(0x71), ETHEREUM_BLOCK(0x90), ETHEREUM_TX(0x91),
+   PROXIMA_X(0x0C), PROXIMA_X_WHAAAT(0x0D), RAW(0x55), DAG_PROTOBUFF(0x70), DAG_CBOR(0x71), ETHEREUM_BLOCK(0x90), ETHEREUM_TX(0x91),
    BITCOIN_BLOCK(0xb0), BITCOIN_TX(0xb1), ZCASH_BLOCK(0xc0), ZCASH_TX(0xc1);
 
    private final long code;

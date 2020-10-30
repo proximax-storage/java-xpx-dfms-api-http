@@ -24,7 +24,7 @@ public interface SuperContractServices {
     * @return the SuperContract ID
     */
    Observable<Cid> deploy(Cid driveId, String path);
-   
+
    /**
     * Start execution of a SuperContract
     * 
@@ -34,8 +34,8 @@ public interface SuperContractServices {
     * @param parameters parameters for the executed function
     * @return transaction ID
     */
-   Observable<Cid> execute(Cid superContract, BigInteger gas, String functionName, String[] parameters);
-   
+   Observable<Cid> execute(Cid superContract, BigInteger gas, String functionName, String... parameters);
+
    /**
     * Get a SuperContract by ID
     * 
@@ -43,15 +43,15 @@ public interface SuperContractServices {
     * @return the super contract descriptor
     */
    Observable<SuperContract> get(Cid superContractId);
-   
+
    /**
     * Get all super contracts on a drive
     * 
     * @param driveId CID of the drive/contract
-    * @return observable list of super contracts on a drive
+    * @return observable list of super contract CIDs on a drive
     */
-   Observable<List<SuperContract>> list(Cid driveId);
-   
+   Observable<List<Cid>> ls(Cid driveId);
+
    /**
     * Get results of a SuperContract execution by its TxID
     * 
@@ -59,14 +59,14 @@ public interface SuperContractServices {
     * @return observable execution results
     */
    Observable<List<String>> results(Cid transactionId);
-   
+
    /**
     * Get all execution results started by a node. Returns Transaction IDs.
     * 
     * @return observable list of transaction IDs
     */
    Observable<List<Cid>> executions();
-   
+
    /**
     * Deactivate a SuperContract by its ID
     * 

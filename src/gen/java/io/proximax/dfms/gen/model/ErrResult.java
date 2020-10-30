@@ -25,11 +25,11 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Error
+ * ErrResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
-public class Error {
-  public static final String SERIALIZED_NAME_MESSAGE = "message";
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
+public class ErrResult {
+  public static final String SERIALIZED_NAME_MESSAGE = "Message";
   @SerializedName(SERIALIZED_NAME_MESSAGE)
   private String message;
 
@@ -82,7 +82,7 @@ public class Error {
     }
   }
 
-  public static final String SERIALIZED_NAME_CODE = "code";
+  public static final String SERIALIZED_NAME_CODE = "Code";
   @SerializedName(SERIALIZED_NAME_CODE)
   private CodeEnum code;
 
@@ -131,12 +131,12 @@ public class Error {
     }
   }
 
-  public static final String SERIALIZED_NAME_TYPE = "type";
+  public static final String SERIALIZED_NAME_TYPE = "Type";
   @SerializedName(SERIALIZED_NAME_TYPE)
   private TypeEnum type;
 
 
-  public Error message(String message) {
+  public ErrResult message(String message) {
     
     this.message = message;
     return this;
@@ -159,7 +159,7 @@ public class Error {
   }
 
 
-  public Error code(CodeEnum code) {
+  public ErrResult code(CodeEnum code) {
     
     this.code = code;
     return this;
@@ -182,7 +182,7 @@ public class Error {
   }
 
 
-  public Error type(TypeEnum type) {
+  public ErrResult type(TypeEnum type) {
     
     this.type = type;
     return this;
@@ -213,10 +213,10 @@ public class Error {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Error error = (Error) o;
-    return Objects.equals(this.message, error.message) &&
-        Objects.equals(this.code, error.code) &&
-        Objects.equals(this.type, error.type);
+    ErrResult errResult = (ErrResult) o;
+    return Objects.equals(this.message, errResult.message) &&
+        Objects.equals(this.code, errResult.code) &&
+        Objects.equals(this.type, errResult.type);
   }
 
   @Override
@@ -228,7 +228,7 @@ public class Error {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Error {\n");
+    sb.append("class ErrResult {\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");

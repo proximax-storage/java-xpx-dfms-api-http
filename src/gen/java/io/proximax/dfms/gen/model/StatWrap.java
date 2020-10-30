@@ -28,7 +28,7 @@ import java.io.IOException;
 /**
  * StatWrap
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
 public class StatWrap {
   public static final String SERIALIZED_NAME_STAT = "Stat";
   @SerializedName(SERIALIZED_NAME_STAT)

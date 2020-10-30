@@ -1,7 +1,7 @@
 /**
  * 
  */
-package io.proximax.dfms.cucumber.config;
+package io.proximax.dfms.test;
 
 import java.io.IOException;
 import java.io.InputStream;

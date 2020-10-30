@@ -506,14 +506,7 @@ paths:
         - $ref: '#/components/parameters/srcParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Result:
-                    $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/scDeployResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/exec:
@@ -550,18 +543,7 @@ paths:
           description: Function parameters, only numbers.
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ScId:
-                    description: SuperContract ID is [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
-                    type: string
-                    example: baegqajaiaqjcak6kujbwwdsx3ytcv5wvyrf7fwcij7yvb527laruzjgwch5jxqlm
-                  TxHash:
-                    $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/scExecResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/get:
@@ -575,14 +557,7 @@ paths:
         - $ref: '#/components/parameters/scIdParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  SuperContract:
-                    $ref: '#/components/schemas/SuperContract'
+          $ref: '#/components/responses/scSupercontractResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/ls:
@@ -596,16 +571,7 @@ paths:
         - $ref: '#/components/parameters/driveIdParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Ids:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/cidListResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/results:
@@ -619,17 +585,7 @@ paths:
         - $ref: '#/components/parameters/txIdParam'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Results:
-                    type: array
-                    items:
-                      type: string
-                      example: /SuperContracts/result.txt baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5
+          $ref: '#/components/responses/scResultsResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/executions:
@@ -641,16 +597,7 @@ paths:
       operationId: executions
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Ids:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/cid'
+          $ref: '#/components/responses/scExecutionsResp'
         '400': 
           $ref: '#/components/responses/errorResp'
   /sc/deactivate:
@@ -674,7 +621,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/error'
+            $ref: '#/components/schemas/errResult'
     contractResp:
       description: Single contract
       content:
@@ -763,7 +710,37 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/statListWrap'
-                
+    scDeployResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cidResultWrap'
+    scExecResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/supercontractExec'
+    scExecutionsResp:
+      description: List of executions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/executionsWrap'
+    scSupercontractResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/superContractWrap'
+    scResultsResp:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/resultsWrap'
+
   parameters:
     driveIdParam:
       in: query
@@ -906,10 +883,19 @@ components:
             - "file"
             - "dir"
         Cid:
-          type: object
-          properties:
-            /:
-              $ref: '#/components/schemas/cid'
+          $ref: '#/components/schemas/cidWithPath'
+    cidWithPath:
+      type: object
+      properties:
+        /:
+          $ref: '#/components/schemas/cid'
+    supercontractExec:
+      type: object
+      properties:
+        ScId:
+          $ref: '#/components/schemas/cid'
+        TxHash:
+          $ref: '#/components/schemas/cidWithPath'
     pubKey:
       type: string
       example: 080412200eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2
@@ -918,6 +904,11 @@ components:
       type: object
       properties:
         Id:
+          $ref: '#/components/schemas/cid'
+    cidResultWrap:
+      type: object
+      properties:
+        Result:
           $ref: '#/components/schemas/cid'
     cid:
       type: string
@@ -930,6 +921,16 @@ components:
       properties:
         Ids:
           $ref: '#/components/schemas/cidList'    
+    executionsWrap:
+      type: object
+      description: Wrapper for array of Cids
+      properties:
+        Ids:
+          $ref: '#/components/schemas/executionList'    
+    executionList:
+      type: array
+      items:
+        $ref: '#/components/schemas/cidWithPath'
     cidList:
       type: array
       items:
@@ -994,7 +995,12 @@ components:
           type: integer
           example: 1
           format: int64
-    SuperContract:
+    superContractWrap:
+      type: object
+      properties:
+        SuperContract:
+          $ref: '#/components/schemas/superContract'
+    superContract:
       type: object
       properties:
         id:
@@ -1020,13 +1026,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/cid'
-    error:
+    resultsWrap:
       type: object
       properties:
-        message:
+        Results:
+          type: array
+          items:
+            type: string
+            example: /SuperContracts/result.txt baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5
+    errResult:
+      type: object
+      properties:
+        Message:
           type: string
           description: Error message
-        code:
+        Code:
           type: integer
           enum: 
           - 0
@@ -1039,7 +1053,7 @@ components:
             * 3 - RateLimited - is returned when the operation has been rate-limited.
             * 4 - Forbidden - is returned when the client doesn't have permission to
                   perform the requested operation.
-        type:
+        Type:
           type: string
           enum: 
           - "error"

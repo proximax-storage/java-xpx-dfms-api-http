@@ -63,16 +63,19 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
       HttpUrl url = buildUrl(URL_ADD, encode(id), path).build();
       Request request = new Request.Builder().url(url).post(createRequestBody(content)).build();
       // make the request
-      return makeRequest(request, false).map(this::mapStringOrError)
+      return makeRequest(request, false)
+            .map(this::mapStringOrError)
             .map(str -> getGson().fromJson(str, CidWrap.class))
-            .map(CidWrap::getId).map(Cid::decode);
+            .map(CidWrap::getId)
+            .map(Cid::decode);
    }
 
    @Override
    public Observable<DriveContent> get(Cid id, String path) {
       HttpUrl url = buildUrl(URL_GET, encode(id), path).build();
       // caller is responsible to call close on the input stream
-      return makeGetObservable(url, false).map(this::mapRespBodyOrError)
+      return makeGetObservable(url, false)
+            .map(this::mapRespBodyOrError)
             .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
    }
 
@@ -80,63 +83,63 @@ public class DriveHttp extends HttpRepository<ServiceBase> implements DriveServi
    public Observable<DriveContent> file(Cid id, Cid file) {
       HttpUrl url = buildUrl(URL_FILE, encode(id), encode(file)).build();
       // caller is responsible to call close on the input stream
-      return makeGetObservable(url, false).map(this::mapRespBodyOrError)
+      return makeGetObservable(url, false)
+            .map(this::mapRespBodyOrError)
             .map(resp -> new InputStreamContent(Optional.empty(), resp.byteStream()));
    }
 
    @Override
    public Completable remove(Cid id, String path) {
       HttpUrl url = buildUrl(URL_REMOVE, encode(id), path).build();
-      return makeGetCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override
    public Completable move(Cid id, String sourcePath, String destinationPath) {
       HttpUrl url = buildUrl(URL_MOVE, encode(id), sourcePath, destinationPath).build();
-      return makePostCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override
    public Completable copy(Cid id, String sourcePath, String destinationPath) {
       HttpUrl url = buildUrl(URL_COPY, encode(id), sourcePath, destinationPath).build();
-      return makePostCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override
    public Completable makeDir(Cid id, String path) {
       HttpUrl url = buildUrl(URL_MKDIR, encode(id), path).build();
-      return makePostCompletable(url);
-
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
 
    @Override
    public Observable<DriveItem> stat(Cid id, String path) {
       HttpUrl url = buildUrl(URL_STAT, encode(id), path).build();
       return makeGetObservable(url, false)
-         .map(this::mapStringOrError)
-         .map(str -> getGson().fromJson(str, StatWrap.class))
-         .map(StatWrap::getStat)
-         .map(DriveItem::fromDto);
+            .map(this::mapStringOrError)
+            .map(str -> getGson().fromJson(str, StatWrap.class))
+            .map(StatWrap::getStat)
+            .map(DriveItem::fromDto);
    }
 
    @Override
    public Observable<List<DriveItem>> ls(Cid id, String path) {
       HttpUrl url = buildUrl(URL_LS, encode(id), path).build();
       return makeGetObservable(url, false)
-         .map(this::mapStringOrError)
-         .map(str -> getGson().fromJson(str, StatListWrap.class))
-         .flatMapIterable(StatListWrap::getList)
-         .map(DriveItem::fromDto)
-         .toList().toObservable();
+            .map(this::mapStringOrError)
+            .map(str -> getGson().fromJson(str, StatListWrap.class))
+            .flatMapIterable(StatListWrap::getList)
+            .map(DriveItem::fromDto)
+            .toList()
+            .toObservable();
    }
 
    @Override
    public Completable flush(Cid id, String path) {
       HttpUrl url = buildUrl(URL_FLUSH, encode(id), path).build();
-      return makeGetCompletable(url);
-   
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
-   
+
    /**
     * create new request body from the content
     * 

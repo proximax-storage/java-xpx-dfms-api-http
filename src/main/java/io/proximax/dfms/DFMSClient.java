@@ -7,6 +7,7 @@ package io.proximax.dfms;
 
 import java.net.URL;
 
+import io.proximax.dfms.http.repos.DriveHttp;
 import io.proximax.dfms.http.repos.SuperContractHttp;
 import okhttp3.OkHttpClient;
 
@@ -47,5 +48,14 @@ public class DFMSClient extends DFMSBaseNode {
     */
    public SuperContractServices createSuperContractServices() {
       return new SuperContractHttp(this, getApiPath(), getClient(), getLongPollingClient());
+   }
+   
+   /**
+    * create service instance allowing access to the node's drive end-points
+    * 
+    * @return new instance
+    */
+   public DriveServices createDriveServices() {
+      return new DriveHttp(this, getApiPath(), getClient(), getLongPollingClient());
    }
 }

@@ -25,7 +25,6 @@ import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.http.HttpRepository.OkHttp3ResponseCallback;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import okhttp3.Call;
@@ -178,53 +177,11 @@ class HttpRepositoryTest {
       Request request = new Request.Builder().url("http://localhost").build();
       Response response = new Response.Builder()
             .request(request).protocol(Protocol.HTTP_2).code(150).message("hello").body(ResponseBody
-                  .create(MediaType.get("text/plain"), "{\"Message\"=\"msg\", \"Code\"=\"2\", \"Type\"=\"tp\"}"))
+                  .create(MediaType.get("text/plain"), "{\"Message\"=\"msg\", \"Code\"=\"2\", \"Type\"=\"error\"}"))
             .build();
       HttpRepository<DFMSClient> repo = new HttpRepository<>(new DFMSClient(new URL(URL)), Optional.empty(), client, longPollingClient);
 
       assertThrows(DFMSResponseException.class, () -> repo.mapRespBodyOrError(response));
-   }
-   
-   @Test
-   void testCompletablePost() throws IOException {
-      // prepare client
-      Call call = Mockito.mock(Call.class);
-      Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
-      // prepare repo
-      HttpRepository<DFMSClient> repo = new HttpRepository<>(new DFMSClient(new URL(URL)), Optional.empty(), client, longPollingClient);
-      // make the request
-      final HttpUrl url = repo.getApiUrl();
-      Completable postCompletion = repo.makePostCompletable(url);
-      // test
-      assertNotNull(postCompletion);
-      // capture the request
-      ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
-      Mockito.verify(client).newCall(requestCaptor.capture());
-      Request actualRequest = requestCaptor.getValue();
-      assertEquals(url, actualRequest.url());
-      assertEquals(0, actualRequest.body().contentLength());
-      assertEquals("POST", actualRequest.method());
-   }
-   
-   @Test
-   void testCompletableGet() throws IOException {
-      // prepare client
-      Call call = Mockito.mock(Call.class);
-      Mockito.when(client.newCall(Matchers.any())).thenReturn(call);
-      // prepare repo
-      HttpRepository<DFMSClient> repo = new HttpRepository<>(new DFMSClient(new URL(URL)), Optional.empty(), client, longPollingClient);
-      // make the request
-      final HttpUrl url = repo.getApiUrl();
-      Completable getCompletion = repo.makeGetCompletable(url);
-      // test
-      assertNotNull(getCompletion);
-      // capture the request
-      ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
-      Mockito.verify(client).newCall(requestCaptor.capture());
-      Request actualRequest = requestCaptor.getValue();
-      assertEquals(url, actualRequest.url());
-      assertNull(actualRequest.body());
-      assertEquals("GET", actualRequest.method());
    }
    
    @Test

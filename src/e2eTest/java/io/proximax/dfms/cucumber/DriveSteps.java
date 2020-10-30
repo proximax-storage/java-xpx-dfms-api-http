@@ -48,7 +48,7 @@ public class DriveSteps extends BaseSteps {
    public void i_upload_file_as_prefixed(String sourceFile, String targetName) throws IOException {
       DriveServices drive = ctx.getClient().createDriveServices();
       DriveContent addContent = new FileSystemContent(new File(sourceFile).toPath());
-      Cid cid = drive.add(ctx.getContract().getId(), ctx.getPrefix() + targetName, addContent).timeout(30, TimeUnit.SECONDS)
+      Cid cid = drive.add(ctx.getContract().getId(), ctx.getPrefixedFile(targetName), addContent).timeout(30, TimeUnit.SECONDS)
             .blockingFirst();
       assertNotNull(cid);
    }
@@ -56,32 +56,36 @@ public class DriveSteps extends BaseSteps {
    @Then("prefixed file {string} has size {long} and cid {string}")
    public void prefixed_file_has_size_and_cid(String driveFile, Long size, String cid) {
       DriveServices drive = ctx.getClient().createDriveServices();
-      DriveItem item = drive.stat(ctx.getContract().getId(), ctx.getPrefix() + driveFile).blockingFirst();
+      DriveItem item = drive.stat(ctx.getContract().getId(), ctx.getPrefixedFile(driveFile)).blockingFirst();
       assertEquals(DriveItemType.FILE, item.getType());
       assertEquals(size, item.getSize());
       assertEquals(Cid.decode(cid), item.getCid());
-
    }
    
    @When("I create prefixed directory {string}")
    public void i_create_prefixed_directory(String dirName) {
       DriveServices drive = ctx.getClient().createDriveServices();
-      drive.makeDir(ctx.getContract().getId(), ctx.getPrefix()+dirName).timeout(30, TimeUnit.SECONDS).blockingAwait();
+      drive.makeDir(ctx.getContract().getId(), ctx.getPrefixedFile(dirName)).timeout(30, TimeUnit.SECONDS).blockingAwait();
    }
 
    @Then("file {string} is listed in prefixed directory {string}")
    public void file_is_listed_in_prefixed_directory(String fileName, String dirSuffix) {
        DriveServices fs = ctx.getClient().createDriveServices();
-       String prefix = ctx.getPrefix();
-       List<DriveItem> items = fs.ls(ctx.getContract().getId(), prefix + dirSuffix).blockingFirst();
+       List<DriveItem> items = fs.ls(ctx.getContract().getId(), ctx.getPrefixedFile(dirSuffix)).blockingFirst();
        assertTrue(items.stream().map(DriveItem::getName).anyMatch(name -> name.equals(fileName)));
    }
 
    @Then("{int} file is listed in prefixed directory {string}")
    public void file_is_listed_in_prefixed_directory(Integer count, String dirSuffix) {
       DriveServices fs = ctx.getClient().createDriveServices();
-      String prefix = ctx.getPrefix();
-      List<DriveItem> items = fs.ls(ctx.getContract().getId(), prefix + dirSuffix).blockingFirst();
+      List<DriveItem> items = fs.ls(ctx.getContract().getId(), ctx.getPrefixedFile(dirSuffix)).blockingFirst();
       assertEquals(count, items.size());
+   }
+   
+   @Then("I flush the drive")
+   public void flush_the_drive() {
+      DriveServices drive = ctx.getClient().createDriveServices();
+      drive.flush(ctx.getContract().getId(), "/").blockingAwait();
+
    }
 }

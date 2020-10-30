@@ -14,15 +14,45 @@
 package io.proximax.dfms.gen.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * CidList
+ * Wrapper for array of Cids
  */
+@ApiModel(description = "Wrapper for array of Cids")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
-public class CidList extends ArrayList<String> {
+public class ExecutionsWrap {
+  public static final String SERIALIZED_NAME_IDS = "Ids";
+  @SerializedName(SERIALIZED_NAME_IDS)
+  private ExecutionList ids = new ExecutionList();
+
+
+  public ExecutionsWrap ids(ExecutionList ids) {
+    
+    this.ids = ids;
+    return this;
+  }
+
+   /**
+   * Get ids
+   * @return ids
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public ExecutionList getIds() {
+    return ids;
+  }
+
+
+  public void setIds(ExecutionList ids) {
+    this.ids = ids;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -32,20 +62,21 @@ public class CidList extends ArrayList<String> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    ExecutionsWrap executionsWrap = (ExecutionsWrap) o;
+    return Objects.equals(this.ids, executionsWrap.ids);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(ids);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CidList {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class ExecutionsWrap {\n");
+    sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
     sb.append("}");
     return sb.toString();
   }

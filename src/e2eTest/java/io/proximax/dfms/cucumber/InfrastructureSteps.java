@@ -23,8 +23,8 @@ import io.proximax.dfms.DFMSClient;
 import io.proximax.dfms.DFMSReplicator;
 import io.proximax.dfms.NetworkServices;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.cucumber.config.TestConfig;
-import io.proximax.dfms.cucumber.config.TestConfig.Node;
+import io.proximax.dfms.test.TestConfig;
+import io.proximax.dfms.test.TestConfig.Node;
 
 /**
  * infrastructure steps required to define what nodes we are using for tests

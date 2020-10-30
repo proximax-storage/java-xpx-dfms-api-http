@@ -15,14 +15,57 @@ package io.proximax.dfms.gen.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * CidList
+ * ResultsWrap
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
-public class CidList extends ArrayList<String> {
+public class ResultsWrap {
+  public static final String SERIALIZED_NAME_RESULTS = "Results";
+  @SerializedName(SERIALIZED_NAME_RESULTS)
+  private List<String> results = null;
+
+
+  public ResultsWrap results(List<String> results) {
+    
+    this.results = results;
+    return this;
+  }
+
+  public ResultsWrap addResultsItem(String resultsItem) {
+    if (this.results == null) {
+      this.results = new ArrayList<>();
+    }
+    this.results.add(resultsItem);
+    return this;
+  }
+
+   /**
+   * Get results
+   * @return results
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public List<String> getResults() {
+    return results;
+  }
+
+
+  public void setResults(List<String> results) {
+    this.results = results;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -32,20 +75,21 @@ public class CidList extends ArrayList<String> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    ResultsWrap resultsWrap = (ResultsWrap) o;
+    return Objects.equals(this.results, resultsWrap.results);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(results);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CidList {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class ResultsWrap {\n");
+    sb.append("    results: ").append(toIndentedString(results)).append("\n");
     sb.append("}");
     return sb.toString();
   }

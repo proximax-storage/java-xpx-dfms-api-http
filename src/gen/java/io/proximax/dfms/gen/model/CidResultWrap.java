@@ -15,14 +15,47 @@ package io.proximax.dfms.gen.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 
 /**
- * CidList
+ * CidResultWrap
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
-public class CidList extends ArrayList<String> {
+public class CidResultWrap {
+  public static final String SERIALIZED_NAME_RESULT = "Result";
+  @SerializedName(SERIALIZED_NAME_RESULT)
+  private String result;
+
+
+  public CidResultWrap result(String result) {
+    
+    this.result = result;
+    return this;
+  }
+
+   /**
+   * [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. 
+   * @return result
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "baegaajaiaqjcahaxr4ry4styn74ronvr2nvfdmgxtrzyhsci2xqpw5eisrisrgn5", value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
+
+  public String getResult() {
+    return result;
+  }
+
+
+  public void setResult(String result) {
+    this.result = result;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -32,20 +65,21 @@ public class CidList extends ArrayList<String> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    CidResultWrap cidResultWrap = (CidResultWrap) o;
+    return Objects.equals(this.result, cidResultWrap.result);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(result);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CidList {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class CidResultWrap {\n");
+    sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("}");
     return sb.toString();
   }

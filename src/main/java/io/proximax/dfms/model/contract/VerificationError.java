@@ -4,10 +4,11 @@
 package io.proximax.dfms.model.contract;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.dfms.cid.Cid;
-import io.proximax.dfms.http.dtos.VerifyResultDTO;
+import io.proximax.dfms.gen.model.VerifyResult;
 
 /**
  * Verification error identifying replicator and faulty blocks that were detected
@@ -40,8 +41,8 @@ public class VerificationError {
       return faultyBlocks;
    }
 
-   public static VerificationError fromDto(VerifyResultDTO dto) {
-      // TODO implement actual conversion from the DTO
-      return new VerificationError(null, null);
+   public static VerificationError fromDto(VerifyResult dto) {
+      List<Cid> faults = dto.getFaultyBlocks().stream().map(Cid::decode).collect(Collectors.toList());
+      return new VerificationError(PublicKey.fromHexString(dto.getReplicator()), faults);
    }
 }

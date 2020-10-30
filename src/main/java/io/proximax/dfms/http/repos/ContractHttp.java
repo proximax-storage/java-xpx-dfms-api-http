@@ -16,8 +16,8 @@ import io.proximax.dfms.ServiceBase;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.gen.model.CidListWrap;
 import io.proximax.dfms.gen.model.ContractWrap;
+import io.proximax.dfms.gen.model.VerifyResult;
 import io.proximax.dfms.http.HttpRepository;
-import io.proximax.dfms.http.dtos.VerifyResultDTO;
 import io.proximax.dfms.model.contract.Amendment;
 import io.proximax.dfms.model.contract.DriveContract;
 import io.proximax.dfms.model.contract.DriveContractDuration;
@@ -28,6 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+
 /**
  * DriveContract client services implementation using HTTP protocol
  */
@@ -39,7 +40,7 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
    private static final String URL_AMENDS = "contract/amends";
    private static final String URL_VERIFY = "/contract/verify";
    private static final String URL_FINISH = "/contract/finish";
-   
+
    /**
     * create new instance
     * 
@@ -53,7 +54,8 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
    }
 
    @Override
-   public Observable<DriveContract> compose(BigInteger space, DriveContractDuration duration, DriveContractOptions options) {
+   public Observable<DriveContract> compose(BigInteger space, DriveContractDuration duration,
+         DriveContractOptions options) {
       HttpUrl url = buildUrl(URL_COMPOSE, options.asOptionMap(), space.toString(), duration.encode()).build();
       // make the request
       return makePostObservable(url, true)
@@ -84,7 +86,8 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
             .map(CidListWrap::getIds)
             .flatMapIterable(list -> list)
             .map(Cid::decode)
-            .toList().toObservable();
+            .toList()
+            .toObservable();
    }
 
    @Override
@@ -104,15 +107,15 @@ public class ContractHttp extends HttpRepository<ServiceBase> implements Contrac
       // make the request
       return makePostObservable(url, true)
             .map(this::mapStringOrError)
-            .map(str -> getGson().fromJson(str, VerifyResultDTO.class))
+            .map(str -> getGson().fromJson(str, VerifyResult.class))
             .map(VerificationError::fromDto)
-            .toList().toObservable();
+            .toList()
+            .toObservable();
    }
 
    @Override
    public Completable finish(Cid id) {
       HttpUrl url = buildUrl(URL_FINISH, encode(id)).build();
-      return makePostCompletable(url);
+      return makePostObservable(url, false).map(this::mapStringOrError).ignoreElements();
    }
-
 }

@@ -28,11 +28,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import io.proximax.dfms.ServiceNode;
-import io.proximax.dfms.http.dtos.ErrorDTO;
+import io.proximax.dfms.gen.model.ErrResult;
 import io.proximax.dfms.model.exceptions.DFMSResponseException;
 import io.proximax.dfms.model.exceptions.DFMSRuntimeException;
 import io.proximax.dfms.model.exceptions.ResponseErrorType;
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import okhttp3.Call;
@@ -223,40 +222,30 @@ public class HttpRepository<T extends ServiceNode> {
       final String responseMessage = response.message();
       try {
          final String responseBody = response.body().string();
-         try {
-            ErrorDTO err = getGson().fromJson(responseBody, ErrorDTO.class);
-            return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode()), err.getMessage());
-         } catch (JsonSyntaxException e) {
-            return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - " + responseBody, e);
-         }
+         return createExceptionFromResponseBody(responseBody);
       } catch (IOException e) {
-         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " no response body", e);
+         return new DFMSRuntimeException(responseCode + "/" + responseMessage + " - missing response body", e);
       }
    }
 
    /**
-    * POST request with empty request body
+    * process response body and create exception from the body content
     * 
-    * @param url we are making the POST request to
-    * @return completable for the action
+    * @param responseBody response body text
+    * @return the exception that will be raised to observers
     */
-   protected Completable makePostCompletable(HttpUrl url) {
-      RequestBody body = RequestBody.create(new byte[0]);
-      Request request = new Request.Builder().url(url).post(body).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
-   }
-
-   /**
-    * GET request without expected response
-    * 
-    * @param url we are making the GET request to
-    * @return completable for the action
-    */
-   protected Completable makeGetCompletable(HttpUrl url) {
-      Request request = new Request.Builder().url(url).build();
-      Call call = getClient().newCall(request);
-      return Completable.fromAction(call::execute);
+   protected DFMSRuntimeException createExceptionFromResponseBody(String responseBody) {
+      try {
+         // parse the error DTO from the response
+         ErrResult err = getGson().fromJson(responseBody, ErrResult.class);
+         // throw error if response did not have code
+         if (err.getCode() == null) {
+            throw new DFMSRuntimeException("response is missing error code");
+         }
+         return new DFMSResponseException(ResponseErrorType.getByCode(err.getCode().getValue()), err.getMessage());
+      } catch (JsonSyntaxException | DFMSRuntimeException e) {
+         return new DFMSRuntimeException("Failed to process response - " + responseBody, e);
+      }
    }
 
    /**

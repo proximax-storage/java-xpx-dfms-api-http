@@ -20,7 +20,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.dfms.gen.model.StatCid;
+import io.proximax.dfms.gen.model.CidWithPath;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.io.IOException;
  * File statistics
  */
 @ApiModel(description = "File statistics")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-17T14:27:52.840+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
 public class Stat {
   public static final String SERIALIZED_NAME_NAME = "Name";
   @SerializedName(SERIALIZED_NAME_NAME)
@@ -92,7 +92,7 @@ public class Stat {
 
   public static final String SERIALIZED_NAME_CID = "Cid";
   @SerializedName(SERIALIZED_NAME_CID)
-  private StatCid cid;
+  private CidWithPath cid;
 
 
   public Stat name(String name) {
@@ -164,7 +164,7 @@ public class Stat {
   }
 
 
-  public Stat cid(StatCid cid) {
+  public Stat cid(CidWithPath cid) {
     
     this.cid = cid;
     return this;
@@ -177,12 +177,12 @@ public class Stat {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public StatCid getCid() {
+  public CidWithPath getCid() {
     return cid;
   }
 
 
-  public void setCid(StatCid cid) {
+  public void setCid(CidWithPath cid) {
     this.cid = cid;
   }
 

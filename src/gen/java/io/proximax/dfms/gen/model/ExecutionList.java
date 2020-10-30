@@ -15,14 +15,15 @@ package io.proximax.dfms.gen.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import io.proximax.dfms.gen.model.CidWithPath;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * CidList
+ * ExecutionList
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-10-25T18:34:19.638+01:00[Europe/Prague]")
-public class CidList extends ArrayList<String> {
+public class ExecutionList extends ArrayList<CidWithPath> {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -44,7 +45,7 @@ public class CidList extends ArrayList<String> {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CidList {\n");
+    sb.append("class ExecutionList {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
