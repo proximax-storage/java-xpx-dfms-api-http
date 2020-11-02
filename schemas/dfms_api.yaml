@@ -656,12 +656,6 @@ components:
             $ref: '#/components/schemas/inviteWrap'
     contractVerifyResp:
       description: Start a drive verification
-      headers: 
-        -X-Stream-Output:
-          schema:
-            type: integer
-            enum:
-             - 1
       content:
         application/json:
           schema:
