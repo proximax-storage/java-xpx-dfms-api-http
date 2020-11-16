@@ -5,13 +5,13 @@ io.proximax.dfms.cid.multihash
 io.proximax.dfms.cipher
 io.proximax.dfms.gen.model
 io.proximax.dfms.http
-io.proximax.dfms.http.dtos
 io.proximax.dfms.http.repos
 io.proximax.dfms.model.contract
 io.proximax.dfms.model.drive
 io.proximax.dfms.model.drive.content
 io.proximax.dfms.model.exceptions
 io.proximax.dfms.model.network
+io.proximax.dfms.model.sc
 io.proximax.dfms.privacy
 io.proximax.dfms.privacy.strategies
 io.proximax.dfms.utils
